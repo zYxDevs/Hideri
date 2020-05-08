@@ -18,7 +18,7 @@ export abstract class NHentaiCommand {
         group: CommandGroup.COMMUNITIES,
         aliases: ['nhentai']
     })
-    async execute(message: CommandMessage, query: RestAsString) {
+    private async execute(message: CommandMessage, query: RestAsString) {
         message.channel.startTyping();
         const query_str = encodeURIComponent(query.get());
         const { pages } = await NHentaiEmbedBrowser.api.search(query_str);
@@ -31,7 +31,7 @@ export abstract class NHentaiCommand {
 
     @Guard(NotBot, Not(StartsWith('<')))
     @On('message')
-    async on_message(message: CommandMessage) {
+    private async on_message(message: CommandMessage) {
         let match_number = 0;
         const matches = message.content.matchAll(/\(\s*(\d{5,6})\s*(\d+)?\s*\)/g);
         for (const match of matches) {

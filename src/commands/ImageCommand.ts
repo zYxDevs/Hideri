@@ -44,7 +44,7 @@ export abstract class ImageCommand {
         infos: 'Get random ahegao picture',
         group: CommandGroup.COMMUNITIES
     })
-    async ahegao(message: CommandMessage) {
+    private async ahegao(message: CommandMessage) {
         message.channel.startTyping();
         const { msg } = await (await fetch('https://ahegao.egecelikci.com/api')).json();
         message.channel.send(this.create_embed('Ahegao Result', msg));
@@ -55,7 +55,7 @@ export abstract class ImageCommand {
         group: CommandGroup.COMMUNITIES,
         rest_required: false
     })
-    async neko(message: CommandMessage, tag_type: NekosArgumentType, text: RestAsString) {
+    private async neko(message: CommandMessage, tag_type: NekosArgumentType, text: RestAsString) {
         const tag = tag_type.get();
         if (StringUtils.ci_includes(neko_tags, tag)) {
             message.channel.startTyping();
@@ -85,7 +85,7 @@ export abstract class ImageCommand {
         group: CommandGroup.COMMUNITIES,
         aliases: ['reddit']
     })
-    async r(message: CommandMessage, subreddit: string, status: RedditStatusType, timeframe: RedditTimeType, post_number: string = '0') {
+    private async r(message: CommandMessage, subreddit: string, status: RedditStatusType, timeframe: RedditTimeType, post_number: string = '0') {
         message.channel.startTyping();
 
         const response = await (await fetch(`https://www.reddit.com/r/${subreddit}/${status.get()}/.json?limit=100${timeframe.get() ? ('&t=' + timeframe.get()) : ''}`)).json();

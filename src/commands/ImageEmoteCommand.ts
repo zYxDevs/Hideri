@@ -20,7 +20,7 @@ export abstract class ImageEmoteCommand {
                     description: description,
                     group: CommandGroup.IMAGE_EMOTES
                 })
-                async exec(message: CommandMessage) {
+                private async exec(message: CommandMessage) {
                     const embed = new MessageEmbed();
                     embed.setImage(url);
                     message.channel.send(embed);
