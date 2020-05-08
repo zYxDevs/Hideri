@@ -1,5 +1,5 @@
 import config from '../config.json';
-import { Discord, Guard, CommandMessage } from '@typeit/discord';
+import { Discord, Guard, CommandMessage, Client } from '@typeit/discord';
 import { Owner } from '../guards/Owner';
 import { Command } from '../ArgumentParser';
 import { RestAsString } from '../argument-types/RestAsString';
@@ -50,12 +50,12 @@ export abstract class DebugCommand {
     @Command('eval', {
         hide: true
     })
-    private async eval(message: CommandMessage, code: RestAsString) {
+    private async eval(message: CommandMessage, client: Client, code: RestAsString) {
         let out = '';
         const hook = this.hook_stdout(s => out += s);
         const result = eval(code.get());
         hook.unhook();
-        await message.channel.send('```js\n' + out.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '') + '\n```');
+        out && await message.channel.send('```js\n' + out.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '') + '\n```');
         const result_string = stringify_object(result);
 
         for (const chunk of split_to_chunks(result_string, 1980).slice(0, 10)) {
