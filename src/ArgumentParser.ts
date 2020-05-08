@@ -7,7 +7,7 @@ import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
 import { RestAsString } from './argument-types/RestAsString.js';
 import { Integer } from './argument-types/Integer.js';
 import { CommandGroup } from './types/CommandGroup';
-import { User } from 'discord.js';
+import { User, GuildMember } from 'discord.js';
 
 const default_options = {
     args_required: true,
@@ -143,6 +143,17 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                     const user = message.mentions.users.find(user => user.toString() == tag);
                     if (user) {
                         argument_array.push(user);
+                        continue;
+                    } else if (!params.args_required || optional) {
+                        argument_array.push(undefined);
+                    } else {
+                        return reply_incorrect(params, name, usage, message);
+                    }
+                } else if (type == GuildMember) {
+                    const tag = argv.shift().trim().replace('@!', '@');
+                    const member = message.mentions.members.find(member => member.toString() == tag);
+                    if (member) {
+                        argument_array.push(member);
                         continue;
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
