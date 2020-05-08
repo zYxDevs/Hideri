@@ -56,12 +56,42 @@ abstract class AppDiscord {
         message.channel.send(embed);
     }
 
-    @Command('info', {
+    @Command('version', {
         infos: 'Get info about this version of HentaiBot',
         extraneous_argument_message: false
     })
-    private async info(message: CommandMessage) {
+    private async version(message: CommandMessage) {
         message.channel.send(`HentaiBot version \`${PACKAGE_VERSION} (${GIT_HASH})\` built with TypeScript version \`${TYPESCRIPT_VERSION}\``);
+    }
+
+    @Command('invite', {
+        infos: 'Invite',
+        description: 'Get invite link for bot',
+        extraneous_argument_message: false
+    })
+    private async invite(message: CommandMessage, client: Client) {
+        const user_count = client.guilds.cache.reduce((total_users, server) => {
+            const server_user_count = server.members.cache.reduce((server_users, member) => {
+                if (member.user.bot) return server_users;
+                return server_users + 1;
+            }, 0);
+
+            return total_users + server_user_count;
+        }, 0);
+
+        const embed = new MessageEmbed({
+            title: 'Invite HentaiBot',
+            url: 'https://discord.com/oauth2/authorize?client_id=507648234236411904&scope=bot&permissions=640928832',
+            thumbnail: {
+                url: client.user.avatarURL()
+            },
+            fields: [{
+                name: '\ufeff',
+                value: `Running on ${client.guilds.cache.size} servers\nServing ${user_count} users`
+            }]
+        });
+
+        message.channel.send(embed);
     }
 
     @Guard(Owner())
