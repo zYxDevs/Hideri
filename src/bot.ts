@@ -52,7 +52,7 @@ abstract class AppDiscord {
         embed.addField('Info', command_obj.infos ?? 'None');
         embed.addField('Description', command_obj.description ?? 'None');
         embed.addField('Usage', `\`${command_obj.usage}\``);
-        if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases}\``);
+        if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases.join(', ')}\``);
         message.channel.send(embed);
     }
 
