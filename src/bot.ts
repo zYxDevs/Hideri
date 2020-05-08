@@ -8,6 +8,7 @@ import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
 import { RegexUtils } from './utils/RegexUtils';
 import { MessageEmbed } from 'discord.js';
 import { IOnExt } from './types/IOnExt';
+import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 
 @Discord({
     prefix: config.prefix
@@ -26,7 +27,8 @@ abstract class AppDiscord {
     }
 
     @Command('ping', {
-        infos: 'Round-trip ping'
+        infos: 'Round-trip ping',
+        extraneous_argument_message: false
     })
     private async ping(message: CommandMessage, client: Client) {
         const reply = await message.channel.send(`Calculating ping...`);
@@ -52,6 +54,14 @@ abstract class AppDiscord {
         embed.addField('Usage', `\`${command_obj.usage}\``);
         if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases}\``);
         message.channel.send(embed);
+    }
+
+    @Command('info', {
+        infos: 'Get info about this version of HentaiBot',
+        extraneous_argument_message: false
+    })
+    private async info(message: CommandMessage) {
+        message.channel.send(`HentaiBot version \`${PACKAGE_VERSION} (${GIT_HASH})\` built with TypeScript version \`${TYPESCRIPT_VERSION}\``);
     }
 
     @Guard(Owner())

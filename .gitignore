@@ -41,3 +41,4 @@ build/**/*
 yarn.lock
 
 src/config.json
+src/constants.ts
