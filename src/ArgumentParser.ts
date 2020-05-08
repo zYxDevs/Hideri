@@ -139,8 +139,8 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                         return reply_incorrect(params, name, usage, message);
                     }
                 } else if (type === User) {
-                    const tag = argv.shift();
-                    const user = message.mentions.users.find(user => user.tag == tag);
+                    const tag = argv.shift().trim().replace('@!', '@');
+                    const user = message.mentions.users.find(user => user.toString() == tag);
                     if (user) {
                         argument_array.push(user);
                         continue;
