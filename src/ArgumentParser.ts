@@ -7,6 +7,7 @@ import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
 import { RestAsString } from './argument-types/RestAsString.js';
 import { Integer } from './argument-types/Integer.js';
 import { CommandGroup } from './types/CommandGroup';
+import { User } from 'discord.js';
 
 const default_options = {
     args_required: true,
@@ -105,17 +106,49 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                     argument_array.push(client);
                 } else if (type === Number) {
                     const number = +argv.shift();
-                    if (Number.isNaN(number) && params.args_required && !optional) return reply_incorrect(params, name, usage, message);
+                    if (!Number.isNaN(number)) {
+                        argument_array.push(number);
+                    } else if (!params.args_required || optional) {
+                        argument_array.push(undefined);
+                    } else {
+                        return reply_incorrect(params, name, usage, message);
+                    }
                     argument_array.push(number);
                 } else if (type === Integer) {
                     const number = +argv.shift();
-                    if (!Number.isInteger(number) && params.args_required && !optional) return reply_incorrect(params, name, usage, message);
-                    argument_array.push(number);
+                    if (Number.isInteger(number)) {
+                        argument_array.push(number);
+                    } else if (!params.args_required || optional) {
+                        argument_array.push(undefined);
+                    } else {
+                        return reply_incorrect(params, name, usage, message);
+                    }
                 } else if (type === Boolean) {
                     const bool_string = argv.shift();
-                    if (/true|t|1|yes|y/i.test(bool_string)) argument_array.push(true);
-                    if (/false|f|0|no|n/i.test(bool_string)) argument_array.push(false);
-                    return reply_incorrect(params, name, usage, message);
+                    if (/true|t|1|yes|y/i.test(bool_string)) {
+                        argument_array.push(true);
+                        continue;
+                    }
+                    if (/false|f|0|no|n/i.test(bool_string)) {
+                        argument_array.push(false);
+                        continue;
+                    }
+                    if (!params.args_required || optional) {
+                        argument_array.push(undefined);
+                    } else {
+                        reply_incorrect(params, name, usage, message);
+                    }
+                } else if (type === User) {
+                    const tag = argv.shift();
+                    const user = message.mentions.users.find(user => user.tag == tag);
+                    if (user) {
+                        argument_array.push(user);
+                        continue;
+                    } else if (!params.args_required || optional) {
+                        argument_array.push(undefined);
+                    } else {
+                        reply_incorrect(params, name, usage, message);
+                    }
                 } else if (type.constructor === Rest) {
                     if (type.type == String) {
                         argument_array.push(...argv.splice(0));
@@ -136,13 +169,14 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                 }
             }
 
-            if (argv.length) {
+            if (argv.length && params.extraneous_argument_message) {
                 let output = '';
-                if (params.extraneous_argument_message) output += `Error: extraneous argument(s) \`[${argv.join(', ')}]\`\n\n`;
+                output += `Error: extraneous argument(s) \`[${argv.join(', ')}]\`\n\n`;
                 if (params.incorrect_usage_message) output += `Usage: \`${usage}\``;
                 if (output) message.reply(output);
                 return;
             }
+
             try {
                 const result = original_method.apply(this, argument_array);
                 if (result instanceof Promise) {
