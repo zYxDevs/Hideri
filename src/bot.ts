@@ -70,14 +70,11 @@ abstract class AppDiscord {
         extraneous_argument_message: false
     })
     private async invite(message: CommandMessage, client: Client) {
-        const user_count = client.guilds.cache.reduce((total_users, server) => {
-            const server_user_count = server.members.cache.reduce((server_users, member) => {
-                if (member.user.bot) return server_users;
-                return server_users + 1;
-            }, 0);
-
-            return total_users + server_user_count;
-        }, 0);
+        const user_count = new Set(client.guilds.cache.map(server => {
+            return server.members.cache.map(member => {
+                return member.user.id;
+            });
+        }).flat()).size;
 
         const embed = new MessageEmbed({
             title: 'Invite HentaiBot',
