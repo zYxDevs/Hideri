@@ -136,7 +136,7 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                     if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, usage, message);
                     }
                 } else if (type === User) {
                     const tag = argv.shift();
@@ -147,7 +147,7 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, usage, message);
                     }
                 } else if (type.constructor === Rest) {
                     if (type.type == String) {
