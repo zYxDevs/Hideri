@@ -8,16 +8,16 @@ export const IMPERSONATION_COMMANDS: {
     text: string | Function,
 }[] = [
     {
-        name: "baka",
-        info: "B-Baka!",
-        text: "B-Baka! I-It’s Not like I like You!",
-        description: "Makes someone a tsundere",
+        name: 'baka',
+        info: 'B-Baka!',
+        text: 'B-Baka! I-It’s Not like I like You!',
+        description: 'Makes someone a tsundere',
         aliases: [ 'tsundere' ]
     }, {
-        name: "onii-chan",
-        info: "Onii~~chan",
-        description: "police are on their way",
-        text: () => RandomUtils.choice([
+        name: 'onii-chan',
+        info: 'Onii~~chan',
+        description: 'police are on their way',
+        text: RandomUtils.create_randomizer([
             'Y-yamete, onii-chan!',
             'Yamete onii-chan!',
             'Onii-chan, what are you doing?',
@@ -25,5 +25,27 @@ export const IMPERSONATION_COMMANDS: {
             'Onii-chan!!'
         ]),
         aliases: [ 'onii', 'oniichan' ]
+    }, {
+        name: 'embarrass',
+        description: 'Embarrass someone',
+        text: RandomUtils.create_randomizer([
+            'shut the fuck up dad it\'s not alvin and the fucking chipmunks it\'s nightcore',
+            'mfw when the gay section of pornhub is down https://tenor.com/view/jojos-bizarre-adventure-narancia-mista-bruno-buccellati-giorno-giovanna-gif-16529033',
+            'yeah i watch jojo. yeah i suck dick. what of it?',
+            'don\'t mess with us evangelion fans, we\'ll have a mental breakdown',
+            'don\'t mess with us konosuba fans, we\'ll masturbate to an underage girl',
+            'bet that you\'ve never heard of Jojo\'s Bizarre Adventure, an underrated gem 😎',
+            'ever heard of highschool of the dead? yeah didnt think so, its pretty niche',
+            'mfw i see unsucked cock https://tenor.com/view/jojo-talking-anime-gif-13883674',
+            'guys whats lolicon and why am i not invited',
+            'please stop asking if i have a girlfriend all i do is cry and watch cute asian cartoons',
+            'i only watch underground anime. ever heard of sword art online? did\'nt think so',
+            'bruh did you not get the jojos referance',
+            'okay google pokimane nudes wait oh fuck no stop google',
+            'i jack off to boku no pico every night',
+            'STFU (Shut the frick up) Jijo is not gey.',
+            '‼️‼️HOLY FUCKING SHIT‼️‼️‼️‼️ IS THAT A MOTHERFUCKING JOJO REFERENCE??????!!!!!!!!!!11!1!1!1!1!1!1! 😱😱😱😱😱😱😱 JOJO IS THE BEST FUCKING ANIME 🔥🔥🔥🔥💯💯💯💯 JOSUKE IS SO BADASSSSS 😎😎😎😎😎😎😎👊👊👊👊👊 ORAORAORAORAORALORAORAORAORAORAORAORAORAORAORAORAORAORAORAORA 😩😩😩😩😩😩😩😩',
+            'I haven\'t touched a real girl in years.'
+        ])
     }
 ];
