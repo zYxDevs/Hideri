@@ -9,12 +9,24 @@ import { RegexUtils } from './utils/RegexUtils';
 import { MessageEmbed } from 'discord.js';
 import { IOnExt } from './types/IOnExt';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
+import { BaseActivity } from './activities/BaseActivity';
+import { RandomUtils } from './utils/RandomUtils';
+import { MathUtils } from './utils/MathUtils';
+import { ServerStatusActivity } from './activities/ServerStatusActivity';
+import { AwayWatchActivity } from './activities/AwayWatchActivity';
+import { GenericHelpActivity } from './activities/GenericHelpActivity';
+import { MobileWatchActivity } from './activities/MobileWatchActivity';
+import { NekoparaPlayActivity } from './activities/NekoparaPlayActivity';
+import { TrapPlayActivity } from './activities/TrapPlayActivity';
 
 @Discord({
     prefix: config.prefix
 })
 abstract class AppDiscord {
     private static _client: Client;
+
+    private last_activity: BaseActivity;
+    private last_timeout: NodeJS.Timer;
 
     static start() {
         this._client = new Client();
@@ -23,7 +35,35 @@ abstract class AppDiscord {
 
     @On('ready')
     private ready(client: Client) {
-        client.user.setActivity('<h for help');
+        this.process_next_activity();
+    }
+
+    private async process_next_activity() {
+        const client = AppDiscord._client;
+        client.clearTimeout(this.last_timeout);
+
+        if (this.last_activity) await this.last_activity.destroy();
+
+        await client.user.setPresence({
+            status: 'online'
+        });
+
+        const constructor = RandomUtils.choice<{ new(client: Client): BaseActivity }>([
+            AwayWatchActivity,
+            GenericHelpActivity,
+            MobileWatchActivity,
+            NekoparaPlayActivity,
+            ServerStatusActivity,
+            TrapPlayActivity
+        ]);
+
+        const activity = new constructor(client);
+        activity.create();
+
+        this.last_activity = activity;
+
+        const next_delay = MathUtils.clamp(RandomUtils.gaussian(1, 10), .5, Infinity);
+        this.last_timeout = client.setTimeout(() => this.process_next_activity(), next_delay * 60e3);
     }
 
     @Command('ping', {
