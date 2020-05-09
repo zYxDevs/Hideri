@@ -16,6 +16,8 @@
     "@typeit/discord": "^2.0.22",
     "discord.js": "^12.2.0",
     "get-function-arguments": "^1.0.0",
+    "grosso-modo": "^3.1.1",
+    "jimp": "^0.10.3",
     "nekos.life": "^2.0.7",
     "nhentai-api": "^3.0.2",
     "node-fetch": "^2.6.0",
