@@ -23,7 +23,7 @@ export abstract class NHentaiCommand {
         const query_str = encodeURIComponent(query.get());
         const { pages } = await NHentaiEmbedBrowser.api.search(query_str);
         const { books } = await NHentaiEmbedBrowser.api.search(query_str, RandomUtils.randint(1, pages));
-        const book = RandomUtils.choice(books);
+        const book = RandomUtils.choice<any>(books);
         if (!book) return message.reply('No search results found');
         const page = RandomUtils.randint(4, book.pages.length - 4);
         new NHentaiEmbedBrowser(book, page).send_embed(message);
