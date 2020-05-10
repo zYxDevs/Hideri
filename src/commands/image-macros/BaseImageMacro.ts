@@ -44,11 +44,11 @@ export abstract class BaseImageMacro {
     }
 
     get image() {
-        return BaseImageMacro.image_cache.get(this.options.image_location);
+        return BaseImageMacro.image_cache.get(this.options.image_location).then(image => Jimp.read(image));
     }
 
     get mask() {
-        return BaseImageMacro.image_cache.get(this.options.mask_location);
+        return BaseImageMacro.image_cache.get(this.options.mask_location).then(image => Jimp.read(image));
     }
 
     private get_extension(mime: string) {
