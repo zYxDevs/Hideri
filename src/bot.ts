@@ -153,3 +153,9 @@ abstract class AppDiscord {
 }
 
 AppDiscord.start();
+
+['SIGTERM', 'SIGINT'].forEach((signal: NodeJS.Signals) => {
+    process.on(signal, () => {
+        AppDiscord.destroy().finally(() => process.exit(0));
+    })
+});
