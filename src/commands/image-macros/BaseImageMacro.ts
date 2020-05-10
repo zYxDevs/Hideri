@@ -35,7 +35,8 @@ export abstract class BaseImageMacro {
         (options.fonts || [
             `${__dirname}../../../assets/fonts/opensans-black-128-emoji/opensans-black-128-emoji.fnt`,
             `${__dirname}../../../assets/fonts/opensans-black-64-emoji/opensans-black-64-emoji.fnt`,
-            `${__dirname}../../../assets/fonts/opensans-black-32-emoji/opensans-black-32-emoji.fnt`
+            `${__dirname}../../../assets/fonts/opensans-black-32-emoji/opensans-black-32-emoji.fnt`,
+            `${__dirname}../../../assets/fonts/opensans-black-16-emoji/opensans-black-16-emoji.fnt`
         ]).forEach(font => {
             if (BaseImageMacro.font_cache.has(font)) return;
 
@@ -64,7 +65,10 @@ export abstract class BaseImageMacro {
         }
     }
 
-    public async get_font(text: string, width: number, height: number) {
+    public async get_font(text: string, width: number, height: number): Promise<{
+        font: Font,
+        overflow: boolean
+    }> {
         const fonts = BaseImageMacro.font_cache.values();
         let last_font = null;
 
@@ -72,10 +76,16 @@ export abstract class BaseImageMacro {
             last_font = font;
             if (Jimp.measureTextHeight(font, text, width, (text) => {
                 if (text == '\ufffc') return { xadvance: font.info.size };
-            }) <= height) return font;
+            }) <= height) return {
+                font: font,
+                overflow: false
+            };
         }
 
-        return last_font;
+        return {
+            font: last_font,
+            overflow: true
+        };
     }
 
     public async exec(message: CommandMessage, client: Client, ...text_or_images: string[]) {
@@ -168,7 +178,7 @@ export abstract class BaseImageMacro {
             }
         }
 
-        const font = await this.get_font(segments.filter(s => s.type == 'text').map(s => s.data).join(' '), this.frame.width, this.frame.height);
+        const { font, overflow } = await this.get_font(segments.filter(s => s.type == 'text').map(s => s.data).join(' '), this.frame.width, this.frame.height);
 
         emojis = emojis.map(emoji => emoji.resize(font.info.size, font.info.size));
 
@@ -179,10 +189,14 @@ export abstract class BaseImageMacro {
 
             const segment = segments[segment_index];
             if (segment.type == 'text') {
+                let vertical_alignment: number = Jimp.VERTICAL_ALIGN_MIDDLE;
+                if (segment_index != segments.length - 1) vertical_alignment = Jimp.VERTICAL_ALIGN_TOP
+                if (overflow) vertical_alignment = Jimp.VERTICAL_ALIGN_TOP;
+
                 blank_frame.print(font, 0, y_location, {
                     text: segment.data,
                     alignmentX: Jimp.HORIZONTAL_ALIGN_CENTER,
-                    alignmentY: segment_index == (segments.length - 1) ? Jimp.VERTICAL_ALIGN_MIDDLE : Jimp.VERTICAL_ALIGN_TOP,
+                    alignmentY: vertical_alignment,
                     charHandler: (text: string) => {
                         if (text != '\ufffc') return;
                         return {
@@ -201,7 +215,9 @@ export abstract class BaseImageMacro {
                 const image = await segment.data;
                 if (!image) continue;
 
-                if (segment_index == (segments.length - 1)) image.contain(this.frame.width, this.frame.height - y_location);
+                image.contain(this.frame.width, this.frame.height - y_location, Jimp.HORIZONTAL_ALIGN_CENTER | (
+                    segment_index == segments.length - 1 ? Jimp.VERTICAL_ALIGN_MIDDLE : Jimp.VERTICAL_ALIGN_TOP
+                ));
                 blank_frame.composite(image, 0, y_location);
                 y_location += image.getHeight();
             }
