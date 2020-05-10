@@ -16,6 +16,7 @@
 
     </pages>
     <chars count="3601">
+       <char id="32" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="33" page="0" chnl="15"/>
 <char id="128512" x="0" y="0" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="4" chnl="15"/>
 <char id="128515" x="128" y="0" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="4" chnl="15"/>
 <char id="128516" x="256" y="0" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="4" chnl="15"/>
@@ -1309,7 +1310,6 @@
 <char id="127485" x="0" y="1408" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="9" chnl="15"/>
 <char id="127486" x="128" y="1408" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="9" chnl="15"/>
 <char id="127487" x="256" y="1408" width="128" height="128" xoffset="0" yoffset="16" xadvance="130" page="9" chnl="15"/>
-        <char id="32" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="33" page="0" chnl="15"/>
         <char id="33" x="1541" y="852" width="16" height="94" xoffset="9" yoffset="45" xadvance="34" page="0" chnl="15"/>
         <char id="34" x="1170" y="225" width="35" height="34" xoffset="8" yoffset="45" xadvance="51" page="0" chnl="15"/>
         <char id="35" x="1714" y="845" width="77" height="92" xoffset="3" yoffset="45" xadvance="83" page="1" chnl="15"/>

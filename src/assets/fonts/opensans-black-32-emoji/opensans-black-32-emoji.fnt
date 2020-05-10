@@ -13,6 +13,7 @@
 
     </pages>
     <chars count="3601">
+        <char id="32" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="8" page="0" chnl="15"/>
 <char id="128512" x="0" y="0" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="3" chnl="15"/>
 <char id="128515" x="32" y="0" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="3" chnl="15"/>
 <char id="128516" x="64" y="0" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="3" chnl="15"/>
@@ -1306,7 +1307,6 @@
 <char id="127485" x="320" y="128" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="6" chnl="15"/>
 <char id="127486" x="352" y="128" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="6" chnl="15"/>
 <char id="127487" x="384" y="128" width="32" height="32" xoffset="0" yoffset="10" xadvance="34" page="6" chnl="15"/>
-        <char id="32" x="0" y="0" width="0" height="0" xoffset="0" yoffset="0" xadvance="8" page="0" chnl="15"/>
         <char id="33" x="631" y="102" width="5" height="24" xoffset="2" yoffset="12" xadvance="9" page="0" chnl="15"/>
         <char id="34" x="231" y="220" width="9" height="9" xoffset="2" yoffset="12" xadvance="13" page="0" chnl="15"/>
         <char id="35" x="164" y="444" width="20" height="23" xoffset="0" yoffset="12" xadvance="21" page="1" chnl="15"/>
