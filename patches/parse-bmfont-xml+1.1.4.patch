@@ -1,0 +1,15 @@
+diff --git a/node_modules/parse-bmfont-xml/lib/index.js b/node_modules/parse-bmfont-xml/lib/index.js
+index de81202..40f6709 100644
+--- a/node_modules/parse-bmfont-xml/lib/index.js
++++ b/node_modules/parse-bmfont-xml/lib/index.js
+@@ -20,8 +20,8 @@ module.exports = function parseBMFontXML(data) {
+     output.common = parseAttributes(result.common[0].$)
+     output.info = parseAttributes(result.info[0].$)
+ 
+-    for (var i = 0; i < result.pages.length; i++) {
+-      var p = result.pages[i].page[0].$
++    for (var i = 0; i < result.pages[0].page.length; i++) {
++      var p = result.pages[0].page[i].$
+ 
+       if (typeof p.id === "undefined")
+         throw new Error("malformed file -- needs page id=N")

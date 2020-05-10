@@ -7,12 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
     "prebuild": "npm run clean && node gen_constants.js",
+    "postbuild": "npm run copyfiles",
+    "postinstall": "patch-package",
     "start": "npm run build && node build/bot.js",
-    "clean": "rimraf build/"
+    "clean": "rimraf build/",
+    "copyfiles": "cpx -u src/assets/** build/assets"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@jimp/plugin-print": "^0.10.3",
     "@typeit/discord": "^2.0.22",
     "discord.js": "^12.2.0",
     "get-function-arguments": "^1.0.0",
@@ -21,6 +25,7 @@
     "nekos.life": "^2.0.7",
     "nhentai-api": "^3.0.2",
     "node-fetch": "^2.6.0",
+    "patch-package": "^6.2.2",
     "plur": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "split-to-chunks": "^1.0.3",
@@ -31,6 +36,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.13.5",
+    "cpx": "^1.5.0",
     "rimraf": "^3.0.2",
     "source-map-loader": "^0.2.4",
     "ts-loader": "^7.0.2",

@@ -1,0 +1,227 @@
+diff --git a/node_modules/@jimp/plugin-print/dist/index.js b/node_modules/@jimp/plugin-print/dist/index.js
+index 7676d8d..2c2fb5f 100644
+--- a/node_modules/@jimp/plugin-print/dist/index.js
++++ b/node_modules/@jimp/plugin-print/dist/index.js
+@@ -49,40 +49,54 @@ var _utils = require("@jimp/utils");
+ 
+ var _measureText = require("./measure-text");
+ 
+-function xOffsetBasedOnAlignment(constants, font, line, maxWidth, alignment) {
++function xOffsetBasedOnAlignment(constants, font, line, maxWidth, alignment, charHandler) {
+   if (alignment === constants.HORIZONTAL_ALIGN_LEFT) {
+     return 0;
+   }
+ 
+   if (alignment === constants.HORIZONTAL_ALIGN_CENTER) {
+-    return (maxWidth - (0, _measureText.measureText)(font, line)) / 2;
++    return (maxWidth - (0, _measureText.measureText)(font, line, charHandler)) / 2;
+   }
+ 
+-  return maxWidth - (0, _measureText.measureText)(font, line);
++  return maxWidth - (0, _measureText.measureText)(font, line, charHandler);
+ }
+ 
+ function drawCharacter(image, font, x, y, _char) {
+   if (_char.width > 0 && _char.height > 0) {
+-    var characterPage = font.pages[_char.page];
++    const page = _char.page;
++    var characterPage = typeof page == 'object' ? page : font.pages[page];
+     image.blit(characterPage, x + _char.xoffset, y + _char.yoffset, _char.x, _char.y, _char.width, _char.height);
+   }
+ 
+   return image;
+ }
+ 
+-function printText(font, x, y, text, defaultCharWidth) {
++function printText(font, x, y, text, defaultCharWidth, charHandler) {
++  text = [...text];
+   for (var i = 0; i < text.length; i++) {
+     var _char2 = void 0;
++    let fontCharOverride;
+ 
+     if (font.chars[text[i]]) {
+       _char2 = text[i];
+     } else if (/\s/.test(text[i])) {
+       _char2 = '';
++    } else if (/[\ufe00-\ufe0f\ud800-\udbff\udc00-\udfff]/.test(text[i])) {
++      continue;
++    } else if (charHandler) {
++      let out = charHandler(text[i]);
++      if (typeof out == 'string') {
++        _char2 = out;
++      } else if (typeof out == 'object') {
++        fontCharOverride = out;
++      } else {
++        _char2 = '?';
++      }
+     } else {
+       _char2 = '?';
+     }
+ 
+-    var fontChar = font.chars[_char2] || {};
++    var fontChar = fontCharOverride ? fontCharOverride : (font.chars[_char2] || {});
+     var fontKerning = font.kernings[_char2];
+     drawCharacter(this, font, x, y, fontChar || {});
+     var kerning = fontKerning && fontKerning[text[i + 1]] ? fontKerning[text[i + 1]] : 0;
+@@ -90,14 +104,14 @@ function printText(font, x, y, text, defaultCharWidth) {
+   }
+ }
+ 
+-function splitLines(font, text, maxWidth) {
+-  var words = text.split(' ');
++function splitLines(font, text, maxWidth, charHandler) {
++  var words = text.split(/\s+/g);
+   var lines = [];
+   var currentLine = [];
+   var longestLine = 0;
+   words.forEach(function (word) {
+     var line = [].concat((0, _toConsumableArray2["default"])(currentLine), [word]).join(' ');
+-    var length = (0, _measureText.measureText)(font, line);
++    var length = (0, _measureText.measureText)(font, line, charHandler);
+ 
+     if (length <= maxWidth) {
+       if (length > longestLine) {
+@@ -169,13 +183,13 @@ var _default = function _default() {
+             }
+ 
+             for (var i = 0; i < font.chars.length; i++) {
+-              chars[String.fromCharCode(font.chars[i].id)] = font.chars[i];
++              chars[String.fromCodePoint(font.chars[i].id)] = font.chars[i];
+             }
+ 
+             for (var _i = 0; _i < font.kernings.length; _i++) {
+-              var firstString = String.fromCharCode(font.kernings[_i].first);
++              var firstString = String.fromCodePoint(font.kernings[_i].first);
+               kernings[firstString] = kernings[firstString] || {};
+-              kernings[firstString][String.fromCharCode(font.kernings[_i].second)] = font.kernings[_i].amount;
++              kernings[firstString][String.fromCodePoint(font.kernings[_i].second)] = font.kernings[_i].amount;
+             }
+ 
+             loadPages(_this, _path["default"].dirname(file), font.pages).then(function (pages) {
+@@ -255,21 +269,21 @@ var _default = function _default() {
+         }
+ 
+         if (maxHeight !== Infinity && alignmentY === this.constructor.VERTICAL_ALIGN_BOTTOM) {
+-          y += maxHeight - (0, _measureText.measureTextHeight)(font, text, maxWidth);
++          y += maxHeight - (0, _measureText.measureTextHeight)(font, text, maxWidth, _text.charHandler);
+         } else if (maxHeight !== Infinity && alignmentY === this.constructor.VERTICAL_ALIGN_MIDDLE) {
+-          y += maxHeight / 2 - (0, _measureText.measureTextHeight)(font, text, maxWidth) / 2;
++          y += maxHeight / 2 - (0, _measureText.measureTextHeight)(font, text, maxWidth, _text.charHandler) / 2;
+         }
+ 
+         var defaultCharWidth = Object.entries(font.chars)[0][1].xadvance;
+ 
+-        var _splitLines = splitLines(font, text, maxWidth),
++        var _splitLines = splitLines(font, text, maxWidth, _text.charHandler),
+             lines = _splitLines.lines,
+             longestLine = _splitLines.longestLine;
+ 
+         lines.forEach(function (line) {
+           var lineString = line.join(' ');
+-          var alignmentWidth = xOffsetBasedOnAlignment(_this2.constructor, font, lineString, maxWidth, alignmentX);
+-          printText.call(_this2, font, x + alignmentWidth, y, lineString, defaultCharWidth);
++          var alignmentWidth = xOffsetBasedOnAlignment(_this2.constructor, font, lineString, maxWidth, alignmentX, _text.charHandler);
++          printText.call(_this2, font, x + alignmentWidth, y, lineString, defaultCharWidth, _text.charHandler);
+           y += font.common.lineHeight;
+         });
+ 
+diff --git a/node_modules/@jimp/plugin-print/dist/measure-text.js b/node_modules/@jimp/plugin-print/dist/measure-text.js
+index 589d1b3..576a4e4 100644
+--- a/node_modules/@jimp/plugin-print/dist/measure-text.js
++++ b/node_modules/@jimp/plugin-print/dist/measure-text.js
+@@ -10,27 +10,41 @@ Object.defineProperty(exports, "__esModule", {
+ exports.measureText = measureText;
+ exports.measureTextHeight = measureTextHeight;
+ 
+-function measureText(font, text) {
++function measureText(font, text, charHandler) {
+   var x = 0;
++  text = [...text];
+ 
+   for (var i = 0; i < text.length; i++) {
++    let char;
+     if (font.chars[text[i]]) {
+-      var kerning = font.kernings[text[i]] && font.kernings[text[i]][text[i + 1]] ? font.kernings[text[i]][text[i + 1]] : 0;
+-      x += (font.chars[text[i]].xadvance || 0) + kerning;
++      char = font.chars[text[i]];
++    } else if (charHandler) {
++      let out = charHandler(text[i]);
++      if (typeof out == 'string' && font.chars[out]) {
++        char = font.chars[out];
++      } else if (typeof out == 'object') {
++        char = out;
++      } else {
++        continue;
++      }
++    } else {
++      continue;
+     }
++    var kerning = font.kernings[text[i]] && font.kernings[text[i]][text[i + 1]] ? font.kernings[text[i]][text[i + 1]] : 0;
++    x += (char.xadvance || 0) + kerning;
+   }
+ 
+   return x;
+ }
+ 
+-function measureTextHeight(font, text, maxWidth) {
+-  var words = text.split(' ');
++function measureTextHeight(font, text, maxWidth, charHandler) {
++  var words = text.split(/\s+/g);
+   var line = '';
+   var textTotalHeight = font.common.lineHeight;
+ 
+   for (var n = 0; n < words.length; n++) {
+     var testLine = line + words[n] + ' ';
+-    var testWidth = measureText(font, testLine);
++    var testWidth = measureText(font, testLine, charHandler);
+ 
+     if (testWidth > maxWidth && n > 0) {
+       textTotalHeight += font.common.lineHeight;
+diff --git a/node_modules/@jimp/plugin-print/index.d.ts b/node_modules/@jimp/plugin-print/index.d.ts
+index 5d0273b..5a78264 100644
+--- a/node_modules/@jimp/plugin-print/index.d.ts
++++ b/node_modules/@jimp/plugin-print/index.d.ts
+@@ -1,4 +1,5 @@
+ import { GenericCallback, ImageCallback } from '@jimp/core';
++import Jimp from 'jimp';
+ 
+ export interface FontChar {
+   id: number;
+@@ -55,11 +56,12 @@ export interface Font {
+ }
+ 
+ type PrintableText =
+-  | any
++  | string
+   | {
+   text: string;
+   alignmentX: number;
+   alignmentY: number;
++  charHandler?: CharHandler
+ };
+ 
+ interface PrintClass {
+@@ -90,10 +92,21 @@ interface PrintClass {
+   ): this;
+ }
+ 
++export type CharHandler = (text: string) => {
++  x: number,
++  y: number,
++  width: number,
++  height: number,
++  xoffset: number,
++  yoffset: number,
++  xadvance: number,
++  page: Jimp
++} | string;
++
+ interface Print {
+   constants: {
+-    measureText(font: Font, text: PrintableText): number;
+-    measureTextHeight(font: Font, text: PrintableText, maxWidth: number): number;
++    measureText(font: Font, text: PrintableText, charHandler?: (text: string) => { xadvance: number }): number;
++    measureTextHeight(font: Font, text: PrintableText, maxWidth: number, charHandler?: (text: string) => { xadvance: number }): number;
+ 
+     // Font locations
+     FONT_SANS_8_BLACK: string;
