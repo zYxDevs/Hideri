@@ -25,21 +25,35 @@ import { TrapPlayActivity } from './activities/TrapPlayActivity';
 abstract class AppDiscord {
     private static _client: Client;
 
-    private last_activity: BaseActivity;
-    private last_timeout: NodeJS.Timer;
+    private static last_activity: BaseActivity;
+    private static last_timeout: NodeJS.Timer;
 
-    static start() {
+    private static activity_randomizer = RandomUtils.create_randomizer<{ new(client: Client): BaseActivity }>([
+        AwayWatchActivity,
+        GenericHelpActivity,
+        MobileWatchActivity,
+        NekoparaPlayActivity,
+        ServerStatusActivity,
+        TrapPlayActivity
+    ]);
+
+    public static start() {
         this._client = new Client();
-        this._client.login(config.token, `${__dirname}/commands/*.js`, `${__dirname}/embed-browsers/EmbedBrowser.js`);
+        this._client.login(config.token, `${__dirname}/commands/*.js`, `${__dirname}/commands/image-macros/*.js`, `${__dirname}/embed-browsers/EmbedBrowser.js`);
     }
 
     @On('ready')
     private ready(client: Client) {
-        this.process_next_activity();
+        AppDiscord.process_next_activity();
     }
 
-    private async process_next_activity() {
-        const client = AppDiscord._client;
+    public static async destroy() {
+        await this.last_activity.destroy();
+        this._client.destroy();
+    }
+
+    private static async process_next_activity() {
+        const client = this._client;
         client.clearTimeout(this.last_timeout);
 
         if (this.last_activity) await this.last_activity.destroy();
@@ -48,19 +62,12 @@ abstract class AppDiscord {
             status: 'online'
         });
 
-        const constructor = RandomUtils.choice<{ new(client: Client): BaseActivity }>([
-            AwayWatchActivity,
-            GenericHelpActivity,
-            MobileWatchActivity,
-            NekoparaPlayActivity,
-            ServerStatusActivity,
-            TrapPlayActivity
-        ]);
+        const constructor = this.activity_randomizer();
 
         const activity = new constructor(client);
         activity.create();
 
-        this.last_activity = activity;
+        AppDiscord.last_activity = activity;
 
         const next_delay = MathUtils.clamp(RandomUtils.gaussian(1, 10), .5, Infinity);
         this.last_timeout = client.setTimeout(() => this.process_next_activity(), next_delay * 60e3);
