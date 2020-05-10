@@ -27,5 +27,61 @@
             "height": 590,
             "rot": 0
         }
+    }, {
+        "name": "tsumugisay",
+        "description": "Have Tsumugi say something",
+        "image_location": "assets/tsumugi.png",
+        "mask_location": "assets/tsumugi_mask.png",
+        "output_filename": "tsumugi",
+        "mime": "image/png",
+        "frame": {
+            "x": 50,
+            "y": 86,
+            "width": 303,
+            "height": 406,
+            "rot": 0
+        }
+    }, {
+        "name": "nerosay",
+        "description": "Have Nero say something",
+        "image_location": "assets/nero.png",
+        "mask_location": "assets/nero_mask.png",
+        "output_filename": "nero",
+        "mime": "image/jpeg",
+        "frame": {
+            "x": -5,
+            "y": -10,
+            "width": 516,
+            "height": 288,
+            "rot": 11.3
+        }
+    }, {
+        "name": "kaedesay",
+        "description": "Have Kaede say something",
+        "image_location": "assets/kaede.png",
+        "mask_location": "assets/kaede_mask.png",
+        "output_filename": "kaede",
+        "mime": "image/jpeg",
+        "frame": {
+            "x": 392,
+            "y": 432,
+            "width": 350,
+            "height": 265,
+            "rot": 0
+        }
+    }, {
+        "name": "maisay",
+        "description": "Have Mai say something",
+        "image_location": "assets/mai.png",
+        "mask_location": "assets/mai_mask.png",
+        "output_filename": "mai",
+        "mime": "image/jpeg",
+        "frame": {
+            "x": 616,
+            "y": 52,
+            "width": 800,
+            "height": 1041,
+            "rot": 7.9
+        }
     }
 ]
