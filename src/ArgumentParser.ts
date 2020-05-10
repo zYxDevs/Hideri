@@ -195,12 +195,14 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
                         if (!params.handle_errors) return;
                         message.channel.send(`An unknown error occured: \`${error}\``);
                         message.channel.stopTyping();
+                        console.error(error);
                     });
                 } else { message.channel.stopTyping(); }
             } catch (e) {
                 if (!params.handle_errors) return;
                 message.channel.send(`An unknown error occured: \`${e.name} ${e.message}\``);
                 message.channel.stopTyping();
+                console.error(e);
             }
         };
 
