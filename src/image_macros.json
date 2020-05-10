@@ -1,0 +1,31 @@
+[
+    {
+        "name": "tohrusay",
+        "description": "Have Tohru say something",
+        "image_location": "assets/tohru.png",
+        "mask_location": "assets/tohru_mask.png",
+        "output_filename": "tohru",
+        "mime": "image/png",
+        "frame": {
+            "x": 245,
+            "y": 145,
+            "width": 266,
+            "height": 386,
+            "rot": 6.3
+        }
+    }, {
+        "name": "mishirosay",
+        "description": "Have Mishiro say something",
+        "image_location": "assets/mishiro.png",
+        "mask_location": "assets/mishiro_mask.png",
+        "output_filename": "mishiro",
+        "mime": "image/jpeg",
+        "frame": {
+            "x": 163,
+            "y": 453,
+            "width": 485,
+            "height": 590,
+            "rot": 0
+        }
+    }
+]

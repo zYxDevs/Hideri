@@ -3,5 +3,6 @@ export enum CommandGroup {
     ADMIN = 'Admin',
     IMAGE_EMOTES = 'Image Emotes',
     COMMUNITIES = 'Communities',
-    IMPERSONATION = 'Impersonation'
+    IMPERSONATION = 'Impersonation',
+    IMAGE_MACROS = 'Image Macros'
 }
