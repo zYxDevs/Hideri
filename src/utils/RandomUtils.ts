@@ -14,9 +14,9 @@ export class RandomUtils {
         return distribution();
     }
 
-    public static create_randomizer(array: Array<any>, options: {
+    public static create_randomizer<T>(array: Array<T>, options: {
         perceived_random: boolean
-    } = { perceived_random: true }) {
+    } = { perceived_random: true }): () => T {
         let last_index = -1;
         
         if (options.perceived_random) {
