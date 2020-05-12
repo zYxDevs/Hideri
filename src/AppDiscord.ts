@@ -1,6 +1,5 @@
 import { Discord, On, Client, CommandMessage, Guard } from '@typeit/discord';
 import 'reflect-metadata';
-
 import config from './configs/config.json';
 import activities from './configs/activities.json';
 import { Command } from './ArgumentParser';
@@ -13,11 +12,12 @@ import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
 import { BaseActivity } from './activities/BaseActivity';
+import moment from 'moment';
 
 @Discord({
     prefix: config.prefix
 })
-abstract class AppDiscord {
+export abstract class AppDiscord {
     private static _client: Client;
 
     private static last_activity: BaseActivity;
@@ -27,6 +27,8 @@ abstract class AppDiscord {
         require(`./activities/${activity}`)[activity]
     ));
 
+    private start_time: moment.Moment;
+
     public static start() {
         this._client = new Client();
         this._client.login(config.token, `${__dirname}/commands/*.js`, `${__dirname}/commands/image-macros/*.js`, `${__dirname}/embed-browsers/EmbedBrowser.js`);
@@ -35,6 +37,7 @@ abstract class AppDiscord {
     @On('ready')
     private ready(client: Client) {
         AppDiscord.process_next_activity();
+        this.start_time = moment();
     }
 
     public static async destroy() {
@@ -128,6 +131,18 @@ abstract class AppDiscord {
         message.channel.send(embed);
     }
 
+    @Command('uptime', {
+        infos: 'Get uptime',
+        description: 'Get the uptime of this bot',
+        extraneous_argument_message: false
+    })
+    private async uptime(message: CommandMessage) {
+        const uptime_string = moment.duration(moment().diff(this.start_time)).format('w [weeks], d [days], h [hrs], m [minutes]');
+        const start_string = this.start_time.format('MMM Do, Y, h:mm:ss A UTCZZ');
+
+        message.channel.send(`${uptime_string} (since ${start_string})`);
+    }
+
     @Guard(Owner())
     @Command('load_ext', {
         hide: true
@@ -141,11 +156,3 @@ abstract class AppDiscord {
         }
     }
 }
-
-AppDiscord.start();
-
-['SIGTERM', 'SIGINT'].forEach((signal: NodeJS.Signals) => {
-    process.on(signal, () => {
-        AppDiscord.destroy().finally(() => process.exit(0));
-    })
-});
