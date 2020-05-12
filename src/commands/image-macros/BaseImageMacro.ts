@@ -178,7 +178,18 @@ export abstract class BaseImageMacro {
             }
         }
 
-        const { font, overflow } = await this.get_font(segments.filter(s => s.type == 'text').map(s => s.data).join(' '), this.frame.width, this.frame.height);
+        let image_height = 0;
+
+        for (const segment of segments) {
+            if (segment.type != 'image') continue;
+            const image = await segment.data;
+            const height = image.getHeight();
+            const width = image.getWidth();
+
+            image_height += this.frame.width / width * height;
+        }
+
+        const { font, overflow } = await this.get_font(segments.filter(s => s.type == 'text').map(s => s.data).join(' '), this.frame.width, this.frame.height - image_height);
 
         emojis = emojis.map(emoji => emoji.resize(font.info.size, font.info.size));
 
