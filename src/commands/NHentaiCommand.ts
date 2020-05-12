@@ -12,6 +12,7 @@ import { HasPermission } from '../guards/HasPermission';
 import { TextChannel, Webhook } from 'discord.js';
 import { EmbedBrowser } from '../embed-browsers/EmbedBrowser';
 import { On } from '../events/On';
+import { nhentai } from '../apis/Instances';
 
 @Discord({
     prefix: config.prefix
@@ -25,8 +26,8 @@ export abstract class NHentaiCommand {
     private async execute(message: CommandMessage, query: RestAsString) {
         message.channel.startTyping();
         const query_str = encodeURIComponent(query.get());
-        const { pages } = await NHentaiEmbedBrowser.api.search(query_str);
-        const { books } = await NHentaiEmbedBrowser.api.search(query_str, RandomUtils.randint(1, pages));
+        const { pages } = await nhentai.search(query_str);
+        const { books } = await nhentai.search(query_str, RandomUtils.randint(1, pages));
         const book = RandomUtils.choice<any>(books);
         if (!book) return message.reply('No search results found');
         const page = RandomUtils.randint(4, book.pages.length - 4);

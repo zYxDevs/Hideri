@@ -1,13 +1,12 @@
 import { EmbedBrowserOptions, EmbedReactionTypes } from './EmbedBrowser';
 import { MessageEmbed } from 'discord.js';
-import { API } from 'nhentai-api';
+import { nhentai } from '../apis/Instances';
 import { MathUtils } from '../utils/MathUtils';
 import plur from 'plur';
 import title from 'title';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 
 export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
-    public static api = new API();
     private doujin;
     private gallery: number;
 
@@ -30,7 +29,7 @@ export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
     }
 
     public static async from_gallery(gallery: number, page: number = 0, options?: EmbedBrowserOptions) {
-        return new NHentaiEmbedBrowser(await NHentaiEmbedBrowser.api.getBook(gallery), page, options);        
+        return new NHentaiEmbedBrowser(await nhentai.getBook(gallery), page, options);        
     }
 
     async get_embed() {
@@ -38,11 +37,11 @@ export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
             const embed = new MessageEmbed();
             this._page = MathUtils.clamp(this._page, 1, this.doujin.pages.length);
             embed.setAuthor(`/g/${this.gallery}/${this._page}`, undefined, `https://nhentai.net/g/${this.gallery}/${this._page}/`);
-            embed.setImage(NHentaiEmbedBrowser.api.getImageURL(this.doujin.pages[this._page - 1]));
+            embed.setImage(nhentai.getImageURL(this.doujin.pages[this._page - 1]));
             return embed;
         } else {
             const embed = new MessageEmbed({ title: this.doujin.title.english });
-            embed.setImage(NHentaiEmbedBrowser.api.getImageURL(this.doujin.cover));
+            embed.setImage(nhentai.getImageURL(this.doujin.cover));
             embed.setAuthor(this.gallery, undefined, `https://nhentai.net/g/${this.gallery}/`);
             embed.setFooter('min 5 digits');
             embed.addField('Number of pages:', this.doujin.pages.length);

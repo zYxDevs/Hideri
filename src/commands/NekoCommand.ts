@@ -1,4 +1,3 @@
-import NekosClient from 'nekos.life';
 import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
 import { CommandMessage, Discord } from '@typeit/discord';
@@ -8,6 +7,7 @@ import { RestAsString } from '../argument-types/RestAsString';
 import { StringUtils } from '../utils/StringUtils';
 import { MessageEmbed } from 'discord.js';
 import config from '../configs/config.json';
+import { nekos } from '../apis/Instances';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
@@ -17,8 +17,6 @@ class NekosArgumentType extends SetArgumentType {
     prefix: config.prefix
 })
 export abstract class NekoCommand {
-    private nekos_client = new NekosClient();
-
     @Command('neko', {
         infos: 'Fetch image from nekos.life',
         group: CommandGroup.COMMUNITIES,
@@ -29,8 +27,8 @@ export abstract class NekoCommand {
         if (StringUtils.ci_includes(neko_tags, tag)) {
             message.channel.startTyping();
             let location = 'sfw'
-            if (StringUtils.ci_get(this.nekos_client.nsfw, tag)) location = 'nsfw';
-            const response = await StringUtils.ci_get(this.nekos_client[location], tag)();
+            if (StringUtils.ci_get(nekos.nsfw, tag)) location = 'nsfw';
+            const response = await StringUtils.ci_get(nekos[location], tag)();
             if (!response.url) return message.channel.send(response.cat ?? response.why ?? response.owo ?? response.fact ?? response.msg);
             const embed = new MessageEmbed();
             embed.setImage(response.url);
@@ -44,7 +42,7 @@ export abstract class NekoCommand {
             let text_str = text.get().trim();
             if (!text_str) return message.reply(`Error: missing argument \`text\``);
             message.channel.startTyping();
-            const response = await StringUtils.ci_get(this.nekos_client.sfw, tag)({ text: text_str });
+            const response = await StringUtils.ci_get(nekos.sfw, tag)({ text: text_str });
             message.channel.send(response.msg || response.owo);
         }
     }
