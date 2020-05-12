@@ -83,5 +83,19 @@
             "height": 1041,
             "rot": 7.9
         }
+    }, {
+        "name": "chikasay",
+        "description": "Have Chika say something",
+        "image_location": "assets/chika.png",
+        "mask_location": "assets/chika_mask.png",
+        "output_filename": "chika",
+        "mime": "image/jpeg",
+        "frame": {
+            "x": 175,
+            "y": 310,
+            "width": 240,
+            "height": 267,
+            "rot": 0
+        }
     }
 ]
