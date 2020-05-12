@@ -1,6 +1,7 @@
 export enum CommandGroup {
     GENERAL = 'General',
     ADMIN = 'Admin',
+    FUN = 'Fun',
     IMAGE_EMOTES = 'Image Emotes',
     COMMUNITIES = 'Communities',
     IMPERSONATION = 'Impersonation',
