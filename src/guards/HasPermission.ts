@@ -8,9 +8,11 @@ export function HasPermission(permission_list: PermissionResolvable[] | Permissi
     check_admin: true
 }) {
     return (message: Message, client: Client) => {
+        if (!(message.channel instanceof TextChannel)) return false;
+ 
         if (!Array.isArray(permission_list)) permission_list = [permission_list];
 
-        const permissions = (message.channel as TextChannel).permissionsFor(client.user);
+        const permissions = message.channel.permissionsFor(client.user);
 
         for (const permission of permission_list) {
             if (!permissions.has(permission, options.check_admin)) {
