@@ -73,7 +73,7 @@ export abstract class AppDiscord {
     })
     private async ping(message: CommandMessage, client: Client) {
         const reply = await message.channel.send(`Calculating ping...`);
-        reply.edit(`:ping_pong: Pong! ~${(reply.createdTimestamp - message.createdTimestamp).toFixed(2)}ms RTT`);
+        reply.edit(`:ping_pong: Pong! ~${(reply.createdTimestamp - message.createdTimestamp).toFixed(2)}ms RTT, ~${client.ws.ping.toFixed(2)}ms WS`);
     }
 
     @Command('h', {
