@@ -7,7 +7,7 @@ import config from '../configs/config.json';
 import { IOnExt } from '../types/IOnExt';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
-    private page_length = 10;
+    private page_length = 7;
 
     private commands: IOnExt[] = [...Client.getCommandsIntrospection().reduce((command_map, command: IOnExt) => {
         if (command.hide) return command_map;
