@@ -183,6 +183,9 @@ export abstract class BaseImageMacro {
         for (const segment of segments) {
             if (segment.type != 'image') continue;
             const image = await segment.data;
+
+            if (!image) continue;
+
             const height = image.getHeight();
             const width = image.getWidth();
 
