@@ -2,6 +2,7 @@ import { Discord, On, Client, CommandMessage, Guard } from '@typeit/discord';
 import 'reflect-metadata';
 
 import config from './configs/config.json';
+import activities from './configs/activities.json';
 import { Command } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
@@ -9,16 +10,9 @@ import { RegexUtils } from './utils/RegexUtils';
 import { MessageEmbed } from 'discord.js';
 import { IOnExt } from './types/IOnExt';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
-import { BaseActivity } from './activities/BaseActivity';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
-import { ServerStatusActivity } from './activities/ServerStatusActivity';
-import { AwayWatchActivity } from './activities/AwayWatchActivity';
-import { GenericHelpActivity } from './activities/GenericHelpActivity';
-import { MobileWatchActivity } from './activities/MobileWatchActivity';
-import { NekoparaPlayActivity } from './activities/NekoparaPlayActivity';
-import { TrapPlayActivity } from './activities/TrapPlayActivity';
-import { StreamingActivity } from './activities/StreamingActivity';
+import { BaseActivity } from './activities/BaseActivity';
 
 @Discord({
     prefix: config.prefix
@@ -29,15 +23,9 @@ abstract class AppDiscord {
     private static last_activity: BaseActivity;
     private static last_timeout: NodeJS.Timer;
 
-    private static activity_randomizer = RandomUtils.create_randomizer<{ new(client: Client): BaseActivity }>([
-        AwayWatchActivity,
-        GenericHelpActivity,
-        MobileWatchActivity,
-        NekoparaPlayActivity,
-        ServerStatusActivity,
-        StreamingActivity,
-        TrapPlayActivity
-    ]);
+    private static activity_randomizer = RandomUtils.create_randomizer<{ new(client: Client): BaseActivity }>(activities.map(activity =>
+        require(`./activities/${activity}`)[activity]
+    ));
 
     public static start() {
         this._client = new Client();
