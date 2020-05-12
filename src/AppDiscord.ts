@@ -13,6 +13,7 @@ import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
 import { BaseActivity } from './activities/BaseActivity';
 import moment from 'moment';
+import { findBestMatch } from 'string-similarity';
 
 @Discord({
     prefix: config.prefix
@@ -83,10 +84,28 @@ export abstract class AppDiscord {
     })
     private async help(message: CommandMessage, command: string = null) {
         if (!command) return new HelpEmbedBrowser().send_embed(message);
-
+        
+        const commands = Client.getCommandsIntrospection() as IOnExt[];
         command = command.trim().replace(new RegExp(`^${RegexUtils.escape(config.prefix)}`, 'i'), '');
-        const command_obj = (Client.getCommandsIntrospection() as IOnExt[]).find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
-        if (!command_obj || command_obj.hide) return message.reply(`Error: command \`${command}\` not found`);
+        const command_obj = commands.find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
+        
+        if (!command_obj || command_obj.hide) {
+            let { ratings } = findBestMatch(command, commands.filter(command => !command.hide).flatMap(command => [command.commandName, ...(command.aliases ?? [])]));
+            ratings = ratings.filter(({ rating }) => rating > .66).map(({ target }) => target);
+
+            if (!ratings.length) return message.reply(`Error: command \`${command}\` not found`);
+
+            const embed = new MessageEmbed({ title: `Command \`${command}\` not found` });
+            embed.addField('Did you mean the following?', ratings.map(name => {
+                const command_obj = commands.find(({ commandName, aliases }) => commandName == name || aliases?.includes(name));
+                if (!command_obj) return '';
+
+                return `\`${command_obj.commandName}\`, from ${command_obj.group}: ${command_obj.infos ?? ''}`;
+            }).filter(x => x).join('\n'))
+
+            return message.channel.send(embed);
+        }
+        
         const embed = new MessageEmbed({ title: `\`${command_obj.commandName}\` command` });
         embed.addField('Group', command_obj.group);
         embed.addField('Info', command_obj.infos ?? 'None');
