@@ -36,22 +36,25 @@ export abstract class NHentaiCommand {
     @Guard(NotBot, Not(StartsWith('<')))
     @On('message')
     private async on_message(message: CommandMessage, client: Client) {
+        let matches = [...message.content.matchAll(/\(\s*(\d{5,6})(\s+\d+)?\s*\)/g)];
+
+        if (!matches.length) return;
+
         message.channel.startTyping();
+
         const has_webhook_permission = HasPermission('MANAGE_WEBHOOKS', {
             error_message: null,
             check_admin: true
         })(message, client);
-
-        let matches = [...message.content.matchAll(/\(\s*(\d{5,6})(\s+\d+)?\s*\)/g)];
         let webhook: Webhook;
 
-        if (has_webhook_permission && message.channel instanceof TextChannel) {
+        if (has_webhook_permission) {
             if (matches.length > 7) {
-                const member = message.channel.members.find(member => member.user == client.user);
-                webhook = await message.channel.createWebhook(member?.displayName ?? client.user.username, {
+                const member = (message.channel as TextChannel).members.find(member => member.user == client.user);
+                webhook = await (message.channel as TextChannel).createWebhook(member?.displayName ?? client.user.username, {
                     avatar: client.user.avatarURL()
                 });
-                matches = matches.slice(0, 100);
+                matches = matches.slice(0, 200);
             }
         } else {
             matches = matches.slice(0, 8);
@@ -70,7 +73,7 @@ export abstract class NHentaiCommand {
             })));
 
             if (webhook) {
-                embed_browser && embed_browsers.push(embed_browser)
+                embed_browser && embed_browsers.push(embed_browser);
 
                 if (embed_browsers.length >= 10 || match_index == (matches.length - 1)) {
                     const embeds = [];
@@ -89,8 +92,6 @@ export abstract class NHentaiCommand {
             }
         }
 
-        if (webhook) {
-            webhook.delete();
-        }
+        webhook?.delete();
     }
 }
