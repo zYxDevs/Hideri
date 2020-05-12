@@ -9,7 +9,7 @@
     "prebuild": "npm run clean && node gen_constants.js",
     "postbuild": "npm run copyfiles",
     "postinstall": "patch-package",
-    "start": "npm run build && node build/bot.js",
+    "start": "npm run build && node build/index.js",
     "clean": "rimraf build/",
     "copyfiles": "cpx -u src/assets/** build/assets"
   },
@@ -22,6 +22,8 @@
     "get-function-arguments": "^1.0.0",
     "grosso-modo": "^3.1.1",
     "jimp": "^0.10.3",
+    "moment": "^2.25.3",
+    "moment-duration-format": "^2.3.2",
     "nekos.life": "^2.0.7",
     "nhentai-api": "^3.0.2",
     "node-fetch": "^2.6.0",
