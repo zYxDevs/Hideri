@@ -18,6 +18,7 @@ import { GenericHelpActivity } from './activities/GenericHelpActivity';
 import { MobileWatchActivity } from './activities/MobileWatchActivity';
 import { NekoparaPlayActivity } from './activities/NekoparaPlayActivity';
 import { TrapPlayActivity } from './activities/TrapPlayActivity';
+import { StreamingActivity } from './activities/StreamingActivity';
 
 @Discord({
     prefix: config.prefix
@@ -34,6 +35,7 @@ abstract class AppDiscord {
         MobileWatchActivity,
         NekoparaPlayActivity,
         ServerStatusActivity,
+        StreamingActivity,
         TrapPlayActivity
     ]);
 
