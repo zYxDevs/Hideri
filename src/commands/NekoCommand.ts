@@ -3,11 +3,11 @@ import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
 import { CommandMessage, Discord } from '@typeit/discord';
 import { SetArgumentType } from '../argument-types/SetArgumentType';
-import neko_tags from '../neko_tags.json';
+import neko_tags from '../configs/neko_tags.json';
 import { RestAsString } from '../argument-types/RestAsString';
 import { StringUtils } from '../utils/StringUtils';
 import { MessageEmbed } from 'discord.js';
-import config from '../config.json';
+import config from '../configs/config.json';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];

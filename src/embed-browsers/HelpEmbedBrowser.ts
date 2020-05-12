@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { Client } from '@typeit/discord';
 import { CommandGroup } from '../types/CommandGroup';
-import config from '../config.json';
+import config from '../configs/config.json';
 import { IOnExt } from '../types/IOnExt';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {

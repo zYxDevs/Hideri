@@ -1,7 +1,7 @@
 import { Discord, On, Client, CommandMessage, Guard } from '@typeit/discord';
 import 'reflect-metadata';
 
-import config from './config.json';
+import config from './configs/config.json';
 import { Command } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';

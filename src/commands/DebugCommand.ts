@@ -1,4 +1,4 @@
-import config from '../config.json';
+import config from '../configs/config.json';
 import { Discord, Guard, CommandMessage, Client } from '@typeit/discord';
 import { Owner } from '../guards/Owner';
 import { Command } from '../ArgumentParser';

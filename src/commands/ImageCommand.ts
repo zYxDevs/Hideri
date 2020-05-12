@@ -1,6 +1,6 @@
 import { Command } from '../ArgumentParser';
 import { Discord, CommandMessage } from '@typeit/discord';
-import config from '../config.json';
+import config from '../configs/config.json';
 import fetch from 'node-fetch';
 import { CommandGroup } from '../types/CommandGroup';
 import { EmbedUtils } from '../utils/EmbedUtils';

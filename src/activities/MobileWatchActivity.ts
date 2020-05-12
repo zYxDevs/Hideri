@@ -1,6 +1,6 @@
 import { BaseActivity } from './BaseActivity';
 import { Client as DiscordJSClient, Base } from 'discord.js';
-import config from '../config.json';
+import config from '../configs/config.json';
 
 export class MobileWatchActivity extends BaseActivity {
     private mobile_client = new DiscordJSClient({

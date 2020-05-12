@@ -1,6 +1,6 @@
 import { Command } from '../ArgumentParser';
 import { Discord, On, Guard, CommandMessage } from '@typeit/discord';
-import config from '../config.json';
+import config from '../configs/config.json';
 import { NotBot } from '../guards/NotBot';
 import { Not } from '../guards/Not';
 import { StartsWith } from '../guards/StartsWith';

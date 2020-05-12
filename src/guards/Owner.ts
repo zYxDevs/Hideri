@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { Client } from '@typeit/discord';
-import config from '../config.json';
+import config from '../configs/config.json';
 
 export function Owner(options: { error_message?: string | null } = {
     error_message: 'You dont look like my onii-chan!'

@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { Client } from '@typeit/discord';
-import config from '../config.json';
+import config from '../configs/config.json';
 
 export function Admin(options: { error_message?: string | null } = {
     error_message: 'B-B-B-BAAAKAAAA, you\'re not allowed to use this command!'

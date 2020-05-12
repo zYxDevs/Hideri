@@ -5,7 +5,7 @@ import { SetArgumentType } from '../argument-types/SetArgumentType';
 import { RandomUtils } from '../utils/RandomUtils';
 import { CommandMessage, Discord } from '@typeit/discord';
 import { EmbedUtils } from '../utils/EmbedUtils';
-import config from '../config.json';
+import config from '../configs/config.json';
 
 class RedditStatusType extends SetArgumentType {
     public argument_list = ['hot', 'rising', 'new', 'top'];

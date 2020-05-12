@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import get_function_arguments from 'get-function-arguments';
 import { ICommandParams, Command as DiscordCommand, CommandMessage, Client } from '@typeit/discord';
 import string_argv from 'string-argv';
-import config from './config.json';
+import config from './configs/config.json';
 import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
 import { RestAsString } from './argument-types/RestAsString.js';
 import { Integer } from './argument-types/Integer.js';

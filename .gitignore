@@ -40,5 +40,5 @@ build/**/*
 # ignore yarn.lock
 yarn.lock
 
-src/config.json
+src/configs/config.json
 src/constants.ts
