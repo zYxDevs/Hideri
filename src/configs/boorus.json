@@ -1,0 +1,41 @@
+[
+    {
+        "name": "hypnohub",
+        "booru": "hypnohub.net",
+        "aliases": [ "hypno" ]
+    }, {
+        "name": "danbooru",
+        "booru": "danbooru.donmai.us",
+        "aliases": [ "dan" ]
+    }, {
+        "name": "konachan",
+        "booru": "konachan.com",
+        "aliases": [ "kona" ]
+    }, {
+        "name": "yandere",
+        "booru": "yande.re"
+    }, {
+        "name": "gelbooru",
+        "booru": "gelbooru.com",
+        "aliases": [ "gel" ]
+    }, {
+        "name": "rule34",
+        "booru": "rule34.xxx",
+        "aliases": [ "r34" ]
+    }, {
+        "name": "safebooru",
+        "booru": "safebooru.org"
+    }, {
+        "name": "tbib",
+        "booru": "tbib.org"
+    }, {
+        "name": "xbooru",
+        "booru": "xbooru.com"
+    }, {
+        "name": "lolibooru",
+        "booru": "lolibooru.moe"
+    }, {
+        "name": "paheal",
+        "booru": "rule34.paheal.net"
+    }
+]

@@ -18,6 +18,7 @@
   "dependencies": {
     "@jimp/plugin-print": "^0.10.3",
     "@typeit/discord": "^2.0.22",
+    "booru": "^2.2.3",
     "discord.js": "^12.2.0",
     "get-function-arguments": "^1.0.0",
     "grosso-modo": "^3.1.1",
