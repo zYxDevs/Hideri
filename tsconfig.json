@@ -19,7 +19,11 @@
       "es2020.string"
     ],
     "moduleResolution": "node",
-    "types": [ "node" ]
+    "types": [ "node" ],
+    "typeRoots": [
+      "./types",
+      "./global.d.ts"
+    ]
   },
   "exclude": [
     "node_modules",
