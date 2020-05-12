@@ -96,7 +96,7 @@ abstract class AppDiscord {
         command = command.trim().replace(new RegExp(`^${RegexUtils.escape(config.prefix)}`, 'i'), '');
         const command_obj = (Client.getCommandsIntrospection() as IOnExt[]).find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
         if (!command_obj || command_obj.hide) return message.reply(`Error: command \`${command}\` not found`);
-        const embed = new MessageEmbed({ title: `\`${command}\` command` });
+        const embed = new MessageEmbed({ title: `\`${command_obj.commandName}\` command` });
         embed.addField('Group', command_obj.group);
         embed.addField('Info', command_obj.infos ?? 'None');
         embed.addField('Description', command_obj.description ?? 'None');
