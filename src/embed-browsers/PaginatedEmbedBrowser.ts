@@ -1,7 +1,7 @@
-import { EmbedBrowser, EmbedBrowserOptions, EmbedReactionTypes } from './EmbedBrowser';
+import { BaseEmbedBrowser, EmbedBrowserOptions, EmbedReactionTypes } from './BaseEmbedBrowser';
 import { MathUtils } from '../utils/MathUtils';
 
-export abstract class PaginatedEmbedBrowser extends EmbedBrowser {
+export abstract class PaginatedEmbedBrowser extends BaseEmbedBrowser {
     public min_page = 1;
     public max_page = 2;
 

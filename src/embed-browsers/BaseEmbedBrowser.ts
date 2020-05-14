@@ -11,8 +11,8 @@ const default_options = {
     sender_only: true
 }
 
-export abstract class EmbedBrowser {
-    private static class_instances: EmbedBrowser[] = new CappedArray(500);
+export abstract class BaseEmbedBrowser {
+    private static class_instances: BaseEmbedBrowser[] = new CappedArray(500);
 
     public message: Message;
 
@@ -20,7 +20,7 @@ export abstract class EmbedBrowser {
 
     constructor(public options: EmbedBrowserOptions = default_options) {
         this.options = Object.assign({}, default_options, options);
-        EmbedBrowser.class_instances.push(this);
+        BaseEmbedBrowser.class_instances.push(this);
     }
 
     public async send_embed(message: Message) {
@@ -49,8 +49,8 @@ export abstract class EmbedBrowser {
     }
 
     public remove() {
-        const index = EmbedBrowser.class_instances.indexOf(this);
-        if (~index) EmbedBrowser.class_instances.splice(index, 1);
+        const index = BaseEmbedBrowser.class_instances.indexOf(this);
+        if (~index) BaseEmbedBrowser.class_instances.splice(index, 1);
     }
 
     public static on_react(reaction: MessageReaction, user: User, client: Client) {
@@ -58,7 +58,7 @@ export abstract class EmbedBrowser {
         const reaction_type_str = EmbedReactionTypes[reaction_type];
         const id = reaction.message.id;
         if (!reaction_type) return;
-        EmbedBrowser.class_instances.forEach(instance => {
+        BaseEmbedBrowser.class_instances.forEach(instance => {
             if (instance.get_message().id != id) return;
             instance.reaction_buttons.get(reaction_type_str)?.call(instance, reaction, user, client);
         });
@@ -72,7 +72,7 @@ export abstract class EmbedBrowserDelegate {
     on_react(reaction: MessageReaction, user: User, client: Client) {
         if (user.bot) return;
         if (reaction.message.author.id !== client.user.id) return;
-        EmbedBrowser.on_react(reaction, user, client);
+        BaseEmbedBrowser.on_react(reaction, user, client);
     }
 }
 

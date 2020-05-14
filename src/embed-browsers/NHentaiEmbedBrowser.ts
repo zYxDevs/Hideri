@@ -1,13 +1,14 @@
-import { EmbedBrowserOptions, EmbedReactionTypes } from './EmbedBrowser';
+import { EmbedBrowserOptions, EmbedReactionTypes } from './BaseEmbedBrowser';
 import { MessageEmbed } from 'discord.js';
 import { nhentai } from '../apis/Instances';
 import { MathUtils } from '../utils/MathUtils';
 import plur from 'plur';
 import title from 'title';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
+import { Book } from 'nhentai-api';
 
 export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
-    private doujin;
+    private doujin: Book;
     private gallery: number;
 
     public min_page = 0;
@@ -36,17 +37,19 @@ export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
         if (Number.isInteger(this._page) && this._page > 0) {
             const embed = new MessageEmbed();
             this._page = MathUtils.clamp(this._page, 1, this.doujin.pages.length);
-            embed.setAuthor(`/g/${this.gallery}/${this._page}`, undefined, `https://nhentai.net/g/${this.gallery}/${this._page}/`);
+            embed.setTitle(`/g/${this.gallery}/${this._page}`);
+            embed.setURL(`https://nhentai.net/g/${this.gallery}/${this._page}/`);
             embed.setImage(nhentai.getImageURL(this.doujin.pages[this._page - 1]));
             return embed;
         } else {
-            const embed = new MessageEmbed({ title: this.doujin.title.english });
+            const embed = new MessageEmbed();
             embed.setImage(nhentai.getImageURL(this.doujin.cover));
-            embed.setAuthor(this.gallery, undefined, `https://nhentai.net/g/${this.gallery}/`);
+            embed.setTitle(this.doujin.title.english ?? this.doujin.title.japanese ?? this.doujin.title.pretty);
+            embed.setURL(`https://nhentai.net/g/${this.gallery}/`);
             embed.setFooter('min 5 digits');
             embed.addField('Number of pages:', this.doujin.pages.length);
             const tag_dict: { [key: string]: string[] } = {};
-            this.doujin.tags.forEach(tag => {
+            (this.doujin as any).tags.forEach(tag => {
                 const type = tag.type.type;
                 if (!(type in tag_dict)) tag_dict[type] = [];
                 tag_dict[type].push(tag.name)

@@ -1,4 +1,4 @@
-import { EmbedBrowserOptions } from './EmbedBrowser';
+import { EmbedBrowserOptions } from './BaseEmbedBrowser';
 import { MessageEmbed } from 'discord.js';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { Client } from '@typeit/discord';
