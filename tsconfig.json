@@ -16,13 +16,15 @@
       "es2017",
       "es2019",
       "esnext.asynciterable",
-      "es2020.string"
+      "es2020.string",
+      "es2020.promise"
     ],
     "moduleResolution": "node",
     "types": [ "node" ],
     "typeRoots": [
       "./types",
-      "./global.d.ts"
+      "./global.d.ts",
+      "./node_modules/@types"
     ]
   },
   "exclude": [

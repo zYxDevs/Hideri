@@ -14,6 +14,7 @@ import { MathUtils } from './utils/MathUtils';
 import { BaseActivity } from './activities/BaseActivity';
 import moment from 'moment';
 import { findBestMatch } from 'string-similarity';
+import { ServerHandler } from './workers/ServerHandler';
 
 @Discord({
     prefix: config.prefix
@@ -32,13 +33,21 @@ export abstract class AppDiscord {
 
     public static start() {
         this._client = new Client();
-        this._client.login(config.token, `${__dirname}/commands/*.js`, `${__dirname}/commands/image-macros/*.js`, `${__dirname}/embed-browsers/EmbedBrowser.js`);
+        this._client.login(config.token,
+            `${__dirname}/commands/*.js`,
+            `${__dirname}/commands/image-macros/*.js`,
+            `${__dirname}/commands/search-embeds/*.js`,
+            `${__dirname}/embed-browsers/BaseEmbedBrowser.js`
+        );
+
+        ServerHandler.set_cache_dir(`${__dirname}/${config.cache_dir}/`);
     }
 
     @On('ready')
     private ready(client: Client) {
         AppDiscord.process_next_activity();
         this.start_time = moment();
+        ServerHandler.set_client_id(client.user.id);
     }
 
     public static async destroy() {
@@ -137,7 +146,7 @@ export abstract class AppDiscord {
 
         const embed = new MessageEmbed({
             title: 'Invite HentaiBot',
-            url: 'https://discord.com/oauth2/authorize?client_id=507648234236411904&scope=bot&permissions=640928832',
+            url: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=640928832`,
             thumbnail: {
                 url: client.user.avatarURL()
             },

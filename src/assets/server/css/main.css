@@ -1,0 +1,72 @@
+@font-face {
+    font-family: "Whitney Book";
+    src: url(/fonts/Whitney-Book.woff2);
+}
+
+* {
+    font-family: "Whitney Book", Roboto, Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: white;
+}
+
+body {
+    background-color: #26262b;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+}
+
+img {
+    width: auto;
+    height: calc(100% - 2rem);
+    margin: 1rem;
+    border-radius: 5px;
+}
+
+h3 {
+    font-size: 2rem;
+    margin: 0 1rem 1rem 0;
+    text-align: center;
+}
+
+p {
+    margin: 0 1rem 0 .125rem;
+    font-size: .95rem;
+    color: rgb(185, 187, 190);
+}
+
+button {
+    background-color: #7289da;
+    height: 38px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 2px 16px;
+    user-select: none;
+    outline: 0;
+    cursor: pointer;
+    margin-left: auto;
+    margin-top: auto;
+}
+
+#text_container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 1rem 1rem 0;
+}
+
+#container {
+    background-color: rgb(54, 57, 63);
+    margin: auto;
+
+    width: 35rem;
+    height: 12rem;
+    border-radius: 4px;
+
+    border-left: 4px solid rgb(32, 34, 37);
+
+    display: flex;
+}
