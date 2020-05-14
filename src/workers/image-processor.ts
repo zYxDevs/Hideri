@@ -78,7 +78,7 @@ class ImageProcessor {
     }
 
     static get_copied_image(location: string): Promise<Jimp> {
-        return ImageProcessor.get_image_or_cached(location).then(image => Jimp.read(image));
+        return ImageProcessor.get_image_or_cached(location).then(image => image.clone());
     }
 
     async get_font(text: string, width: number, height: number): Promise<{
@@ -116,9 +116,12 @@ class ImageProcessor {
         for (const segment of this.options.segments) {
             if (segment.type != 'image') continue;
 
-            const image = await ImageProcessor.get_copied_image(segment.data);
+            const image = await (ImageProcessor.get_copied_image(segment.data).catch(() => null));
 
-            if (!image) continue;
+            if (!image) {
+                (segment.type as any) = 'text';
+                continue;
+            }
 
             segment.image = image;
 
