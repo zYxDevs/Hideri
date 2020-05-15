@@ -48,9 +48,13 @@ const serve_proxied_image = async (request: Request, response: Response<any>, ur
     const file_exists = await (access(filepath).then(() => true).catch(() => false));
 
     if (file_exists) {
+        logger.verbose(`cache hit: ${url}`);
+
         response.setHeader('Content-Type', await get_mime_type(filepath));
         return response.end(await readFile(filepath));
     }
+
+    logger.verbose(`cache miss: ${url}`);
 
     const image = await fetch(url, fetch_options);
 
@@ -113,6 +117,8 @@ app.get('*', (request, response) => {
 });
 
 app.listen(config.port);
+
+logger.http(`listening on port ${config.port}`);
 
 process.on('message', async message => {
     const { command, data } = message;
