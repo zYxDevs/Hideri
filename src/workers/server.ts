@@ -3,7 +3,7 @@ import fetch, { RequestInit } from 'node-fetch';
 import express, { Response, Request, RequestHandler } from 'express';
 import mime from 'mime-types';
 import slugify from 'slugify';
-import fs from 'fs';
+import fs, { write } from 'fs';
 import { ServerHandlerCommand } from './ServerHandlerCommand';
 import path from 'path';
 import FileType from 'file-type';
@@ -12,6 +12,7 @@ import compression from 'compression';
 import { create_handler } from './WorkerErrorHandler';
 import { WorkerLogger as logger } from './WorkerLogger';
 import memory_cache from 'memory-cache';
+import { generate_favicons } from './generate-favicons';
 
 const app = express();
 
@@ -169,6 +170,17 @@ process.on('message', async message => {
 
         case ServerHandlerCommand.SET_CLIENT_AVATAR:
             avatar_url = data;
+            access(`${__dirname}/../assets/server/last_avatar`).catch(() => false).then(async res => {
+                if (!res) {
+                    generate_favicons(avatar_url);
+                } else {
+                    const last_avatar = await readFile(`${__dirname}/../assets/server/last_avatar`);
+                    
+                    if (last_avatar.toString() != avatar_url) generate_favicons(avatar_url);
+                }
+
+                writeFile(`${__dirname}/../assets/server/last_avatar`, avatar_url)
+            });
     }
 });
 
