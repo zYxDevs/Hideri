@@ -114,7 +114,7 @@ const cache = (seconds: number): RequestHandler => (request, response, next) => 
 
 app.use((req, res, next) => {
     const source = req.headers['x-forwarded-for'] ?? req.connection.remoteAddress;
-    logger.http(`client ${source} requested url ${req.url}`);
+    logger.http(`[${source}]: ${req.method.toUpperCase()} ${req.url}`);
     next();
 }, cache(300), compression(), express.static(`${__dirname}/../assets/server`));
 
