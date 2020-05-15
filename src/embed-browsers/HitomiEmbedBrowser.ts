@@ -26,7 +26,7 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
         super(_page, options);
         this.max_page = gallery.files.length;
 
-        this.fetch_order = [...new Array(gallery.files.length)].map((_, i) => i).sort((a, b) => Math.abs(a - _page + 1) - Math.abs(b - _page + 1));
+        this.fetch_order = [...new Array(gallery.files.length).keys()].sort((a, b) => Math.abs(a - _page + 1) - Math.abs(b - _page + 1));
     }
 
     public static async from_gallery(gallery_id: number, page?: number, options?: EmbedBrowserOptions) {
