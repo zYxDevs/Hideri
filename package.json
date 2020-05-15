@@ -23,6 +23,7 @@
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
     "discord.js": "^12.2.0",
+    "ejs": "^3.1.2",
     "express": "^4.17.1",
     "file-type": "^14.3.0",
     "get-function-arguments": "^1.0.0",

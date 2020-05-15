@@ -4,5 +4,6 @@
     "owner_id": "132599390727700480",
     "port": 80,
     "cache_dir": "./caches",
-    "exit_on_uncaught_error": true
+    "exit_on_uncaught_error": true,
+    "color": "#000000"
 }

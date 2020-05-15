@@ -3,7 +3,7 @@ import fetch, { RequestInit } from 'node-fetch';
 import express, { Response, Request, RequestHandler } from 'express';
 import mime from 'mime-types';
 import slugify from 'slugify';
-import fs, { write } from 'fs';
+import fs from 'fs';
 import { ServerHandlerCommand } from './ServerHandlerCommand';
 import path from 'path';
 import FileType from 'file-type';
@@ -24,6 +24,7 @@ const mkdir = fs.promises.mkdir;
 let cache_path = '';
 let client_id = '';
 let avatar_url = '';
+let username = '';
 
 const get_mime_type = async (file: Buffer | string) => {
     if (typeof file == 'string' && path.extname(file)) {
@@ -93,20 +94,34 @@ const serve_proxied_image = async (request: Request, response: Response<any>, ur
     writeFile(filepath, data, 'binary');
 };
 
-const cache = (seconds: number): RequestHandler => (request, response, next) => {
+const cache = (seconds?: number): RequestHandler => (request, response, next) => {
     const url = request.originalUrl ?? request.url;
-    const key = `__express__${url}`;
-    const body = memory_cache.get(key);
+    const body_key = `__express__${url}`;
+    const status_key = `__express__status_${url}`;
+    const content_type_key = `__express__content_type_${url}`;
+    const body = memory_cache.get(body_key);
+    const status = memory_cache.get(status_key);
+    const content_type = memory_cache.get(content_type_key);
     
     if (body) {
         logger.verbose(`memory cache hit: ${url}`);
+
+        if (status) response.statusCode = status;
+        if (content_type) response.setHeader('Content-Type', content_type);
+
         return response.send(body);
     }
 
     const original_send = response.send;
 
     response.send = body => {
-        if (response.statusCode < 300) memory_cache.put(key, body, seconds * 1000);
+        if (response.statusCode < 300) {
+            const duration = seconds ? seconds * 1000 : undefined;
+
+            memory_cache.put(body_key, body, duration);
+            memory_cache.put(status_key, response.statusCode, duration);
+            memory_cache.put(content_type_key, response.getHeader('Content-Type'), duration);
+        }
 
         return original_send.call(response, body);
     };
@@ -114,19 +129,31 @@ const cache = (seconds: number): RequestHandler => (request, response, next) => 
     next();
 };
 
+app.set('view engine', 'ejs');
+
 app.use((req, res, next) => {
     const source = req.headers['x-forwarded-for'] ?? req.connection.remoteAddress;
     logger.http(`[${source}]: ${req.method.toUpperCase()} ${req.url}`);
     next();
-}, cache(300), compression(), express.static(`${__dirname}/../assets/server`));
+}, cache(300), compression(), express.static(`${__dirname}/../assets/server/static`));
+
+app.get(['/', '/index.html'], cache(), (request, response) => {
+    response.render(`${__dirname}/../assets/server/views/index`, {
+        username: username,
+        invite_link: `https://discord.com/oauth2/authorize?client_id=${client_id}&scope=bot&permissions=640928832`,
+        color: config.color || '#ffffff'
+    });
+});
+
+app.get('/site.webmanifest', cache(), (request, response) => {
+    response.render(`${__dirname}/../assets/server/views/site-webmanifest`, {
+        username: username,
+        color: config.color || '#ffffff'
+    });
+});
 
 app.get('/images/avatar.png', (request, response) => {
     response.redirect(avatar_url);
-});
-
-app.get('/scripts/client.js', (request, response) => {
-    response.setHeader('Content-Type', 'application/javascript');
-    response.end(`function invite() { return 'https://discord.com/oauth2/authorize?client_id=${client_id}&scope=bot&permissions=640928832'; }`);
 });
 
 app.get('/hitomila/*', async (request, response) => {
@@ -181,6 +208,11 @@ process.on('message', async message => {
 
                 writeFile(`${__dirname}/../assets/server/last_avatar`, avatar_url)
             });
+
+            break;
+        
+        case ServerHandlerCommand.SET_CLIENT_USERNAME:
+            username = data;
     }
 });
 

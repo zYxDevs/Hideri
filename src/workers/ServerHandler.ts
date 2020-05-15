@@ -23,6 +23,11 @@ export abstract class ServerHandler {
                 size: 512
             })
         });
+
+        this.server.send({
+            command: ServerHandlerCommand.SET_CLIENT_USERNAME,
+            data: client.user.username
+        });
     }
 
     public static set_cache_dir(dir: string) {
