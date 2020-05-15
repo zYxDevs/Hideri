@@ -5,5 +5,7 @@
     "NekoparaPlayActivity",
     "ServerStatusActivity",
     "StreamingActivity",
-    "TrapPlayActivity"
+    "TrapPlayActivity",
+    "SeriesWatchActivity",
+    "PlayingWithActivity"
 ]
