@@ -1,4 +1,4 @@
-import { fork, Serializable } from 'child_process';
+import { fork, Serializable, ChildProcess } from 'child_process';
 import { create_logger } from '../utils/Logger';
 import { IPCLoggingResponse } from '../types/IPCLoggingResponse';
 
@@ -32,7 +32,7 @@ export abstract class ImageProcessorHandler {
         reject: Function,
         options: ImageIPCOptions
     }[] = [];
-    public static image_processor;
+    public static image_processor: ChildProcess;
     
     public static process(options: ImageIPCOptions): Promise<{ data: number[] }> {
         let promise_resolve: Function;

@@ -1,4 +1,4 @@
-import { fork } from 'child_process';
+import { fork, ChildProcess } from 'child_process';
 import { ServerHandlerCommand } from '../types/ServerHandlerCommand';
 import { create_logger } from '../utils/Logger';
 import { IPCLoggingResponse } from '../types/IPCLoggingResponse';
@@ -7,9 +7,7 @@ const logger = create_logger(module);
 const server_logger = create_logger('Server Thread')
 
 export abstract class ServerHandler {
-    public static server = fork(`${__dirname}/server.js`, [], {
-        stdio:  [ 'pipe', 'pipe', 'pipe', 'ipc' ]
-    });
+    public static server: ChildProcess;
 
     public static set_client_id(id: string) {
         this.server.send({
@@ -26,8 +24,22 @@ export abstract class ServerHandler {
     }
 }
 
-logger.info(`server thread started with PID ${ServerHandler.server.pid}`);
+const setup_thread = () => {
+    ServerHandler.server = fork(`${__dirname}/image-processor.js`, [], {
+        stdio:  [ 'pipe', 'pipe', 'pipe', 'ipc' ]
+    });
 
-ServerHandler.server.on('message', (message: IPCLoggingResponse) => {
-    message.type == 'log' && server_logger.log(message.level, message.message);
-});
+    ServerHandler.server.on('exit', code => {
+        logger.error(`child thread exitied with code ${code}`);
+        logger.error(`attempting to relaunch...`);
+        setTimeout(() => setup_thread(), 100);
+    });
+
+    ServerHandler.server.on('message', (message: IPCLoggingResponse) => {
+        message.type == 'log' && server_logger.log(message.level, message.message);
+    });
+
+    logger.info(`server thread started with PID ${ServerHandler.server.pid}`);
+};
+
+setup_thread();
