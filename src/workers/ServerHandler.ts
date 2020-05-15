@@ -25,7 +25,7 @@ export abstract class ServerHandler {
 }
 
 const setup_thread = () => {
-    ServerHandler.server = fork(`${__dirname}/image-processor.js`, [], {
+    ServerHandler.server = fork(`${__dirname}/server.js`, [], {
         stdio:  [ 'pipe', 'pipe', 'pipe', 'ipc' ]
     });
 
