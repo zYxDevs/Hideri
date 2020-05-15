@@ -54,7 +54,7 @@ export abstract class AppDiscord {
     private ready(client: Client) {
         AppDiscord.process_next_activity();
         this.start_time = moment();
-        ServerHandler.set_client_id(client.user.id);
+        ServerHandler.set_client(client);
 
         const user_count = new Set(client.guilds.cache.map(server => {
             return server.members.cache.map(member => {

@@ -1,7 +1,8 @@
 import { fork, ChildProcess } from 'child_process';
-import { ServerHandlerCommand } from '../types/ServerHandlerCommand';
+import { ServerHandlerCommand } from './ServerHandlerCommand';
 import { create_logger } from '../utils/Logger';
 import { IPCLoggingResponse } from '../types/IPCLoggingResponse';
+import { Client } from '@typeit/discord';
 
 const logger = create_logger(module);
 const server_logger = create_logger('Server Thread')
@@ -9,10 +10,18 @@ const server_logger = create_logger('Server Thread')
 export abstract class ServerHandler {
     public static server: ChildProcess;
 
-    public static set_client_id(id: string) {
+    public static set_client(client: Client) {
         this.server.send({
             command: ServerHandlerCommand.SET_CLIENT_ID,
-            data: id
+            data: client.user.id
+        });
+
+        this.server.send({
+            command: ServerHandlerCommand.SET_CLIENT_AVATAR,
+            data: client.user.avatarURL({
+                format: 'png',
+                size: 512
+            })
         });
     }
 

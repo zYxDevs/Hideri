@@ -4,7 +4,7 @@ import express, { Response, Request, RequestHandler } from 'express';
 import mime from 'mime-types';
 import slugify from 'slugify';
 import fs from 'fs';
-import { ServerHandlerCommand } from '../types/ServerHandlerCommand';
+import { ServerHandlerCommand } from './ServerHandlerCommand';
 import path from 'path';
 import FileType from 'file-type';
 import sharp from 'sharp';
@@ -22,6 +22,7 @@ const mkdir = fs.promises.mkdir;
 
 let cache_path = '';
 let client_id = '';
+let avatar_url = '';
 
 const get_mime_type = async (file: Buffer | string) => {
     if (typeof file == 'string' && path.extname(file)) {
@@ -118,7 +119,11 @@ app.use((req, res, next) => {
     next();
 }, cache(300), compression(), express.static(`${__dirname}/../assets/server`));
 
-app.get('/client.js', (request, response) => {
+app.get('/images/avatar.png', (request, response) => {
+    response.redirect(avatar_url);
+});
+
+app.get('/scripts/client.js', (request, response) => {
     response.setHeader('Content-Type', 'application/javascript');
     response.end(`function invite() { return 'https://discord.com/oauth2/authorize?client_id=${client_id}&scope=bot&permissions=640928832'; }`);
 });
@@ -157,8 +162,13 @@ process.on('message', async message => {
             })
 
             break;
+        
         case ServerHandlerCommand.SET_CLIENT_ID:
             client_id = data;
+            break;
+
+        case ServerHandlerCommand.SET_CLIENT_AVATAR:
+            avatar_url = data;
     }
 });
 
