@@ -75,9 +75,11 @@ const serve_proxied_image = async (request: Request, response: Response<any>, ur
     if (image.headers.has('Content-Length')) {
         const length = +image.headers.get('content-length');
         if (length > .75e6) {
+            const start = Date.now();
             data = await sharp(data).resize(1080, 1080, {
                 fit: 'inside'
             }).toBuffer();
+            logger.verbose(`image resized after ${Date.now() - start}ms`);
         }
     }
 

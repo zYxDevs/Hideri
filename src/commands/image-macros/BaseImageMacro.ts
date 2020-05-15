@@ -4,6 +4,10 @@ import { MessageAttachment } from 'discord.js';
 import { Font } from '@jimp/plugin-print';
 import fetch from 'node-fetch';
 import { ImageProcessorHandler } from '../../workers/ImageProcessorHandler';
+import { create_logger } from '../../utils/Logger';
+
+const logger = create_logger(module);
+
 export abstract class BaseImageMacro {
     public frame: {
         x: number,
@@ -128,6 +132,8 @@ export abstract class BaseImageMacro {
             }
         }
 
+        const start = Date.now();
+
         const { data } = await ImageProcessorHandler.process({
             image_location: this.options.image_location,
             mask_location: this.options.mask_location,
@@ -136,7 +142,9 @@ export abstract class BaseImageMacro {
             frame: this.frame,
             segments: segments,
             emojis: emojis
-        })
+        });
+
+        logger.verbose(`image processed after ${Date.now() - start}ms`);
 
         message.channel.send(new MessageAttachment(Buffer.from(data), `${this.options.output_filename ?? 'output'}.${this.get_extension(this.options.mime ?? Jimp.MIME_JPEG)}`));
     }
