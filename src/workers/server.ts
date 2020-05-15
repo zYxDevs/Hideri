@@ -96,6 +96,11 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/client.js', (request, response) => {
+    response.setHeader('Content-Type', 'application/javascript');
+    response.end(`function invite() { return 'https://discord.com/oauth2/authorize?client_id=${client_id}&scope=bot&permissions=640928832'; }`);
+});
+
 app.get('/hitomila/*', async (request, response) => {
     const url = request.url.replace(/^\/hitomila\//g, '');
 
