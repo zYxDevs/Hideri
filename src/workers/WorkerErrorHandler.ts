@@ -15,8 +15,8 @@ export const create_handler = () => {
         })
     
         await logger.fatal(`uncaught error ${error.stack}`, true);
-        await logger.fatal(`thread is now in inconsistent state and cannot continue. exiting`);
-        await logger.fatal(`full stacktrace has been written to ${filename}`);
+        await logger.fatal(`thread is now in inconsistent state and cannot continue. exiting`, true);
+        await logger.fatal(`full stacktrace has been written to ${filename}`, true);
         await writeFile(filename, error.stack);
         process.exit(1);
     });
@@ -31,7 +31,7 @@ export const create_handler = () => {
             const filename = path.join(__dirname, '..', logging.log_dir, `error-${Date.now()}.stacktrace`);
     
             await logger.error(`uncaught promise rejection ${reason.stack}`, true);
-            logger.error(`full stacktrace has been written to ${filename}`);
+            logger.error(`full stacktrace has been written to ${filename}`, true);
             writeFile(filename, reason.stack);
         } else {
             await logger.error(`uncaught promise rejection ${reason}`, true);
