@@ -5,7 +5,7 @@ export type WorkerLogger = {
 };
 
 interface WorkerLoggerInstance {
-    [key: string]:  WorkerLogger[keyof WorkerLogger]
+    [key: string]: WorkerLogger[keyof WorkerLogger]
 }
 
 class WorkerLoggerInstance {
