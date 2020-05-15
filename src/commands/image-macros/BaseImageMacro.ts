@@ -120,7 +120,10 @@ export abstract class BaseImageMacro {
                     if (member && member.user.avatarURL()) {
                         segments.push({
                             type: 'image',
-                            data: member.user.avatarURL().replace('.webp', '.png?size=512')
+                            data: member.user.avatarURL({
+                                format: 'png',
+                                size: 512
+                            })
                         });
                         continue;
                     }
