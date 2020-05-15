@@ -63,7 +63,7 @@ export abstract class AppDiscord {
         }).flat()).size;
 
         logger.info(`bot logged in, client id ${client.user.id}, serving ${client.guilds.cache.size} guilds and ${user_count} users with ${Client.getCommands().length} commands`);
-        logger.info(`HentaiBot version ${PACKAGE_VERSION} (${GIT_HASH}) built with TypeScript version ${TYPESCRIPT_VERSION}`);
+        logger.info(`${client.user.username} version ${PACKAGE_VERSION} (${GIT_HASH}) built with TypeScript version ${TYPESCRIPT_VERSION}`);
     }
 
     public static async destroy() {
@@ -144,11 +144,11 @@ export abstract class AppDiscord {
     }
 
     @Command('version', {
-        infos: 'Get info about this version of HentaiBot',
+        infos: `Get info about this version of the bot`,
         extraneous_argument_message: false
     })
-    private async version(message: CommandMessage) {
-        message.channel.send(`HentaiBot version \`${PACKAGE_VERSION} (${GIT_HASH})\` built with TypeScript version \`${TYPESCRIPT_VERSION}\``);
+    private async version(message: CommandMessage, client: Client) {
+        message.channel.send(`${client.user.username} version \`${PACKAGE_VERSION} (${GIT_HASH})\` built with TypeScript version \`${TYPESCRIPT_VERSION}\``);
     }
 
     @Command('invite', {
@@ -164,7 +164,7 @@ export abstract class AppDiscord {
         }).flat()).size;
 
         const embed = new MessageEmbed({
-            title: 'Invite HentaiBot',
+            title: `Invite ${client.user.username}`,
             url: `https://discord.com/oauth2/authorize?client_id=${client.user.id}&scope=bot&permissions=640928832`,
             thumbnail: {
                 url: client.user.avatarURL()
