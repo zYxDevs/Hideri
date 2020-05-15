@@ -1,6 +1,6 @@
 import config from '../configs/config.json';
 import fetch, { RequestInit } from 'node-fetch';
-import express, { Response, Request } from 'express';
+import express, { Response, Request, RequestHandler } from 'express';
 import mime from 'mime-types';
 import slugify from 'slugify';
 import fs from 'fs';
@@ -11,6 +11,7 @@ import sharp from 'sharp';
 import compression from 'compression';
 import { create_handler } from './WorkerErrorHandler';
 import { WorkerLogger as logger } from './WorkerLogger';
+import memory_cache from 'memory-cache';
 
 const app = express();
 
@@ -90,13 +91,32 @@ const serve_proxied_image = async (request: Request, response: Response<any>, ur
     writeFile(filepath, data, 'binary');
 };
 
+const cache = (seconds: number): RequestHandler => (request, response, next) => {
+    const url = request.originalUrl ?? request.url;
+    const key = `__express__${url}`;
+    const body = memory_cache.get(key);
+    
+    if (body) {
+        logger.verbose(`memory cache hit: ${url}`);
+        return response.send(body);
+    }
+
+    const original_send = response.send;
+
+    response.send = body => {
+        if (response.statusCode < 300) memory_cache.put(key, body, seconds * 1000);
+
+        return original_send.call(response, body);
+    };
+
+    next();
+};
+
 app.use((req, res, next) => {
     const source = req.headers['x-forwarded-for'] ?? req.connection.remoteAddress;
     logger.http(`client ${source} requested url ${req.url}`);
     next();
-});
-
-app.use(compression());
+}, cache(300), compression(), express.static(`${__dirname}/../assets/server`));
 
 app.get('/client.js', (request, response) => {
     response.setHeader('Content-Type', 'application/javascript');
@@ -116,8 +136,6 @@ app.get('/hitomila/*', async (request, response) => {
         }
     });
 });
-
-app.use(express.static(`${__dirname}/../assets/server`));
 
 app.get('*', (request, response) => {
     response.redirect('/');
