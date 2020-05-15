@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
-    "prebuild": "npm run clean && node gen_constants.js",
+    "prebuild": "npm run clean && node gen-constants.js",
     "postbuild": "npm run copyfiles",
     "postinstall": "patch-package",
     "start": "npm run build && node build/index.js",
