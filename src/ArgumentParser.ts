@@ -7,7 +7,22 @@ import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
 import { RestAsString } from './argument-types/RestAsString.js';
 import { Integer } from './argument-types/Integer.js';
 import { CommandGroup } from './types/CommandGroup';
-import { User, GuildMember } from 'discord.js';
+import { User, GuildMember, TextChannel, DMChannel } from 'discord.js';
+import { create_logger } from './utils/Logger';
+import fs from 'fs';
+import path from 'path';
+import logging from './configs/logging.json';
+
+const writeFile = fs.promises.writeFile;
+
+const logger = create_logger(module);
+
+const write_error = (commandName: string, error: Error) => {
+    const filename = path.join(__dirname, logging.log_dir, `error-${Date.now()}.stacktrace`);
+    logger.error(`command ${commandName} errored: ${error.stack}`);
+    logger.error(`full stacktrace has been written to ${filename}`);
+    writeFile(filename, error.stack);
+};
 
 const default_options = {
     args_required: true,
@@ -40,6 +55,7 @@ export interface ICommandParamsExt {
 };
 
 export function Command(commandName: string, params: ICommandParams & ICommandParamsExt = default_options) {
+    logger.debug(`command ${commandName} created in group ${params.group}`);
     params = Object.assign({}, default_options, params);
     return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
         const argument_types = Reflect.getMetadata('design:paramtypes', target, propertyKey).slice(1);
@@ -69,6 +85,13 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
             const message: CommandMessage = args[0];
             let argv = string_argv(message.content);
             argv = argv.slice(1);
+
+            if (message.channel instanceof DMChannel) {
+                logger.info(`command ${commandName} called by ${message.author.tag} (${message.author.id})`);
+            } else {
+                logger.info(`command ${commandName} called by ${message.author.tag} (${message.author.id}) in server ${message.guild.name} (${message.guild.id}), channel #${message.channel.name} (${message.channel.id})`);
+            }
+
             const argument_array: any[] = [message];
 
             for (let index = 0; index < argument_types.length; ++index) {
@@ -191,18 +214,24 @@ export function Command(commandName: string, params: ICommandParams & ICommandPa
             try {
                 const result = original_method.apply(this, argument_array);
                 if (result instanceof Promise) {
-                    result.then(() => message.channel.stopTyping()).catch(error => {
+                    result.catch(error => {
                         if (!params.handle_errors) return;
                         message.channel.send(`An unknown error occured: \`${error}\``);
-                        message.channel.stopTyping();
-                        console.error(error);
-                    });
+
+                        if (error instanceof Error) {
+                            write_error(commandName, error);
+                        } else {
+                            logger.error(`command ${commandName} rejected: ${error}`);
+                        }
+
+                    }).finally(() => message.channel.stopTyping());
                 } else { message.channel.stopTyping(); }
-            } catch (e) {
+            } catch (error) {
                 if (!params.handle_errors) return;
-                message.channel.send(`An unknown error occured: \`${e.name} ${e.message}\``);
+                message.channel.send(`An unknown error occured: \`${error.name} ${error.message}\``);
                 message.channel.stopTyping();
-                console.error(e);
+
+                write_error(commandName, error);
             }
         };
 

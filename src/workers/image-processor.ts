@@ -1,6 +1,8 @@
 import Jimp from 'jimp';
 import { Font } from '@jimp/plugin-print';
 import { CappedMap } from '../utils/CappedMap';
+import { WorkerLogger as logger } from './WorkerLogger';
+import { create_handler } from './WorkerErrorHandler';
 
 class ImageProcessor {
     static font_cache = new CappedMap<string, Promise<Font>>(1000);
@@ -49,8 +51,11 @@ class ImageProcessor {
             `${__dirname}../../../assets/fonts/opensans-black-32-emoji/opensans-black-32-emoji.fnt`,
             `${__dirname}../../../assets/fonts/opensans-black-16-emoji/opensans-black-16-emoji.fnt`
         ]).forEach(font => {
-            if (ImageProcessor.font_cache.has(font)) return;
+            if (ImageProcessor.font_cache.has(font)) {
+                return logger.verbose(`cache hit: ${font}`);
+            }
 
+            logger.verbose(`cache miss: ${font}`);
             ImageProcessor.font_cache.set(font, Jimp.loadFont(font))
         });
     }
@@ -68,11 +73,15 @@ class ImageProcessor {
         const image = ImageProcessor.image_cache.get(location);
 
         if (!image) {
+            logger.verbose(`cache miss: ${location}`);
+
             const loaded_image = await Jimp.read(location);
             ImageProcessor.image_cache.set(location, loaded_image);
 
             return loaded_image;
         }
+
+        logger.verbose(`cache hit: ${location}`)
 
         return image;
     }
@@ -191,11 +200,11 @@ class ImageProcessor {
 }
 
 process.on('message', async message => {
-    const options = JSON.parse(message);
-
-    const processor = new ImageProcessor(options);
+    const processor = new ImageProcessor(message);
 
     const result = await processor.process();
 
     process.send(result);
-})
+});
+
+create_handler();

@@ -9,6 +9,8 @@ import path from 'path';
 import FileType from 'file-type';
 import sharp from 'sharp';
 import compression from 'compression';
+import { create_handler } from './WorkerErrorHandler';
+import { WorkerLogger as logger } from './WorkerLogger';
 
 const app = express();
 
@@ -82,6 +84,12 @@ const serve_proxied_image = async (request: Request, response: Response<any>, ur
     writeFile(filepath, data, 'binary');
 };
 
+app.use((req, res, next) => {
+    const source = req.headers['x-forwarded-for'] ?? req.connection.remoteAddress;
+    logger.http(`client ${source} requested url ${req.url}`);
+    next();
+});
+
 app.get('/hitomila/*', async (request, response) => {
     const url = request.url.replace(/^\/hitomila\//g, '');
 
@@ -96,7 +104,7 @@ app.get('/hitomila/*', async (request, response) => {
     });
 });
 
-app.unsubscribe(compression());
+app.use(compression());
 
 app.use(express.static(`${__dirname}/../assets/server`));
 
@@ -107,7 +115,7 @@ app.get('*', (request, response) => {
 app.listen(config.port);
 
 process.on('message', async message => {
-    const { command, data } = JSON.parse(message);
+    const { command, data } = message;
 
     switch (command) {
         case ServerHandlerCommand.SET_CACHE_DIR:
@@ -122,3 +130,5 @@ process.on('message', async message => {
             client_id = data;
     }
 });
+
+create_handler();

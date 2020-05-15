@@ -3,6 +3,9 @@ import fetch from 'node-fetch';
 import { CappedMap } from '../utils/CappedMap';
 import public_ip from 'public-ip';
 import config from '../configs/config.json';
+import { create_logger } from '../utils/Logger';
+
+const logger = create_logger(module);
 
 export type GalleryFile = {
     hasavif: 0 | 1,
@@ -73,6 +76,8 @@ export class Hitmoi {
     private refetch_indicies() {
         if (this.last_timeout) clearTimeout(this.last_timeout);
         setTimeout(() => {
+            logger.debug('refetching indicies');
+
             this.index_fetches = Promise.all([
                 this.get_index_version('tagindex').then(version => this.tag_index_version = version),
                 this.get_index_version('galleriesindex').then(version => this.galleries_index_version = version)
@@ -118,8 +123,12 @@ export class Hitmoi {
     }
 
     public async get_gallery_info(gallery: number | string): Promise<GalleryInfo> {
-        if (Hitmoi.gallery_cache.has(gallery.toString())) return Hitmoi.gallery_cache.get(gallery.toString());
+        if (Hitmoi.gallery_cache.has(gallery.toString())) {
+            logger.verbose(`cache hit: ${gallery}`);
+            return Hitmoi.gallery_cache.get(gallery.toString());
+        }
 
+        logger.verbose(`cache miss: ${gallery}`);
         const response = await fetch(`https://ltn.hitomi.la/galleries/${gallery}.js`);
         const text = await response.text();
         const info = JSON.parse(text.replace(/^var.+?(?={)/, ''));

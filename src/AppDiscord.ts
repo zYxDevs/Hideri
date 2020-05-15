@@ -15,6 +15,9 @@ import { BaseActivity } from './activities/BaseActivity';
 import moment from 'moment';
 import { findBestMatch } from 'string-similarity';
 import { ServerHandler } from './workers/ServerHandler';
+import { create_logger } from './utils/Logger';
+
+const logger = create_logger(module);
 
 @Discord({
     prefix: config.prefix
@@ -32,7 +35,11 @@ export abstract class AppDiscord {
     private start_time: moment.Moment;
 
     public static start() {
-        this._client = new Client();
+        logger.info('logging in');
+
+        this._client = new Client({
+            silent: true
+        });
         this._client.login(config.token,
             `${__dirname}/commands/*.js`,
             `${__dirname}/commands/image-macros/*.js`,
@@ -48,11 +55,21 @@ export abstract class AppDiscord {
         AppDiscord.process_next_activity();
         this.start_time = moment();
         ServerHandler.set_client_id(client.user.id);
+
+        const user_count = new Set(client.guilds.cache.map(server => {
+            return server.members.cache.map(member => {
+                return member.user.id;
+            });
+        }).flat()).size;
+
+        logger.info(`bot logged in, client id ${client.user.id}, serving ${client.guilds.cache.size} guilds and ${user_count} users with ${Client.getCommands().length} commands`);
+        logger.info(`HentaiBot version ${PACKAGE_VERSION} (${GIT_HASH}) built with TypeScript version ${TYPESCRIPT_VERSION}`);
     }
 
     public static async destroy() {
         await this.last_activity.destroy();
         this._client.destroy();
+        logger.info(`destroying bot`);
     }
 
     private static async process_next_activity() {
@@ -74,6 +91,8 @@ export abstract class AppDiscord {
 
         const next_delay = MathUtils.clamp(RandomUtils.gaussian(1, 10), .5, Infinity);
         this.last_timeout = client.setTimeout(() => this.process_next_activity(), next_delay * 60e3);
+
+        logger.debug(`bot switched activity to ${constructor.name}`);
     }
 
     @Command('ping', {

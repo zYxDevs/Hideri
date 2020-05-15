@@ -52,11 +52,9 @@ export abstract class BaseImageMacro {
     }
 
     public async exec(message: CommandMessage, client: Client, ...text_or_images: string[]) {
-        const start = Date.now();
         message.channel.startTyping();
 
         let emojis: string[] = [];
-        let emoji_index = 0;
         const segments: ({ type: 'text' | 'image', data: string })[] = [];
 
         if (text_or_images.length == 1 && text_or_images[0] == '!!') {
@@ -139,8 +137,6 @@ export abstract class BaseImageMacro {
             segments: segments,
             emojis: emojis
         })
-
-        console.log(Date.now() - start);
 
         message.channel.send(new MessageAttachment(Buffer.from(data), `${this.options.output_filename ?? 'output'}.${this.get_extension(this.options.mime ?? Jimp.MIME_JPEG)}`));
     }

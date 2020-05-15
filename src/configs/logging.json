@@ -1,0 +1,9 @@
+{
+    "log_level": "silly",
+    "console": true,
+    "log_dir": "./logs",
+    "combined_log": "combined.log",
+    "debug_log": "debug.log",
+    "error_log": "error.log",
+    "generate_json_logs": true
+}
