@@ -1,3 +1,7 @@
+import { readFileSync } from 'fs';
+
+console.log(readFileSync(`${__dirname}/assets/header.txt`, 'utf8').toString());
+
 import { AppDiscord } from "./AppDiscord";
 import moment from 'moment';
 import moment_duration_format from 'moment-duration-format';
