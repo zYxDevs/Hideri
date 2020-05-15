@@ -1,10 +1,11 @@
 import { EmbedBrowserOptions, EmbedReactionTypes } from './BaseEmbedBrowser';
-import { MessageEmbed, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { hitomi } from '../apis/Instances';
 import { MathUtils } from '../utils/MathUtils';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { GalleryInfo } from '../apis/Hitomi';
 import fetch from 'node-fetch';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
     public min_page = 0;

@@ -5,9 +5,9 @@ import { SetArgumentType } from '../argument-types/SetArgumentType';
 import neko_tags from '../configs/neko_tags.json';
 import { RestAsString } from '../argument-types/RestAsString';
 import { StringUtils } from '../utils/StringUtils';
-import { MessageEmbed } from 'discord.js';
 import config from '../configs/config.json';
 import { nekos } from '../apis/Instances';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];

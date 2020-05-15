@@ -1,10 +1,10 @@
 import { EmbedBrowserOptions } from './BaseEmbedBrowser';
-import { MessageEmbed } from 'discord.js';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { Client } from '@typeit/discord';
 import { CommandGroup } from '../types/CommandGroup';
 import config from '../configs/config.json';
 import { IOnExt } from '../types/IOnExt';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;

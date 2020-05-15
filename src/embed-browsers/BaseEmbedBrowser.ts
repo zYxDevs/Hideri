@@ -1,6 +1,7 @@
 import { Discord, On, Client } from '@typeit/discord';
 import { CappedArray } from '../utils/CappedArray';
-import { MessageReaction, User, Message, MessageEmbed } from 'discord.js';
+import { MessageReaction, User, Message } from 'discord.js';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 export type EmbedBrowserOptions = {
     sender_only?: boolean,

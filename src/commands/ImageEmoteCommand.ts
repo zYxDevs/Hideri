@@ -2,8 +2,8 @@ import { Discord, CommandMessage } from '@typeit/discord';
 import config from '../configs/config.json';
 import image_emotes from '../configs/image_emotes.json';
 import { Command } from '../ArgumentParser';
-import { MessageEmbed } from 'discord.js';
 import { CommandGroup } from '../types/CommandGroup';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 image_emotes.forEach(({ name, info, description, url }) => {
     @Discord({

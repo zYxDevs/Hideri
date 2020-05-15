@@ -4,7 +4,7 @@ import { Discord, CommandMessage } from '@typeit/discord';
 import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
 import { forSite } from 'booru';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 export abstract class BaseBooruCommand {
     public async exec(message: CommandMessage, booru: string, ...query: string[]) {

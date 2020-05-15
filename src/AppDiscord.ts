@@ -6,7 +6,6 @@ import { Command } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
 import { RegexUtils } from './utils/RegexUtils';
-import { MessageEmbed } from 'discord.js';
 import { IOnExt } from './types/IOnExt';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
@@ -16,6 +15,7 @@ import moment from 'moment';
 import { findBestMatch } from 'string-similarity';
 import { ServerHandler } from './workers/ServerHandler';
 import { create_logger } from './utils/Logger';
+import { MessageEmbed } from './utils/EmbedUtils';
 
 const logger = create_logger(module);
 

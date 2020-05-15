@@ -1,11 +1,11 @@
 import { EmbedBrowserOptions, EmbedReactionTypes } from './BaseEmbedBrowser';
-import { MessageEmbed } from 'discord.js';
 import { nhentai } from '../apis/Instances';
 import { MathUtils } from '../utils/MathUtils';
 import plur from 'plur';
 import title from 'title';
 import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { Book } from 'nhentai-api';
+import { MessageEmbed } from '../utils/EmbedUtils';
 
 export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
     private doujin: Book;
