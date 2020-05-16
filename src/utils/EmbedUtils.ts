@@ -13,6 +13,6 @@ export abstract class EmbedUtils {
 export class MessageEmbed extends DiscordMessageEmbed {
     constructor(data?: DiscordMessageEmbed | MessageEmbedOptions) {
         super(data);
-        if (!data.color) this.setColor(config.color);
+        if (!data?.color) this.setColor(config.color);
     }
 }

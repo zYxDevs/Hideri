@@ -1,5 +1,5 @@
 import { BaseSearchEmbed } from './BaseSearchEmbed';
-import { Client } from 'discord.js';
+import { Client, Message } from 'discord.js';
 import { CommandMessage, Discord } from '@typeit/discord';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { NHentaiEmbedBrowser } from '../../embed-browsers/NHentaiEmbedBrowser';
@@ -32,7 +32,7 @@ export class NHentaiSearchEmbed extends BaseSearchEmbed {
         new NHentaiEmbedBrowser(book, page).send_embed(message);
     }
 
-    public async embed_handler(message: CommandMessage, client: Client, match: RegExpMatchArray) {
+    public async embed_handler(message: Message, client: Client, match: RegExpMatchArray) {
         const gallery = +match[1];
         const page = +match[2] || 0;
 

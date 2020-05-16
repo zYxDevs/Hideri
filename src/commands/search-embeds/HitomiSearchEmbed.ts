@@ -1,6 +1,6 @@
 import { BaseSearchEmbed } from './BaseSearchEmbed';
 import { CommandMessage, Discord } from '@typeit/discord';
-import { Client } from 'discord.js';
+import { Client, Message } from 'discord.js';
 import config from '../../configs/config.json';
 import { Command } from '../../ArgumentParser';
 import { CommandGroup } from '../../types/CommandGroup';
@@ -36,7 +36,7 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
         new HitomiEmbedBrowser(gallery, page).send_embed(message);
     }
 
-    public async embed_handler(message: CommandMessage, client: Client, match: RegExpMatchArray) {
+    public async embed_handler(message: Message, client: Client, match: RegExpMatchArray) {
         const gallery = +match[1];
         const page = +match[2] || 0;
 

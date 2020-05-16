@@ -1,4 +1,4 @@
-import { Discord, On, Client } from '@typeit/discord';
+import { Discord, On, Client, ArgsOf } from '@typeit/discord';
 import { CappedArray } from '../utils/CappedArray';
 import { MessageReaction, User, Message } from 'discord.js';
 import { MessageEmbed } from '../utils/EmbedUtils';
@@ -70,10 +70,10 @@ export abstract class BaseEmbedBrowser {
 export abstract class EmbedBrowserDelegate {
     @On('messageReactionAdd')
     @On('messageReactionRemove')
-    on_react(reaction: MessageReaction, user: User, client: Client) {
+    on_react([reaction, user]: ArgsOf<'messageReactionAdd'>, client: Client) {
         if (user.bot) return;
         if (reaction.message.author.id !== client.user.id) return;
-        BaseEmbedBrowser.on_react(reaction, user, client);
+        BaseEmbedBrowser.on_react(reaction, user as User, client);
     }
 }
 

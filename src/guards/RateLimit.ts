@@ -1,5 +1,4 @@
-import { Client } from '@typeit/discord';
-import { Message } from 'discord.js';
+import { Client, ArgsOf } from '@typeit/discord';
 
 export function RateLimit(options: { error_message?: string | null, rate_limit: number }) {
     let last_message_time = 0;
@@ -7,7 +6,7 @@ export function RateLimit(options: { error_message?: string | null, rate_limit: 
         error_message: 'This command is on cooldown!'
     }, options);
 
-    return (message: Message, client: Client) => {
+    return ([message]: ArgsOf<'message'>, client: Client) => {
         const now = Date.now();
         if ((now - last_message_time) / 1000 < options.rate_limit) {
             options.error_message && message.reply(options.error_message);

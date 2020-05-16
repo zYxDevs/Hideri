@@ -42,7 +42,7 @@ process.on('uncaughtException', async error => {
 
 process.on('unhandledRejection', async reason => {
     if (reason instanceof Error) {
-        const filename = path.join(__dirname, '..', logging.log_dir, `error-${Date.now()}.stacktrace`);
+        const filename = path.join(__dirname, logging.log_dir, `error-${Date.now()}.stacktrace`);
 
         logger.error(`uncaught promise rejection ${reason.stack}`);
         logger.error(`full stacktrace has been written to ${filename}`);

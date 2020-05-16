@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import get_function_arguments from 'get-function-arguments';
-import { ICommandParams, Command as DiscordCommand, CommandMessage, Client } from '@typeit/discord';
+import { CommandParams, Command as DiscordCommand, CommandMessage, Client } from '@typeit/discord';
 import string_argv from 'string-argv';
 import config from './configs/config.json';
 import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
@@ -41,7 +41,7 @@ const reply_incorrect = (options, name: string, usage: string, message: CommandM
     if (output) message.reply(output);
 }
 
-export interface ICommandParamsExt {
+export interface CommandParamsExt {
     group?: CommandGroup,
     usage?: string,
     hide?: boolean,
@@ -54,7 +54,7 @@ export interface ICommandParamsExt {
     rest_required?: boolean
 };
 
-export function Command(commandName: string, params: ICommandParams & ICommandParamsExt = default_options) {
+export function Command(commandName: string, params: CommandParams & CommandParamsExt = default_options) {
     logger.debug(`command ${commandName} created in group ${params.group}`);
     params = Object.assign({}, default_options, params);
     return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {

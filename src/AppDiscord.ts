@@ -1,4 +1,4 @@
-import { Discord, On, Client, CommandMessage, Guard } from '@typeit/discord';
+import { Discord, On, Client, CommandMessage, Guard, ArgsOf } from '@typeit/discord';
 import 'reflect-metadata';
 import config from './configs/config.json';
 import activities from './configs/activities.json';
@@ -6,7 +6,7 @@ import { Command } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
 import { RegexUtils } from './utils/RegexUtils';
-import { IOnExt } from './types/IOnExt';
+import { DOnExt } from './types/DOnExt';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
@@ -51,7 +51,7 @@ export abstract class AppDiscord {
     }
 
     @On('ready')
-    private ready(client: Client) {
+    private ready([]: ArgsOf<'ready'>, client: Client) {
         AppDiscord.process_next_activity();
         this.start_time = moment();
         ServerHandler.set_client(client);
@@ -113,7 +113,7 @@ export abstract class AppDiscord {
     private async help(message: CommandMessage, command: string = null) {
         if (!command) return new HelpEmbedBrowser().send_embed(message);
         
-        const commands = Client.getCommandsIntrospection() as IOnExt[];
+        const commands = Client.getCommandsIntrospection() as DOnExt[];
         command = command.trim().replace(new RegExp(`^${RegexUtils.escape(config.prefix)}`, 'i'), '');
         const command_obj = commands.find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
         

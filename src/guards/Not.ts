@@ -1,3 +1,5 @@
+import { ArgsOf, Client } from '@typeit/discord';
+
 export function Not(func: Function) {
-    return (...args) => !func(...args)
+    return ([message]: ArgsOf<'message'>, client: Client) => !func([message], client)
 }

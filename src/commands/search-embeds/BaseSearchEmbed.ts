@@ -1,9 +1,8 @@
-import { Discord, Guard, CommandMessage, Client } from '@typeit/discord';
-import { On } from '../../events/On';
+import { Discord, Guard, On, Client, ArgsOf } from '@typeit/discord';
 import { NotBot } from '../../guards/NotBot';
 import { StartsWith } from '../../guards/StartsWith';
 import { Not } from '../../guards/Not';
-import { TextChannel } from 'discord.js';
+import { TextChannel, Message } from 'discord.js';
 import { HasPermission } from '../../guards/HasPermission';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import config from '../../configs/config.json';
@@ -23,11 +22,11 @@ export abstract class BaseSearchEmbed {
         BaseSearchEmbed.class_instances.push(this);
     }
 
-    public abstract async embed_handler(message: CommandMessage, client: Client, match: RegExpMatchArray, is_webhook?: boolean): Promise<BaseEmbedBrowser>;
+    public abstract async embed_handler(message: Message, client: Client, match: RegExpMatchArray, is_webhook?: boolean): Promise<BaseEmbedBrowser>;
 
     @Guard(NotBot, Not(StartsWith('<')))
     @On('message')
-    private async on_message(message: CommandMessage, client: Client) {
+    private async on_message([message]: ArgsOf<'message'>, client: Client) {
         await Promise.allSettled(BaseSearchEmbed.class_instances.map(async instance => {
             let matches = [...message.content.matchAll(instance.pattern)];
             if (!matches.length) return;
@@ -37,7 +36,7 @@ export abstract class BaseSearchEmbed {
             const has_webhook_permission = HasPermission('MANAGE_WEBHOOKS', {
                 error_message: null,
                 check_admin: true
-            })(message, client);
+            })([message], client);
 
             if (matches.length > instance.max_normal_embeds && has_webhook_permission && this.use_webhook) {
                 matches = matches.slice(0, instance.max_webhook_embeds);
@@ -80,5 +79,7 @@ export abstract class BaseSearchEmbed {
                 embed_browser && await embed_browser.send_embed(message);
             }
         }));
+
+        message.channel.stopTyping();
     }
 }

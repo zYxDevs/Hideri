@@ -3,20 +3,20 @@ import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { Client } from '@typeit/discord';
 import { CommandGroup } from '../types/CommandGroup';
 import config from '../configs/config.json';
-import { IOnExt } from '../types/IOnExt';
+import { DOnExt } from '../types/DOnExt';
 import { MessageEmbed } from '../utils/EmbedUtils';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;
 
-    private commands: IOnExt[] = [...Client.getCommandsIntrospection().reduce((command_map, command: IOnExt) => {
+    private commands: DOnExt[] = [...Client.getCommandsIntrospection().reduce((command_map, command: DOnExt) => {
         if (command.hide) return command_map;
 
         if (!command_map.has(command.group)) command_map.set(command.group, []);
         command_map.get(command.group).push(command);
 
         return command_map;
-    }, new Map<CommandGroup, IOnExt[]>()).values()].flat();
+    }, new Map<CommandGroup, DOnExt[]>()).values()].flat();
     public max_page = Math.ceil(this.commands.length / this.page_length);
     
     constructor(options?: EmbedBrowserOptions) {

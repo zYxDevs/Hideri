@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@typeit/discord": "^2.0.22",
+    "@typeit/discord": "^3.0.2",
     "@types/express": "^4.17.6",
     "@types/node-fetch": "^2.5.7",
     "booru": "^2.2.3",
