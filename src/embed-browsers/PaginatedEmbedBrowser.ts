@@ -17,8 +17,10 @@ export abstract class PaginatedEmbedBrowser extends BaseEmbedBrowser {
     }
 
     set page(page: number) {
+        const last_page = this._page;
         this._page = MathUtils.clamp(page, this.min_page, this.max_page);
-        this.get_embed().then(embed => this.set_embed(embed));
+
+        if (this._page != last_page) this.get_embed().then(embed => this.set_embed(embed));
     }
 
     public on_previous() {
