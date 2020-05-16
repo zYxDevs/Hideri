@@ -133,7 +133,7 @@ const cache = (seconds?: number): RequestHandler => (request, response, next) =>
 app.set('view engine', 'ejs');
 
 app.use((req, res, next) => {
-    const source = req.headers['x-forwarded-for'].toString() ?? req.connection.remoteAddress;
+    const source = req.headers['x-forwarded-for']?.toString() ?? req.connection.remoteAddress;
     if (source.endsWith('127.0.0.1') && !logging.server_log_loopback) return next();
     logger.http(`[${source}]: ${req.method.toUpperCase()} ${req.url}`);
     next();
