@@ -23,7 +23,7 @@ AppDiscord.start();
     })
 });
 
-process.on('uncaughtException', async error => {
+const exception_handler = async error => {
     const filename = path.join(__dirname, logging.log_dir, `error-${Date.now()}.stacktrace`);
 
     logger.log('fatal', `uncaught error ${error.stack}`);
@@ -38,9 +38,9 @@ process.on('uncaughtException', async error => {
     } else {
         logger.warn('bot is configured to not exit on uncaught exceptions. This is undefined behavior and may cause issues or corruption.');
     }
-});
+};
 
-process.on('unhandledRejection', async reason => {
+const rejection_handler = async reason => {
     if (reason instanceof Error) {
         const filename = path.join(__dirname, logging.log_dir, `error-${Date.now()}.stacktrace`);
 
@@ -50,4 +50,8 @@ process.on('unhandledRejection', async reason => {
     } else {
         logger.error(`uncaught promise rejection ${reason}`);
     }
-});
+};
+
+process.on('uncaughtException', error => exception_handler(error).catch(() => {}));
+
+process.on('unhandledRejection', reason => rejection_handler(reason).catch(() => {}));
