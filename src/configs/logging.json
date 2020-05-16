@@ -5,5 +5,6 @@
     "combined_log": "combined.log",
     "debug_log": "debug.log",
     "error_log": "error.log",
-    "generate_json_logs": true
+    "generate_json_logs": true,
+    "server_log_loopback": false
 }
