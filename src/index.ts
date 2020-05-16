@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-console.log(fs.readFileSync(`${__dirname}/assets/header.txt`, 'utf8').toString());
+try { console.log(fs.readFileSync(`${__dirname}/assets/header.txt`, 'utf8').toString()); } catch {}
 
 import path from 'path';
 import logging from './configs/logging.json';
