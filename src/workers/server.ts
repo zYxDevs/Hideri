@@ -1,4 +1,5 @@
 import config from '../configs/config.json';
+import logging from '../configs/logging.json';
 import fetch, { RequestInit } from 'node-fetch';
 import express, { Response, Request, RequestHandler } from 'express';
 import mime from 'mime-types';
@@ -158,7 +159,7 @@ app.get('/images/avatar.png', (request, response) => {
 });
 
 app.get('/hitomila/*', async (request, response) => {
-    const url = request.url.replace(/^\/hitomila\//g, '');
+    const url = decodeURIComponent(request.url).replace(/^\/hitomila\/\?/g, '');
 
     if (!/^https?:\/\/\w{2}\.hitomi\.la\/(?:images|webp)\//.test(url)) {
         return response.redirect('/');

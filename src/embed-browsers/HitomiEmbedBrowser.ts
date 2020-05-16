@@ -6,6 +6,7 @@ import { PaginatedEmbedBrowser } from './PaginatedEmbedBrowser';
 import { GalleryInfo } from '../apis/Hitomi';
 import fetch from 'node-fetch';
 import { MessageEmbed } from '../utils/EmbedUtils';
+import config from '../configs/config.json';
 
 export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
     public min_page = 0;
@@ -45,7 +46,7 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
         if (!this.fetch_order.length) return;
 
         const image = this.gallery.files[this.fetch_order.shift()];
-        const url = hitomi.get_image_url(image);
+        const url = hitomi.get_image_url(image).replace(config.server_url, `http://localhost:${config.port}`);
 
         await fetch(url);
 

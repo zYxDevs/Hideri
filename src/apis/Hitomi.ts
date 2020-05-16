@@ -48,8 +48,6 @@ export class Hitmoi {
     private galleries_index_version = '';
     private tag_index_version = '';
 
-    private ip = '';
-
     private fetch_headers: {
         'Referer': 'https://hitomi.la/search.html',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'
@@ -69,8 +67,6 @@ export class Hitmoi {
         ]);
 
         this.refetch_indicies();
-
-        public_ip.v4().then(ip => this.ip = ip);
     }
 
     private refetch_indicies() {
@@ -149,7 +145,7 @@ export class Hitmoi {
     }
 
     public get_image_url(image: GalleryFile) {
-        return `http://${this.ip}:${config.port}/hitomila/${this.image_url_from_image(null, image, false)}`;
+        return `${config.server_url}/hitomila/?${encodeURIComponent(this.image_url_from_image(null, image, false))}`;
     }
 
     // code below ripped from hitomi.la
