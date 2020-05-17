@@ -117,6 +117,40 @@ if (logging.error_log) {
     }
 }
 
+if (logging.info_log) {
+    log_transports.push(new File({
+        filename: path.join(log_dir, logging.info_log),
+        format: pretty_format,
+        level: 'info'
+    }));
+
+    if (logging.generate_json_logs) {
+        log_transports.push(new File({
+            filename: path.join(log_dir, logging.info_log + '.json'),
+            format: format.json(),
+            level: 'info'
+        }));
+    }
+}
+
+if (logging.http_log) {
+    const http_only = format(info => info.level == 'http' ? info : false);
+
+    log_transports.push(new File({
+        filename: path.join(log_dir, logging.http_log),
+        format: combine(http_only(), pretty_format),
+        level: 'http'
+    }));
+
+    if (logging.generate_json_logs) {
+        log_transports.push(new File({
+            filename: path.join(log_dir, logging.http_log + '.json'),
+            format: combine(http_only(), format.json()),
+            level: 'http'
+        }));
+    }
+}
+
 const logger = createLogger({
     transports: log_transports,
     levels: levels.levels
