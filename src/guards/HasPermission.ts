@@ -1,5 +1,5 @@
 import { Client, ArgsOf } from '@typeit/discord';
-import { TextChannel, PermissionResolvable } from 'discord.js';
+import { PermissionResolvable, DMChannel } from 'discord.js';
 
 export function HasPermission(permission: PermissionResolvable, options?: { error_message?: string | null, check_admin: boolean });
 
@@ -8,7 +8,7 @@ export function HasPermission(permission_list: PermissionResolvable[] | Permissi
     check_admin: true
 }) {
     return ([message]: ArgsOf<'message'>, client: Client) => {
-        if (!(message.channel instanceof TextChannel)) return false;
+        if (message.channel instanceof DMChannel) return false;
  
         if (!Array.isArray(permission_list)) permission_list = [permission_list];
 
