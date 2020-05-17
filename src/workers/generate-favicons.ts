@@ -1,6 +1,7 @@
 import sharp from 'sharp';
 import fs from 'fs';
 import fetch from 'node-fetch';
+import { WorkerLogger as logger } from './WorkerLogger';
 
 const favicon_levels = [48, 32, 16];
 
@@ -114,6 +115,8 @@ const get_dib = (image_buffer: Buffer, width: number) => {
 }
 
 export const generate_favicons = async (avatar_url: string) => {
+    const start = Date.now();
+
     const avatar_response = await fetch(avatar_url);
     const avatar = await avatar_response.buffer();
 
@@ -191,5 +194,9 @@ export const generate_favicons = async (avatar_url: string) => {
 
     promises.push(fs.promises.writeFile(`${__dirname}/../assets/server/static/favicon.ico`, favicon_buffer));
 
-    return Promise.all(promises);
+    const result = await Promise.all(promises);
+    
+    logger.info(`Server favicon images generated in ${Date.now() - start}ms`);
+
+    return result;
 };

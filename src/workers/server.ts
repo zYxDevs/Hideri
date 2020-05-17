@@ -200,13 +200,13 @@ process.on('message', async message => {
 
         case ServerHandlerCommand.SET_CLIENT_AVATAR:
             avatar_url = data;
-            access(`${__dirname}/../assets/server/last_avatar`).catch(() => false).then(async res => {
+            access(`${__dirname}/../assets/server/last_avatar`).then(() => true).catch(() => false).then(async res => {
                 if (!res) {
                     generate_favicons(avatar_url);
                 } else {
                     const last_avatar = await readFile(`${__dirname}/../assets/server/last_avatar`);
                     
-                    if (last_avatar.toString() != avatar_url) generate_favicons(avatar_url);
+                    if (last_avatar.toString().trim() != avatar_url) generate_favicons(avatar_url);
                 }
 
                 writeFile(`${__dirname}/../assets/server/last_avatar`, avatar_url)
