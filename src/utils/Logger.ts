@@ -1,4 +1,4 @@
-import { createLogger, format, transports, level } from 'winston';
+import { createLogger, format, transports } from 'winston';
 import logging from '../configs/logging.json';
 import path from 'path';
 import fs from 'fs';
@@ -152,9 +152,11 @@ if (logging.http_log) {
 }
 
 const logger = createLogger({
-    transports: log_transports,
     levels: levels.levels
 });
+
+logger.setMaxListeners(log_transports.length);
+log_transports.forEach(transport => logger.add(transport));
 
 winston.addColors(levels.colors);
 
