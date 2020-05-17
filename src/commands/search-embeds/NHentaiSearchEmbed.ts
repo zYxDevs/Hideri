@@ -16,6 +16,10 @@ import { RandomUtils } from '../../utils/RandomUtils';
 export class NHentaiSearchEmbed extends BaseSearchEmbed {
     public pattern = /\(\s*(\d{5,6})(\s+\d+)?\s*\)/g;
 
+    public name = 'NHentai';
+    public info = 'Fetch gallery from nhentai';
+    public usage = '(gallery) or (gallery page)';
+
     @Command('nh', {
         description: 'Get random image from nhentai',
         group: CommandGroup.COMMUNITIES,

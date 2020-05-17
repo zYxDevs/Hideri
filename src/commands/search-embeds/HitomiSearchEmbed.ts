@@ -16,6 +16,10 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
     public pattern = /!\s*(\d{5,7})(\s+\d+)?\s*!/g;
     public use_webhook = false;
 
+    public name = 'Hitomi.la';
+    public info = 'Fetch gallery from hitomi.la';
+    public usage = '!gallery! or !gallery page!';
+
     @Command('hitomi', {
         group: CommandGroup.COMMUNITIES,
         description: 'Get random image from hitomi.la',

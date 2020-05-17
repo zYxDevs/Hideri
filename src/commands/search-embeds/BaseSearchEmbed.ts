@@ -16,10 +16,15 @@ export abstract class BaseSearchEmbed {
     public max_normal_embeds = 6;
     public max_webhook_embeds = 200;
 
-    private static class_instances: BaseSearchEmbed[] = [];
+    public name = null;
+    public info = null;
+    public description = null;
+    public usage = null;
+
+    public static class_instances: BaseSearchEmbed[] = [];
 
     constructor() {
-        BaseSearchEmbed.class_instances.push(this);
+        if (Object.getPrototypeOf(this) != BaseSearchEmbed.prototype) BaseSearchEmbed.class_instances.push(this);
     }
 
     public abstract async embed_handler(message: Message, client: Client, match: RegExpMatchArray, is_webhook?: boolean): Promise<BaseEmbedBrowser>;
