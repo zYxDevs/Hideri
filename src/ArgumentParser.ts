@@ -196,7 +196,7 @@ export function Command(commandName: string, params: CommandParams & CommandPara
                         return reply_incorrect(params, name, usage, message);
                     }
                 } else if (type == GuildMember) {
-                    const id = (argv.shift().trim().match(/\d+/) ?? [])[0];
+                    const id = (argv.shift()?.trim().match(/\d+/) ?? [])[0];
                     const member = message.mentions.members.find(member => member.user.id == id);
                     if (member) {
                         argument_array.push(member);
