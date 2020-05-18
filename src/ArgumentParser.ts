@@ -69,15 +69,16 @@ export function Command(commandName: string, params: CommandParams & CommandPara
             let type_name = type.name;
 
             if (type == Client) return '';
-            if (type == GuildMember) type_name = `@${type_name}`;
+            if (type == GuildMember || type == User) type_name = `@${type_name}`;
             if (type == RestAsString) return `${params.rest_required ? '[' : '<'}...${name}${params.rest_required ? '' : '?'}: String${params.rest_required ? ']' : '>'}`;
             if (type.prototype instanceof CustomArgumentType) return new type('').get_usage();
 
             if (name.includes('=') ||
                 (name.includes('...') && !params.rest_required)
-            ) optional = true;
-
-            name = name.replace(/\s*?=\s*?(?:null|undefined)/, '?');
+            ) {
+                optional = true;
+                name = name.replace(/\s*?=\s*?(?:null|undefined)/, '') + '?';
+            }
 
             return `${optional ? '<' : '['}${name}: ${type_name}${optional ? '>' : ']'}`;
         }).filter(x => x).join(' ')).trim();
