@@ -8,6 +8,7 @@ import { StringUtils } from '../utils/StringUtils';
 import config from '../configs/config.json';
 import { nekos } from '../apis/Instances';
 import { MessageEmbed } from '../utils/EmbedUtils';
+import { GuildMember } from 'discord.js';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
@@ -45,5 +46,18 @@ export abstract class NekoCommand {
             const response = await StringUtils.ci_get(nekos.sfw, tag)({ text: text_str });
             message.channel.send(response.msg || response.owo);
         }
+    }
+
+    @Command('pat', {
+        infos: 'Heatpat someone',
+        group: CommandGroup.IMAGE_EMOTES,
+        aliases: [ 'headpat' ]
+    })
+    private async pat(message: CommandMessage, member: GuildMember = null) {
+        const embed = new MessageEmbed();
+        embed.setImage((await nekos.sfw.pat()).url);
+        if (member) embed.setDescription(`*Pats ${member}*`);
+
+        message.channel.send(embed);
     }
 }
