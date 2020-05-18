@@ -26,7 +26,8 @@ image_macros.forEach(macro => {
         @Command(macro.name, {
             description: macro.description,
             group: CommandGroup.IMAGE_MACROS,
-            rest_required: false
+            rest_required: false,
+            history_expansion: false
         })
         public async exec(message: CommandMessage, client: Client, ...text_or_image: string[]) {
             return await super.exec(message, client, ...text_or_image);

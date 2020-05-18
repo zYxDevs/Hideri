@@ -18,12 +18,7 @@ import owoify from 'owoify-js';
             description: `${command_cased}ifies a message`
         })
         private async exec(message: CommandMessage, client: Client, text: RestAsString) {
-            let input_text = text.get();
-            if (input_text == '!!') {
-                const last_message = [...message.channel.messages.cache].reverse().find(([,search_message]) => search_message.id != message.id && search_message.author != client.user);
-                if (last_message) input_text = last_message[1].content;
-            }
-            message.channel.send((owoify as any).default(input_text, command));
+            message.channel.send((owoify as any).default(text.get(), command));
         }
     }
 });

@@ -62,7 +62,15 @@ export abstract class BaseImageMacro {
         const segments: ({ type: 'text' | 'image', data: string })[] = [];
 
         if (text_or_images.length == 1 && text_or_images[0] == '!!') {
-            const last_message = [...message.channel.messages.cache].reverse().find(([,channel_message]) => channel_message?.author != client.user && channel_message != message);
+            const last_message = [...message.channel.messages.cache].reverse().find(([,channel_message]) => {
+                if (!channel_message) return false;
+                if (channel_message.author == client.user) return false;
+                if (channel_message == message) return false;
+                if (channel_message.content?.startsWith('<')) return false;
+                
+                return true;
+            });
+            
             if (!last_message) return;
             const attachment = last_message[1].attachments.find(attachment => BaseImageMacro.image_extension_regex.test(attachment.url));
 

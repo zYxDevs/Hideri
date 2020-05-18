@@ -14,7 +14,10 @@ export class RestAsString {
                 regex_dict[arg] = regex;
             }
 
-            const [ match, before, after ] = regex.exec(original_content);
+            const [ match, before, after ] = regex.exec(original_content) ?? [];
+
+            if (!match) return arg;
+
             if (before == after) return match.trim();
             return arg;
         }).join(' ');

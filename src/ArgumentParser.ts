@@ -31,7 +31,8 @@ const default_options = {
     extraneous_argument_message: true,
     handle_errors: true,
     usage: null,
-    rest_required: true
+    rest_required: true,
+    history_expansion: true
 };
 
 const reply_incorrect = (options, name: string, usage: string, message: CommandMessage) => {
@@ -51,7 +52,8 @@ export interface CommandParamsExt {
     missing_argument_message?: boolean,
     extraneous_argument_message?: boolean,
     handle_errors?: boolean,
-    rest_required?: boolean
+    rest_required?: boolean,
+    history_expansion?: boolean
 };
 
 export function Command(commandName: string, params: CommandParams & CommandParamsExt = default_options) {
@@ -85,6 +87,27 @@ export function Command(commandName: string, params: CommandParams & CommandPara
             const message: CommandMessage = args[0];
             let argv = string_argv(message.content);
             argv = argv.slice(1);
+
+            if (params.history_expansion) {
+                const last_message = [...message.channel.messages.cache].reverse().find(([,channel_message]) => {
+                    if (!channel_message) return false;
+                    if (channel_message.author == client.user) return false;
+                    if (channel_message == message) return false;
+                    if (channel_message.content?.startsWith('<')) return false;
+                    
+                    return true;
+                });
+
+                if (last_message) {
+                    argv = argv.map(segment => {
+                        if (!last_message[1]) return segment;
+                        if (!last_message[1].content) return segment;
+                        if (segment != '!!') return segment;
+
+                        return last_message[1].content;
+                    });
+                }
+            }
 
             if (message.channel instanceof DMChannel) {
                 logger.info(`command ${commandName} called by ${message.author.tag} (${message.author.id})`);
