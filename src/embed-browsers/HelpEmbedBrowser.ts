@@ -19,7 +19,7 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
 
         return command_map;
     }, new Map<CommandGroup, DOnExt[]>()).values()].flat();
-    public max_page = Math.ceil((this.commands.length + BaseSearchEmbed.class_instances.length) / this.page_length);
+    public max_page = Math.ceil(this.commands.length / this.page_length);
     
     constructor(options?: EmbedBrowserOptions) {
         super(1, options);
