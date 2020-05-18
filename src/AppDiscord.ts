@@ -89,7 +89,7 @@ export abstract class AppDiscord {
 
         AppDiscord.last_activity = activity;
 
-        const next_delay = MathUtils.clamp(RandomUtils.gaussian(1, 10), .5, Infinity);
+        const next_delay = MathUtils.clamp(RandomUtils.gaussian(5, 20, .75), 2, Infinity);
         this.last_timeout = client.setTimeout(() => this.process_next_activity(), next_delay * 60e3);
 
         logger.debug(`bot switched activity to ${constructor.name}`);
