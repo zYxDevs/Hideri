@@ -6,6 +6,7 @@ import config from '../configs/config.json';
 import { DOnExt } from '../types/DOnExt';
 import { MessageEmbed } from '../utils/EmbedUtils';
 import { BaseSearchEmbed } from '../commands/search-embeds/BaseSearchEmbed';
+import { AppDiscord } from '../AppDiscord';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;
@@ -30,6 +31,8 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
         embed.setFooter(`Page ${this.page}/${this.max_page}`);
 
         if (this.page == 1) {
+            embed.setThumbnail(AppDiscord.client.user.avatarURL());
+
             embed.addField('*Tip: use \`!!\` in command arguments to refer to the content of the last message in the channel*', '**Search Embeds**');
             BaseSearchEmbed.class_instances.forEach(instance => {
                 embed.addField(`${instance.name}: ${instance.info ?? ''}`, `${instance.description ?? ''}\nUsage: \`${instance.usage}\``);

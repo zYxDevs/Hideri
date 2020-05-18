@@ -34,6 +34,8 @@ export abstract class AppDiscord {
 
     private start_time: moment.Moment;
 
+    public static get client() { return this._client; }
+
     public static start() {
         logger.info('logging in');
 
