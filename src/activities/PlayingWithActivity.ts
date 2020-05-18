@@ -9,7 +9,6 @@ export class PlayingWithActivity extends BaseActivity {
                 name: 'with ' + RandomUtils.choice([
                     'Astolfo',
                     'Felix Argyle',
-                    'Hideri Kanzaki',
                     'Totsuka Saika',
                     'Ruka Urushibara',
                     'Hime Arikawa'
