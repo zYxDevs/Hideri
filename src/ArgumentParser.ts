@@ -63,18 +63,18 @@ export function Command(commandName: string, params: CommandParams & CommandPara
         const argument_types = Reflect.getMetadata('design:paramtypes', target, propertyKey).slice(1);
         const argument_names = get_function_arguments(descriptor.value).slice(1);
         const original_method = descriptor.value;
-        const usage = (params?.usage ?? config.prefix + commandName + ' ' + argument_names.map((name, index) => {
+        const usage = (params?.usage ?? config.prefix + commandName + ' ' + argument_names.map((name: string, index: number) => {
             let optional = false;
             const type = argument_types[index];
             if (type == Client) return '';
-            if (type == RestAsString) return `${params.rest_required ? '[' : '<'}...${name}: String${params.rest_required ? ']' : '>'}`;
+            if (type == RestAsString) return `${params.rest_required ? '[' : '<'}...${name}${params.rest_required ? '' : '?'}: String${params.rest_required ? ']' : '>'}`;
             if (type.prototype instanceof CustomArgumentType) return new type('').get_usage();
 
             if (name.includes('=') ||
-                (name.includes('...') && !params.rest_required))
-            {
-                optional = true;
-            }
+                (name.includes('...') && !params.rest_required)
+            ) optional = true;
+
+            name = name.replace(/\s*?=\s*?(?:null|undefined)/, '?');
 
             return `${optional ? '<' : '['}${name}: ${type.name}${optional ? '>' : ']'}`;
         }).filter(x => x).join(' ')).trim();
