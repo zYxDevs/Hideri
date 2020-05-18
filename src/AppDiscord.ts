@@ -43,9 +43,7 @@ export abstract class AppDiscord {
             silent: true
         });
         this._client.login(config.token,
-            `${__dirname}/commands/*.js`,
-            `${__dirname}/commands/image-macros/*.js`,
-            `${__dirname}/commands/search-embeds/*.js`,
+            `${__dirname}/commands/**/*.js`,
             `${__dirname}/embed-browsers/BaseEmbedBrowser.js`
         );
 
