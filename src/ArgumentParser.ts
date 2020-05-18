@@ -66,7 +66,10 @@ export function Command(commandName: string, params: CommandParams & CommandPara
         const usage = (params?.usage ?? config.prefix + commandName + ' ' + argument_names.map((name: string, index: number) => {
             let optional = false;
             const type = argument_types[index];
+            let type_name = type.name;
+
             if (type == Client) return '';
+            if (type == GuildMember) type_name = `@${type_name}`;
             if (type == RestAsString) return `${params.rest_required ? '[' : '<'}...${name}${params.rest_required ? '' : '?'}: String${params.rest_required ? ']' : '>'}`;
             if (type.prototype instanceof CustomArgumentType) return new type('').get_usage();
 
@@ -76,7 +79,7 @@ export function Command(commandName: string, params: CommandParams & CommandPara
 
             name = name.replace(/\s*?=\s*?(?:null|undefined)/, '?');
 
-            return `${optional ? '<' : '['}${name}: ${type.name}${optional ? '>' : ']'}`;
+            return `${optional ? '<' : '['}${name}: ${type_name}${optional ? '>' : ']'}`;
         }).filter(x => x).join(' ')).trim();
 
         params.usage = usage;
