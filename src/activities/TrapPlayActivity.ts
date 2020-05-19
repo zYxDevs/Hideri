@@ -10,7 +10,7 @@ export class TrapPlayActivity extends BaseActivity {
                 name: RandomUtils.choice([
                     'Josou Kaikyou',
                     'Josou Gauken',
-                    'Josou Jinjya',
+                    'Josou Jinja',
                     'Josou Sanmyaku',
                     'Otomaid Cafe',
                     'School Idol QT Cool'
