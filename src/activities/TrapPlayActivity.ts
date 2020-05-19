@@ -12,6 +12,7 @@ export class TrapPlayActivity extends BaseActivity {
                     'Josou Gauken',
                     'Josou Jinja',
                     'Josou Sanmyaku',
+                    'Josou Sennen Oukoku',
                     'Otomaid Cafe',
                     'School Idol QT Cool'
                 ]) + ' | <h',
