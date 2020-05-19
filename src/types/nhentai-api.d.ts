@@ -69,9 +69,11 @@ type TagTypes = {
 }
 
 declare module 'nhentai-api' {
+    import http from 'http';
+    import https from 'https';
     class API {
         private APIPath: APIPath;
-        net: any;
+        net: typeof http | typeof https;
 
         private getAPIArgs(hostType: string, api: string): {
             host: string,
