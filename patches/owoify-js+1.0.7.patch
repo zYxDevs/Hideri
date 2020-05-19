@@ -1,3 +1,17 @@
+diff --git a/node_modules/owoify-js/dist/index.js b/node_modules/owoify-js/dist/index.js
+index 394b6a6..b569be9 100644
+--- a/node_modules/owoify-js/dist/index.js
++++ b/node_modules/owoify-js/dist/index.js
+@@ -2,7 +2,7 @@
+ 'use strict'
+ 
+ if (process.env.NODE_ENV === 'production') {
+-  module.exports = require('./owoify-js.cjs.production.min.js')
++  module.exports = require('./owoify-js.cjs.production.min.js').default
+ } else {
+-  module.exports = require('./owoify-js.cjs.development.js')
++  module.exports = require('./owoify-js.cjs.development.js').default
+ }
 diff --git a/node_modules/owoify-js/dist/owoify-js.cjs.development.js b/node_modules/owoify-js/dist/owoify-js.cjs.development.js
 index 3454317..cc6d2c6 100644
 --- a/node_modules/owoify-js/dist/owoify-js.cjs.development.js

@@ -18,7 +18,7 @@ import owoify from 'owoify-js';
             description: `${command_cased}ifies a message`
         })
         private async exec(message: CommandMessage, client: Client, text: RestAsString) {
-            message.channel.send((owoify as any).default(text.get(), command));
+            message.channel.send(owoify(text.get(), command));
         }
     }
 });
