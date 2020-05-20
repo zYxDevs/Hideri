@@ -28,10 +28,10 @@ export abstract class BaseImageMacro {
     private static image_extension_regex = /\.(png|jpe?g|jfif|gif|bmp|tiff)$/i;
 
     private static default_fonts = [
-        `${__dirname}../../../assets/fonts/opensans-black-128-emoji/opensans-black-128-emoji.fnt`,
-        `${__dirname}../../../assets/fonts/opensans-black-64-emoji/opensans-black-64-emoji.fnt`,
-        `${__dirname}../../../assets/fonts/opensans-black-32-emoji/opensans-black-32-emoji.fnt`,
-        `${__dirname}../../../assets/fonts/opensans-black-16-emoji/opensans-black-16-emoji.fnt`
+        `${__dirname}/../../assets/fonts/opensans-black-128-emoji/opensans-black-128-emoji.fnt`,
+        `${__dirname}/../../assets/fonts/opensans-black-64-emoji/opensans-black-64-emoji.fnt`,
+        `${__dirname}/../../assets/fonts/opensans-black-32-emoji/opensans-black-32-emoji.fnt`,
+        `${__dirname}/../../assets/fonts/opensans-black-16-emoji/opensans-black-16-emoji.fnt`
     ];
 
     constructor(private options: {
@@ -77,7 +77,7 @@ export abstract class BaseImageMacro {
             if (last_message[1].content) {
                 segments.push({
                     type: 'text',
-                    data: last_message[1].content
+                    data: last_message[1].content.trim()
                 })
             }
             
@@ -137,9 +137,11 @@ export abstract class BaseImageMacro {
                     }
                 }
 
-                if (segments[segments.length - 1]?.type != 'text') segments.push({ type: 'text', data: '' });
-
-                segments[segments.length - 1].data += ` ${segment}`;
+                if (segments[segments.length - 1]?.type != 'text') {
+                    segments.push({ type: 'text', data: segment.trim() });
+                } else {
+                    segments[segments.length - 1].data += ` ${segment.trim()}`;
+                }
             }
         }
 
