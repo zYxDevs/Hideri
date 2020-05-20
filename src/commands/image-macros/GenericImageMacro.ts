@@ -7,9 +7,7 @@ import { RateLimit } from '../../guards/RateLimit';
 import image_macros from '../../configs/image_macros.json';
 
 image_macros.forEach(macro => {
-    @Discord({
-        prefix: config.prefix
-    })
+    @Discord(config.prefix)
     class GenericImageMacro extends BaseImageMacro {
         public frame = macro.frame;
 

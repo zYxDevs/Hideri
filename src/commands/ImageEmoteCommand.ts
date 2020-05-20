@@ -6,9 +6,7 @@ import { CommandGroup } from '../types/CommandGroup';
 import { MessageEmbed } from '../utils/EmbedUtils';
 
 image_emotes.forEach(({ name, info, description, url }) => {
-    @Discord({
-        prefix: config.prefix
-    })
+    @Discord(config.prefix)
     class ImageEmote {
         @Command(name, {
             infos: info,

@@ -1,17 +1,18 @@
 import 'reflect-metadata';
 import get_function_arguments from 'get-function-arguments';
-import { CommandParams, Command as DiscordCommand, CommandMessage, Client } from '@typeit/discord';
+import { Command as DiscordCommand, CommandMessage, Client } from '@typeit/discord';
 import string_argv from 'string-argv';
 import config from './configs/config.json';
 import { CustomArgumentType } from './argument-types/CustomArgumentType.js';
 import { RestAsString } from './argument-types/RestAsString.js';
 import { Integer } from './argument-types/Integer.js';
 import { CommandGroup } from './types/CommandGroup';
-import { User, GuildMember, TextChannel, DMChannel } from 'discord.js';
+import { User, GuildMember, DMChannel } from 'discord.js';
 import { create_logger } from './utils/Logger';
 import fs from 'fs';
 import path from 'path';
 import logging from './configs/logging.json';
+import { DOnExt } from './types/DOnExt';
 
 const writeFile = fs.promises.writeFile;
 
@@ -25,6 +26,7 @@ const write_error = (commandName: string, error: Error) => {
 };
 
 const default_options = {
+    group: CommandGroup.GENERAL,
     args_required: true,
     incorrect_usage_message: true,
     missing_argument_message: true,
@@ -43,6 +45,8 @@ const reply_incorrect = (options, name: string, usage: string, message: CommandM
 }
 
 export interface CommandParamsExt {
+    infos?: string,
+    description?: string,
     group?: CommandGroup,
     usage?: string,
     hide?: boolean,
@@ -56,7 +60,15 @@ export interface CommandParamsExt {
     history_expansion?: boolean
 };
 
-export function Command(commandName: string, params: CommandParams & CommandParamsExt = default_options) {
+const commands: DOnExt[] = [];
+
+export abstract class CommandMetadataStorage {
+    public static get_commands(): DOnExt[] {
+        return commands;
+    }
+}
+
+export function Command(commandName: string, params: CommandParamsExt = default_options) {
     logger.debug(`command ${commandName} created in group ${params.group}`);
     params = Object.assign({}, default_options, params);
     return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
@@ -84,7 +96,6 @@ export function Command(commandName: string, params: CommandParams & CommandPara
         }).filter(x => x).join(' ')).trim();
 
         params.usage = usage;
-        params.group = params.group ?? CommandGroup.GENERAL;
 
         descriptor.value = function (...args) {
             const client: Client = args.find(arg => arg.constructor == Client);
@@ -262,8 +273,18 @@ export function Command(commandName: string, params: CommandParams & CommandPara
             }
         };
 
-        DiscordCommand(commandName, params)(target, propertyKey, descriptor);
-        params.aliases?.forEach(alias => DiscordCommand(alias, Object.assign({}, params, { hide: true }))(target, propertyKey, descriptor));
+        commands.push({
+            infos: params.infos,
+            description: params.description,
+            commandName: commandName,
+            group: params.group,
+            usage: params.usage,
+            hide: params.hide,
+            aliases: params.aliases
+        });
+
+        DiscordCommand(commandName)(target, propertyKey, descriptor);
+        params.aliases?.forEach(alias => DiscordCommand(alias)(target, propertyKey, descriptor));
 
         return descriptor;
     };

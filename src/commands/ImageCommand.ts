@@ -5,9 +5,7 @@ import fetch from 'node-fetch';
 import { CommandGroup } from '../types/CommandGroup';
 import { EmbedUtils } from '../utils/EmbedUtils';
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class ImageCommand {
     @Command('ahegao', {
         infos: 'Get random ahegao picture',

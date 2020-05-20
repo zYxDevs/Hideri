@@ -17,9 +17,7 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
 }) => {
     if (Array.isArray(text)) text = RandomUtils.create_randomizer(text);
 
-    @Discord({
-        prefix: config.prefix
-    })
+    @Discord(config.prefix)
     class Impersonation {
         @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS'))
         @Command(name, {

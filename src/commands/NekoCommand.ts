@@ -14,9 +14,7 @@ class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
 }
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class NekoCommand {
     @Command('neko', {
         infos: 'Fetch image from nekos.life',

@@ -2,11 +2,10 @@ import { Discord, On, Client, CommandMessage, Guard, ArgsOf } from '@typeit/disc
 import 'reflect-metadata';
 import config from './configs/config.json';
 import activities from './configs/activities.json';
-import { Command } from './ArgumentParser';
+import { Command, CommandMetadataStorage } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
 import { RegexUtils } from './utils/RegexUtils';
-import { DOnExt } from './types/DOnExt';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
@@ -19,9 +18,7 @@ import { MessageEmbed } from './utils/EmbedUtils';
 
 const logger = create_logger(module);
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class AppDiscord {
     private static _client: Client;
 
@@ -40,13 +37,15 @@ export abstract class AppDiscord {
         logger.info('logging in');
 
         this._client = new Client({
-            silent: true
+            classes: [
+                `${__dirname}/commands/**/*.js`,
+                `${__dirname}/events/*.js`,
+                `${__dirname}/embed-browsers/BaseEmbedBrowser.js`
+            ],
+            variablesChar: ':'
         });
-        this._client.login(config.token,
-            `${__dirname}/commands/**/*.js`,
-            `${__dirname}/events/*.js`,
-            `${__dirname}/embed-browsers/BaseEmbedBrowser.js`
-        );
+
+        this._client.login(config.token);
 
         ServerHandler.set_cache_dir(`${__dirname}/${config.cache_dir}/`);
     }
@@ -114,7 +113,7 @@ export abstract class AppDiscord {
     private async help(message: CommandMessage, command: string = null) {
         if (!command) return new HelpEmbedBrowser().send_embed(message);
         
-        const commands = Client.getCommandsIntrospection() as DOnExt[];
+        const commands = CommandMetadataStorage.get_commands();
         command = command.trim().replace(new RegExp(`^${RegexUtils.escape(config.prefix)}`, 'i'), '');
         const command_obj = commands.find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
         

@@ -7,9 +7,7 @@ import { HasPermission } from '../../guards/HasPermission';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import config from '../../configs/config.json';
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class BaseSearchEmbed {
     public pattern = /(?!x)x/;
     public use_webhook = true;

@@ -10,9 +10,7 @@ import { exec, ExecException } from 'child_process';
 const d = require('discord.js');
 const { MessageEmbed } = d;
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class DebugCommand {
     private hook_stdout(callback: Function) {
         const old_write = process.stdout.write;
