@@ -120,7 +120,7 @@ export abstract class AppDiscord {
         
         if (!command_obj || command_obj.hide) {
             let { ratings } = findBestMatch(command, commands.filter(command => !command.hide).flatMap(command => [command.commandName, ...(command.aliases ?? [])]));
-            ratings = ratings.filter(({ rating }) => rating > .66).map(({ target }) => target);
+            ratings = ratings.filter(({ rating }) => rating > .35).map(({ target }) => target);
 
             if (!ratings.length) return message.reply(`Error: command \`${command}\` not found`);
 
