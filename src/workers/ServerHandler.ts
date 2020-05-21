@@ -3,6 +3,7 @@ import { ServerHandlerCommand } from './ServerHandlerCommand';
 import { create_logger } from '../utils/Logger';
 import { IPCLoggingResponse } from '../types/IPCLoggingResponse';
 import { Client } from '@typeit/discord';
+import config from '../configs/config.json';
 
 const logger = create_logger(module);
 const server_logger = create_logger('Server Thread')
@@ -11,12 +12,12 @@ export abstract class ServerHandler {
     public static server: ChildProcess;
 
     public static set_client(client: Client) {
-        this.server.send({
+        this.server?.send({
             command: ServerHandlerCommand.SET_CLIENT_ID,
             data: client.user.id
         });
 
-        this.server.send({
+        this.server?.send({
             command: ServerHandlerCommand.SET_CLIENT_AVATAR,
             data: client.user.avatarURL({
                 format: 'png',
@@ -24,14 +25,14 @@ export abstract class ServerHandler {
             })
         });
 
-        this.server.send({
+        this.server?.send({
             command: ServerHandlerCommand.SET_CLIENT_USERNAME,
             data: client.user.username
         });
     }
 
     public static set_cache_dir(dir: string) {
-        this.server.send({
+        this.server?.send({
             command: ServerHandlerCommand.SET_CACHE_DIR,
             data: dir
         });
@@ -56,4 +57,8 @@ const setup_thread = () => {
     logger.info(`server thread started with PID ${ServerHandler.server.pid}`);
 };
 
-setup_thread();
+if (config.enable_server) {
+    setup_thread();
+} else {
+    logger.info('server is disabled. not forking');
+}

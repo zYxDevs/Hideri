@@ -7,6 +7,7 @@ import { GalleryInfo } from '../apis/Hitomi';
 import fetch from 'node-fetch';
 import { MessageEmbed } from '../utils/EmbedUtils';
 import config from '../configs/config.json';
+import image_proxying from '../configs/image_proxying.json';
 
 export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
     public min_page = 0;
@@ -43,10 +44,11 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
     }
 
     private async fetch_image() {
+        if (image_proxying.hitomila_method == 'upload') return;
         if (!this.fetch_order.length) return;
 
         const image = this.gallery.files[this.fetch_order.shift()];
-        const url = hitomi.get_image_url(image).replace(config.server_url, `http://localhost:${config.port}`);
+        const url = (await hitomi.get_image_url(image)).replace(config.server_url, `http://localhost:${config.port}`);
 
         await fetch(url);
 
@@ -66,7 +68,7 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
             this._page = MathUtils.clamp(this._page, 1, this.gallery.files.length);
             embed.setTitle(this.gallery.title);
             embed.setURL(hitomi.get_gallery_url(this.gallery));
-            const image = hitomi.get_image_url(this.gallery.files[this._page - 1]);
+            const image = await hitomi.get_image_url(this.gallery.files[this._page - 1]);
             await fetch(image);
             embed.setImage(image);
             this.last_embed = embed;
@@ -74,7 +76,7 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
         } else {
             const embed = new MessageEmbed();
             embed.setTitle(this.gallery.title);
-            const image = hitomi.get_image_url(this.gallery.files[0]);
+            const image = await hitomi.get_image_url(this.gallery.files[0]);
             await fetch(image);
             embed.setImage(image);
             embed.setURL(hitomi.get_gallery_url(this.gallery));

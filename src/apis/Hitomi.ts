@@ -1,9 +1,10 @@
 import { sha256 } from 'js-sha256';
 import fetch from 'node-fetch';
 import { CappedMap } from '../utils/CappedMap';
-import public_ip from 'public-ip';
+import image_proxying from '../configs/image_proxying.json';
 import config from '../configs/config.json';
 import { create_logger } from '../utils/Logger';
+import { ImageUploadProxy } from './ImageUploadProxy';
 
 const logger = create_logger(module);
 
@@ -34,7 +35,7 @@ export type GalleryInfo = {
     type: string
 };
 
-export class Hitmoi {
+export class Hitmoi extends ImageUploadProxy {
     // TODO: do these constants change?
     private domain = 'ltn.hitomi.la';
     private compressed_nozomi_prefix = 'n';
@@ -61,6 +62,8 @@ export class Hitmoi {
     private static gallery_cache = new CappedMap<string, GalleryInfo>(1000);
 
     constructor() {
+        super();
+
         this.index_fetches = Promise.all([
             this.get_index_version('tagindex').then(version => this.tag_index_version = version),
             this.get_index_version('galleriesindex').then(version => this.galleries_index_version = version)
@@ -144,8 +147,16 @@ export class Hitmoi {
         return url.toLowerCase();
     }
 
-    public get_image_url(image: GalleryFile) {
-        return `${config.server_url}/hitomila/?${encodeURIComponent(this.image_url_from_image(null, image, false))}`;
+    public async get_image_url(image: GalleryFile) {
+        return super.get_uploaded_or_proxied(this.image_url_from_image(null, image, false), {
+            method: image_proxying.hitomila_method as 'proxy' | 'upload',
+            proxy_path: '/hitomila/',
+            fetch_options: {
+                headers: {
+                    'referer': 'https://hitomi.la/reader/123.html'
+                }
+            }
+        });
     }
 
     // code below ripped from hitomi.la

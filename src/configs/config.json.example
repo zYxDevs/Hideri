@@ -6,5 +6,6 @@
     "cache_dir": "./caches",
     "exit_on_uncaught_error": true,
     "color": "#000000",
-    "server_url": "https://hideri.ddns.net"
+    "server_url": "https://hideri.ddns.net",
+    "enable_server": true
 }
