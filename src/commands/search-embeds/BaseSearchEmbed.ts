@@ -11,7 +11,7 @@ import config from '../../configs/config.json';
     prefix: config.prefix
 })
 export abstract class BaseSearchEmbed {
-    public pattern = /(?!x)x/;
+    public pattern = /(?!x)x/g;
     public use_webhook = true;
     public max_normal_embeds = 6;
     public max_webhook_embeds = 200;
