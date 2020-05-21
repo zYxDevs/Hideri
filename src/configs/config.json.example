@@ -1,11 +1,11 @@
 {
-    "token": "",
+    "token": "my-bot-token",
     "prefix": "<",
-    "owner_id": "132599390727700480",
+    "owner_id": "my-owner-id",
     "port": 80,
     "cache_dir": "./caches",
     "exit_on_uncaught_error": true,
     "color": "#000000",
-    "server_url": "https://hideri.ddns.net",
-    "enable_server": true
+    "server_url": "https://my-domain.ddns.net",
+    "enable_server": false
 }
