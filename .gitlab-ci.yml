@@ -5,6 +5,7 @@ before_script:
   - apt-get install -y ruby-dev
   - gem install dpl
   - npm install
+  - npx patch-package
 
 stages:
   - build

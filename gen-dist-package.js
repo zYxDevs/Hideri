@@ -7,7 +7,7 @@ const tsconfig = require('./tsconfig.json');
 const dist_package = Object.assign({}, package, {
     devDependencies: {},
     scripts: {
-        start: 'node index.js',
+        start: 'npx patch-package && node index.js',
         postinstall: 'patch-package'
     },
     engines: {
