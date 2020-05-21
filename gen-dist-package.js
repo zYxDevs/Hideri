@@ -7,7 +7,8 @@ const tsconfig = require('./tsconfig.json');
 const dist_package = Object.assign({}, package, {
     devDependencies: {},
     scripts: {
-        start: 'node index.js'
+        start: 'node index.js',
+        postinstall: 'patch-package'
     },
     engines: {
         node: `${semver.major(process.version)}.${semver.minor(process.version)}.x`

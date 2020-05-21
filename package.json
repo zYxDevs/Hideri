@@ -11,7 +11,7 @@
     "postinstall": "patch-package",
     "start": "npm run build && node build/index.js",
     "clean": "node clean.js",
-    "copyfiles": "cpx -u src/assets/** build/assets"
+    "copyfiles": "cpx -u src/assets/** build/assets && cpx -u patches/** build/patches"
   },
   "author": "",
   "license": "ISC",
@@ -47,6 +47,7 @@
     "string-similarity": "^4.0.1",
     "stringify-object": "^3.3.0",
     "title": "^3.4.2",
+    "tslib": "^2.0.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
