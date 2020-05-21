@@ -1,0 +1,29 @@
+image: node:latest
+
+before_script:
+  - apt-get update -qy
+  - apt-get install -y ruby-dev
+  - gem install dpl
+  - npm install
+
+stages:
+  - build
+  - production
+
+build:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - build
+
+production:
+  stage: production
+  image: ruby:latest
+  script:
+    - cd build
+    - cp $BOT_CONFIG_PRODUCTION ./config/
+    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+  only:
+    - master
