@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
     "prebuild": "npm run clean && node gen-constants.js",
-    "postbuild": "npm run copyfiles && node gen-dist-package.js",
+    "postbuild": "npm run copyfiles && node gen-dist-package.js && echo worker: npm run start > build/Procfile",
     "postinstall": "patch-package",
     "start": "npm run build && node build/index.js",
     "clean": "node clean.js",
