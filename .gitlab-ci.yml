@@ -25,7 +25,7 @@ production:
   stage: production
   script:
     - cd build
-    - cp $BOT_CONFIG_PRODUCTION ./config/config.json
+    - cp $BOT_CONFIG_PRODUCTION ./configs/config.json
     - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
