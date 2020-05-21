@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc --build",
     "prebuild": "npm run clean && node gen-constants.js",
-    "postbuild": "npm run copyfiles",
+    "postbuild": "npm run copyfiles && node gen-dist-package.js",
     "postinstall": "patch-package",
     "start": "npm run build && node build/index.js",
     "clean": "node clean.js",
@@ -17,9 +17,6 @@
   "license": "ISC",
   "dependencies": {
     "@typeit/discord": "^4.0.7",
-    "@types/express": "^4.17.6",
-    "@types/node": "^14.0.4",
-    "@types/node-fetch": "^2.5.7",
     "booru": "^2.2.3",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
@@ -54,9 +51,13 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.6",
+    "@types/node": "^14.0.5",
+    "@types/node-fetch": "^2.5.7",
     "cpx": "^1.5.0",
     "globby": "^11.0.0",
     "rimraf": "^3.0.2",
+    "semver": "^7.3.2",
     "tslint": "^6.1.2",
     "typescript": "^3.9.3"
   }
