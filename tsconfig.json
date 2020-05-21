@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2019",
+    "target": "es2020",
     "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "build",
@@ -13,11 +13,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": [
-      "es2017",
-      "es2019",
-      "esnext.asynciterable",
-      "es2020.string",
-      "es2020.promise"
+      "es2020",
+      "es2019"
     ],
     "moduleResolution": "node",
     "types": [ "node" ],
