@@ -146,7 +146,7 @@ class ImageProcessor {
         let emoji_index = 0;
 
         for (const emoji of this.options.emojis) {
-            emojis.push(await ImageProcessor.get_copied_image(emoji));
+            emojis.push((await ImageProcessor.get_copied_image(emoji)).resize(font.info.size, font.info.size));
         }
 
         let y_location = 0;
