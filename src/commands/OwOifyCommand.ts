@@ -8,9 +8,7 @@ import owoify from 'owoify-js';
 ['owo', 'uwu', 'uvu'].forEach(command => {
     const command_cased = command[0].toUpperCase() + command[1] + command[2].toUpperCase();
 
-    @Discord({
-        prefix: config.prefix
-    })
+    @Discord(config.prefix)
     class OwOifyCommand {
         @Command(`${command}ify`, {
             group: CommandGroup.FUN,

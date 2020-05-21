@@ -10,9 +10,7 @@ import { RestAsString } from '../../argument-types/RestAsString';
 import { nhentai } from '../../apis/Instances';
 import { RandomUtils } from '../../utils/RandomUtils';
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export class NHentaiSearchEmbed extends BaseSearchEmbed {
     public pattern = /\(\s*(\d{5,6})(\s+\d+)?\s*\)/g;
 

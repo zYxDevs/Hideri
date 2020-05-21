@@ -35,9 +35,7 @@ export abstract class BaseBooruCommand {
     }
 }
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class GenericBooruCommand extends BaseBooruCommand {
     @Command('booru', {
         group: CommandGroup.COMMUNITIES,
@@ -55,9 +53,7 @@ boorus.forEach(({ name, booru, aliases, info, description } : {
     info?: string,
     description?: string
 }) => {
-    @Discord({
-        prefix: config.prefix
-    })
+    @Discord(config.prefix)
     class BooruCommand extends BaseBooruCommand {
         @Command(name, {
             group: CommandGroup.COMMUNITIES,

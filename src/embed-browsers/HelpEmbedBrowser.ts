@@ -7,11 +7,12 @@ import { DOnExt } from '../types/DOnExt';
 import { MessageEmbed } from '../utils/EmbedUtils';
 import { BaseSearchEmbed } from '../commands/search-embeds/BaseSearchEmbed';
 import { AppDiscord } from '../AppDiscord';
+import { CommandMetadataStorage } from '../ArgumentParser';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;
 
-    private commands: DOnExt[] = [...new Array(BaseSearchEmbed.class_instances.length), ...Client.getCommandsIntrospection().reduce((command_map, command: DOnExt) => {
+    private commands: DOnExt[] = [...new Array(BaseSearchEmbed.class_instances.length), ...CommandMetadataStorage.get_commands().reduce((command_map, command: DOnExt) => {
         if (command.hide) return command_map;
 
         if (!command_map.has(command.group)) command_map.set(command.group, []);

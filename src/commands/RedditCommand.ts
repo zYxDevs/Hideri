@@ -19,9 +19,7 @@ class RedditTimeType extends SetArgumentType {
     public optional = true;
 }
 
-@Discord({
-    prefix: config.prefix
-})
+@Discord(config.prefix)
 export abstract class RedditCommand {
     @Command('r', {
         infos: 'Fetch top post of subreddit',
