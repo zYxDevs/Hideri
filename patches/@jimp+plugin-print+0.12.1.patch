@@ -1,8 +1,8 @@
 diff --git a/node_modules/@jimp/plugin-print/dist/index.js b/node_modules/@jimp/plugin-print/dist/index.js
-index 7676d8d..2c2fb5f 100644
+index 8392c07..d3ccca5 100644
 --- a/node_modules/@jimp/plugin-print/dist/index.js
 +++ b/node_modules/@jimp/plugin-print/dist/index.js
-@@ -49,40 +49,54 @@ var _utils = require("@jimp/utils");
+@@ -19,40 +19,54 @@ var _utils = require("@jimp/utils");
  
  var _measureText = require("./measure-text");
  
@@ -44,7 +44,7 @@ index 7676d8d..2c2fb5f 100644
      } else if (/\s/.test(text[i])) {
        _char2 = '';
 +    } else if (/[\ufe00-\ufe0f\ud800-\udbff\udc00-\udfff]/.test(text[i])) {
-+      continue;
++      continue
 +    } else if (charHandler) {
 +      let out = charHandler(text[i]);
 +      if (typeof out == 'string') {
@@ -63,7 +63,7 @@ index 7676d8d..2c2fb5f 100644
      var fontKerning = font.kernings[_char2];
      drawCharacter(this, font, x, y, fontChar || {});
      var kerning = fontKerning && fontKerning[text[i + 1]] ? fontKerning[text[i + 1]] : 0;
-@@ -90,14 +104,14 @@ function printText(font, x, y, text, defaultCharWidth) {
+@@ -60,14 +74,14 @@ function printText(font, x, y, text, defaultCharWidth) {
    }
  }
  
@@ -81,7 +81,7 @@ index 7676d8d..2c2fb5f 100644
  
      if (length <= maxWidth) {
        if (length > longestLine) {
-@@ -169,13 +183,13 @@ var _default = function _default() {
+@@ -139,13 +153,13 @@ var _default = function _default() {
              }
  
              for (var i = 0; i < font.chars.length; i++) {
@@ -98,7 +98,7 @@ index 7676d8d..2c2fb5f 100644
              }
  
              loadPages(_this, _path["default"].dirname(file), font.pages).then(function (pages) {
-@@ -255,21 +269,21 @@ var _default = function _default() {
+@@ -225,21 +239,21 @@ var _default = function _default() {
          }
  
          if (maxHeight !== Infinity && alignmentY === this.constructor.VERTICAL_ALIGN_BOTTOM) {
@@ -126,10 +126,10 @@ index 7676d8d..2c2fb5f 100644
          });
  
 diff --git a/node_modules/@jimp/plugin-print/dist/measure-text.js b/node_modules/@jimp/plugin-print/dist/measure-text.js
-index 589d1b3..576a4e4 100644
+index b75ac79..5633afa 100644
 --- a/node_modules/@jimp/plugin-print/dist/measure-text.js
 +++ b/node_modules/@jimp/plugin-print/dist/measure-text.js
-@@ -10,27 +10,41 @@ Object.defineProperty(exports, "__esModule", {
+@@ -6,27 +6,41 @@ Object.defineProperty(exports, "__esModule", {
  exports.measureText = measureText;
  exports.measureTextHeight = measureTextHeight;
  
@@ -178,7 +178,7 @@ index 589d1b3..576a4e4 100644
      if (testWidth > maxWidth && n > 0) {
        textTotalHeight += font.common.lineHeight;
 diff --git a/node_modules/@jimp/plugin-print/index.d.ts b/node_modules/@jimp/plugin-print/index.d.ts
-index 5d0273b..5a78264 100644
+index 5d0273b..2a0a7a4 100644
 --- a/node_modules/@jimp/plugin-print/index.d.ts
 +++ b/node_modules/@jimp/plugin-print/index.d.ts
 @@ -1,4 +1,5 @@
@@ -187,7 +187,7 @@ index 5d0273b..5a78264 100644
  
  export interface FontChar {
    id: number;
-@@ -55,11 +56,12 @@ export interface Font {
+@@ -55,13 +56,25 @@ export interface Font {
  }
  
  type PrintableText =
@@ -200,11 +200,6 @@ index 5d0273b..5a78264 100644
 +  charHandler?: CharHandler
  };
  
- interface PrintClass {
-@@ -90,10 +92,21 @@ interface PrintClass {
-   ): this;
- }
- 
 +export type CharHandler = (text: string) => {
 +  x: number,
 +  y: number,
@@ -216,6 +211,11 @@ index 5d0273b..5a78264 100644
 +  page: Jimp
 +} | string;
 +
+ interface PrintClass {
+   // Text methods
+   print(
+@@ -92,8 +105,8 @@ interface PrintClass {
+ 
  interface Print {
    constants: {
 -    measureText(font: Font, text: PrintableText): number;
