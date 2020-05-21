@@ -34,7 +34,7 @@
     "js-sha256": "^0.9.0",
     "memory-cache": "^0.2.0",
     "mime-types": "^2.1.27",
-    "moment": "^2.25.3",
+    "moment": "^2.26.0",
     "moment-duration-format": "^2.3.2",
     "nekos.life": "^2.0.7",
     "nhentai-api": "^3.0.2",
