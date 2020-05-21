@@ -6,6 +6,7 @@ import { TextChannel, Message } from 'discord.js';
 import { HasPermission } from '../../guards/HasPermission';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import config from '../../configs/config.json';
+import { GuardToBoolean } from '../../guards/GuardToBoolean';
 
 @Discord(config.prefix)
 export abstract class BaseSearchEmbed {
@@ -36,10 +37,10 @@ export abstract class BaseSearchEmbed {
 
             message.channel.startTyping();
 
-            const has_webhook_permission = HasPermission('MANAGE_WEBHOOKS', {
+            const has_webhook_permission = GuardToBoolean(HasPermission('MANAGE_WEBHOOKS', {
                 error_message: null,
                 check_admin: true
-            })([message], client);
+            }))([message], client);
 
             if (matches.length > instance.max_normal_embeds && has_webhook_permission && this.use_webhook) {
                 matches = matches.slice(0, instance.max_webhook_embeds);

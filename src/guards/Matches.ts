@@ -1,5 +1,5 @@
-import { Client, ArgsOf } from '@typeit/discord';
+import { GuardFunction } from '@typeit/discord';
 
-export function Matches(expression: RegExp) {
-    return ([message]: ArgsOf<'message'>, client: Client) => expression.test(message.content)
+export function Matches(expression: RegExp): GuardFunction<'message'> {
+    return ([message], client, next) => expression.test(message.content) && next()
 }

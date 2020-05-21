@@ -1,6 +1,6 @@
-import { Client, ArgsOf } from '@typeit/discord';
+import { GuardFunction } from '@typeit/discord';
 
-export function NotBot([message]: ArgsOf<'message'>, client: Client) {
-    if (!message.author) return false;
-    return !message.author.bot;
+export const NotBot: GuardFunction<'message'> = ([message], client, next) => {
+    if (!message.author) return;
+    if (!message.author.bot) next();
 }
