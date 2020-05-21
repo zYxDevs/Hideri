@@ -13,7 +13,9 @@ stages:
 build:
   stage: build
   script:
+    - cp src/configs/config.json.example src/configs/config.json
     - npm run build
+    - mv build/configs/config.json build/configs/config.json.example
   artifacts:
     paths:
       - build
@@ -23,7 +25,7 @@ production:
   image: ruby:latest
   script:
     - cd build
-    - cp $BOT_CONFIG_PRODUCTION ./config/
+    - cp $BOT_CONFIG_PRODUCTION ./config/config.json
     - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
