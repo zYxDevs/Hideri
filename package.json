@@ -27,7 +27,7 @@
     "discord.js": "^12.2.0",
     "ejs": "^3.1.2",
     "express": "^4.17.1",
-    "file-type": "^14.4.0",
+    "file-type": "^14.5.0",
     "get-function-arguments": "^1.0.0",
     "grosso-modo": "^3.1.1",
     "jimp": "^0.12.1",
