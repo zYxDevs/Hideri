@@ -29,3 +29,4 @@ production:
     - dpl --skip-cleanup --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
+  when: manual
