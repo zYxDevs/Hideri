@@ -134,7 +134,7 @@ app.set('view engine', 'ejs');
 
 app.use((req, res, next) => {
     const source = req.headers['x-forwarded-for']?.toString() ?? req.connection.remoteAddress;
-    if (/(127(\.\d{3}){2}\.\d{3}|::1)$/.test(source) && !logging.server_log_loopback) return next();
+    if (/(127(\.\d{1,3}){2}\.\d{1,3}|::1)$/.test(source) && !logging.server_log_loopback) return next();
 
     logger.http(`[${source}]: "${req.method.toUpperCase()} ${req.url}" "${req.get('User-Agent')}"`);
     next();
