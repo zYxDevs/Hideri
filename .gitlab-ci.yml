@@ -23,7 +23,6 @@ build:
 
 production:
   stage: production
-  image: ruby:latest
   script:
     - cd build
     - cp $BOT_CONFIG_PRODUCTION ./config/config.json
