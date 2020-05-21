@@ -19,7 +19,10 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
 
     @Discord(config.prefix)
     class Impersonation {
-        @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS'))
+        @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS', {
+            error_message: 'I need webhook permissions for this!',
+            check_admin: true
+        }))
         @Command(name, {
             infos: info,
             description: description,
