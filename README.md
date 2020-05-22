@@ -44,7 +44,7 @@ Use the `<h` or `<help` command for help. The following commands are implemented
 Hideri also responds to the following patterns anywhere in a message
 #### `(gallery page)`: gets a specific page and gallery from nhentai
 * example: `(177013)` or `(238029 16)`
-#### `!gallery page!: gets a specific page and gallery from hitomi.la
+#### `!gallery page!`: gets a specific page and gallery from hitomi.la
 * example: `!1147281!` or `!930477 10!`
 
 ## Image Macros
