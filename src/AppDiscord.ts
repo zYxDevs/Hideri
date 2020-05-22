@@ -15,10 +15,11 @@ import { findBestMatch } from 'string-similarity';
 import { ServerHandler } from './workers/ServerHandler';
 import { create_logger } from './utils/Logger';
 import { MessageEmbed } from './utils/EmbedUtils';
+import { get_prefix, get_prefix_str, server_configs } from './server-config/ServerConfig';
 
 const logger = create_logger(module);
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export abstract class AppDiscord {
     private static _client: Client;
 
@@ -30,6 +31,8 @@ export abstract class AppDiscord {
     ));
 
     private start_time: moment.Moment;
+
+    private static constructed = false;
 
     public static get client() { return this._client; }
 
@@ -49,6 +52,34 @@ export abstract class AppDiscord {
         this._client.login(config.token);
 
         ServerHandler.set_cache_dir(`${__dirname}/${config.cache_dir}/`);
+    }
+
+    constructor() {
+        if (AppDiscord.constructed) return;
+        AppDiscord.constructed = true;
+        
+        const outer_this = this;
+
+        @Discord(config.prefix)
+        abstract class DefaultHelpCommand {
+            @Command('h', {
+                hide: true,
+                extraneous_argument_message: false,
+                aliases: ['help']
+            })
+            private async help(message: CommandMessage, client: Client) {
+                const prefix = get_prefix_str(message);
+                if (prefix == config.prefix) return;
+
+                const reply_message = await message.author.send(`The server you are in has a prefix of \`${prefix}\`, but you have used the default prefix`);
+
+                // don't try this at home, kids
+                return (outer_this.help as any)(Object.assign({}, message, {
+                    channel: reply_message.channel,
+                    reply: reply_message.reply
+                }), client);
+            }
+        }
     }
 
     @On('ready')
@@ -107,22 +138,24 @@ export abstract class AppDiscord {
 
     @Command('h', {
         infos: 'Get help',
-        description: `Gets help (use \`${config.prefix}h [command]\` for command details`,
+        description: `Gets help (use \`h [command]\` for command details`,
         extraneous_argument_message: false,
         aliases: ['help']
     })
     private async help(message: CommandMessage, command: string = null) {
-        if (!command) return new HelpEmbedBrowser().send_embed(message);
+        const send_dm = server_configs[message?.guild?.id]['common.help_dm'];
+
+        if (!command) return new HelpEmbedBrowser().send_embed(message, send_dm ? message.author.send.bind(message.author) : null);
         
         const commands = CommandMetadataStorage.get_commands();
-        command = command.trim().replace(new RegExp(`^${RegexUtils.escape(config.prefix)}`, 'i'), '');
+        command = command.trim().replace(get_prefix(message), '');
         const command_obj = commands.find(({ commandName, aliases }) => commandName == command || aliases?.includes(command));
         
         if (!command_obj || command_obj.hide) {
             let { ratings } = findBestMatch(command, commands.filter(command => !command.hide).flatMap(command => [command.commandName, ...(command.aliases ?? [])]));
             ratings = ratings.filter(({ rating }) => rating > .35).map(({ target }) => target);
 
-            if (!ratings.length) return message.reply(`Error: command \`${command}\` not found`);
+            if (!ratings.length) (send_dm ? message.author.send : message.reply)(`Error: command \`${command}\` not found`);
 
             const embed = new MessageEmbed({ title: `Command \`${command}\` not found` });
             embed.addField('Did you mean the following?', ratings.map(name => {
@@ -132,7 +165,7 @@ export abstract class AppDiscord {
                 return `\`${command_obj.commandName}\`, from ${command_obj.group}: ${command_obj.infos ?? ''}`;
             }).filter(x => x).join('\n'))
 
-            return message.channel.send(embed);
+            return (send_dm ? message.author : message.channel).send(embed);
         }
         
         const embed = new MessageEmbed({ title: `\`${command_obj.commandName}\` command` });
@@ -141,7 +174,7 @@ export abstract class AppDiscord {
         embed.addField('Description', command_obj.description ?? 'None');
         embed.addField('Usage', `\`${command_obj.usage}\``);
         if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases.join(', ')}\``);
-        message.channel.send(embed);
+        (send_dm ? message.author : message.channel).send(embed);
     }
 
     @Command('version', {

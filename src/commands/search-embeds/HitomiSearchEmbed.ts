@@ -10,7 +10,7 @@ import { HitomiEmbedBrowser } from '../../embed-browsers/HitomiEmbedBrowser';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { RateLimit } from '../../guards/RateLimit';
 
-@Discord(config.prefix)
+@Discord()
 export class HitomiSearchEmbed extends BaseSearchEmbed {
     public pattern = /!\s*(\d{5,7})(\s+\d+)?\s*!/g;
     public use_webhook = false;
@@ -18,6 +18,7 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
     public name = 'Hitomi.la';
     public info = 'Fetch gallery from hitomi.la';
     public usage = '!gallery! or !gallery page!';
+    public nsfw = true;
 
     @Guard(RateLimit({
         scope: 'server',
@@ -26,7 +27,8 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
     @Command('hitomi', {
         group: CommandGroup.COMMUNITIES,
         description: 'Get random image from hitomi.la',
-        aliases: [ 'hitomila' ]
+        aliases: [ 'hitomila' ],
+        nsfw: true
     })
     private async exec(message: CommandMessage, ...query: string[]) {
         const reply = message.channel.send('Searching...');

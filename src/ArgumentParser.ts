@@ -13,6 +13,8 @@ import fs from 'fs';
 import path from 'path';
 import logging from './configs/logging.json';
 import { DOnExt } from './types/DOnExt';
+import { get_prefix_str, server_configs } from './server-config/ServerConfig';
+import matcher from 'matcher';
 
 const writeFile = fs.promises.writeFile;
 
@@ -34,7 +36,9 @@ const default_options = {
     handle_errors: true,
     usage: null,
     rest_required: true,
-    history_expansion: true
+    history_expansion: true,
+    nsfw: false,
+    aliases: []
 };
 
 const reply_incorrect = (options, name: string, usage: string, message: CommandMessage) => {
@@ -57,7 +61,8 @@ export interface CommandParamsExt {
     extraneous_argument_message?: boolean,
     handle_errors?: boolean,
     rest_required?: boolean,
-    history_expansion?: boolean
+    history_expansion?: boolean,
+    nsfw?: boolean
 };
 
 const commands: DOnExt[] = [];
@@ -75,7 +80,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
         const argument_types = Reflect.getMetadata('design:paramtypes', target, propertyKey).slice(1);
         const argument_names = get_function_arguments(descriptor.value).slice(1);
         const original_method = descriptor.value;
-        const usage = (params?.usage ?? config.prefix + commandName + ' ' + argument_names.map((name: string, index: number) => {
+        let usage = (params?.usage ?? commandName + ' ' + argument_names.map((name: string, index: number) => {
             let optional = false;
             const type = argument_types[index];
             let type_name = type.name;
@@ -100,6 +105,26 @@ export function Command(commandName: string, params: CommandParamsExt = default_
         descriptor.value = function (...args) {
             const client: Client = args.find(arg => arg.constructor == Client);
             const message: CommandMessage = args[0];
+
+            if (server_configs[message?.guild?.id]['common.channel_list'].includes(message.channel.id) ==
+                server_configs[message?.guild?.id]['common.channel_list_as_blacklist']) return message.channel.stopTyping();
+            
+            if (server_configs[message?.guild?.id]['common.command_list'].length &&
+                server_configs[message?.guild?.id]['common.command_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
+                server_configs[message?.guild?.id]['common.command_list_as_blacklist']) return message.channel.stopTyping();
+
+            if (!(message.channel instanceof DMChannel)
+                && !message.channel.nsfw
+                && params.nsfw
+                && !server_configs[message?.guild?.id]['common.nsfw_all_channels']
+                ) {
+                message.react('💢');
+                
+                return message.channel.stopTyping();;
+            }
+
+            usage = get_prefix_str(message) + usage;
+
             let argv = string_argv(message.content);
             argv = argv.slice(1);
 

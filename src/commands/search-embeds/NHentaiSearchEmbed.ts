@@ -9,19 +9,22 @@ import { Command } from '../../ArgumentParser';
 import { RestAsString } from '../../argument-types/RestAsString';
 import { nhentai } from '../../apis/Instances';
 import { RandomUtils } from '../../utils/RandomUtils';
+import { get_prefix } from '../../server-config/ServerConfig';
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export class NHentaiSearchEmbed extends BaseSearchEmbed {
     public pattern = /\(\s*(\d{5,6})(\s+\d+)?\s*\)/g;
 
     public name = 'NHentai';
     public info = 'Fetch gallery from nhentai';
     public usage = '(gallery) or (gallery page)';
+    public nsfw = true;
 
     @Command('nh', {
         description: 'Get random image from nhentai',
         group: CommandGroup.COMMUNITIES,
-        aliases: ['nhentai']
+        aliases: ['nhentai'],
+        nsfw: true
     })
     private async exec(message: CommandMessage, query: RestAsString) {
         message.channel.startTyping();

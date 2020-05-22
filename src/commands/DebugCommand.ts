@@ -6,11 +6,12 @@ import { RestAsString } from '../argument-types/RestAsString';
 import stringify_object from 'stringify-object';
 import split_to_chunks from 'split-to-chunks';
 import { exec, ExecException } from 'child_process';
+import { database_client, get_prefix } from '../server-config/ServerConfig';
 
 const d = require('discord.js');
 const { MessageEmbed } = d;
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export abstract class DebugCommand {
     private hook_stdout(callback: Function) {
         const old_write = process.stdout.write;
@@ -24,6 +25,19 @@ export abstract class DebugCommand {
     
         return {
             unhook() { process.stdout.write = old_write }
+        }
+    }
+
+    @Guard(Owner())
+    @Command('query', {
+        hide: true
+    })
+    private async query(message: CommandMessage, query: RestAsString) {
+        const start = Date.now();
+        const { rows } = await database_client.query(query.get());
+        await message.channel.send('```\n' + `${rows.length} rows returned in ${Date.now() - start}ms` + '\n```');
+        for (const chunk of split_to_chunks(JSON.stringify(rows, null, 2), 1980).slice(0, 10)) {
+            await message.channel.send('```js\n' + chunk.join('') + '\n```')
         }
     }
 

@@ -4,9 +4,10 @@ import image_emotes from '../configs/image_emotes.json';
 import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
 import { MessageEmbed } from '../utils/EmbedUtils';
+import { get_prefix } from '../server-config/ServerConfig';
 
 image_emotes.forEach(({ name, info, description, url }) => {
-    @Discord(config.prefix)
+    @Discord(get_prefix)
     class ImageEmote {
         @Command(name, {
             infos: info,

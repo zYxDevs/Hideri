@@ -5,9 +5,10 @@ import { Command } from '../../ArgumentParser';
 import { CommandGroup } from '../../types/CommandGroup';
 import { RateLimit } from '../../guards/RateLimit';
 import image_macros from '../../configs/image_macros.json';
+import { get_prefix } from '../../server-config/ServerConfig';
 
 image_macros.forEach(macro => {
-    @Discord(config.prefix)
+    @Discord(get_prefix)
     class GenericImageMacro extends BaseImageMacro {
         public frame = macro.frame;
 

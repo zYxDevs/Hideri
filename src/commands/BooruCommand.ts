@@ -5,6 +5,7 @@ import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
 import { forSite } from 'booru';
 import { MessageEmbed } from '../utils/EmbedUtils';
+import { get_prefix } from '../server-config/ServerConfig';
 
 export abstract class BaseBooruCommand {
     public async exec(message: CommandMessage, booru: string, ...query: string[]) {
@@ -35,11 +36,12 @@ export abstract class BaseBooruCommand {
     }
 }
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export abstract class GenericBooruCommand extends BaseBooruCommand {
     @Command('booru', {
         group: CommandGroup.COMMUNITIES,
-        description: `Fetch an image from a booru`
+        description: `Fetch an image from a booru`,
+        nsfw: true
     })
     public async exec(message: CommandMessage, booru: string, ...query: string[]) {
         return await super.exec(message, booru, ...query);
@@ -53,13 +55,14 @@ boorus.forEach(({ name, booru, aliases, info, description } : {
     info?: string,
     description?: string
 }) => {
-    @Discord(config.prefix)
+    @Discord(get_prefix)
     class BooruCommand extends BaseBooruCommand {
         @Command(name, {
             group: CommandGroup.COMMUNITIES,
             aliases: aliases,
             infos: info,
-            description: description ?? `Fetch an image from ${booru}`
+            description: description ?? `Fetch an image from ${booru}`,
+            nsfw: !booru.includes('safebooru')
         })
         public async exec(message: CommandMessage, ...query: string[]) {
             return await super.exec(message, booru, ...query);

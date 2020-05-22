@@ -8,6 +8,8 @@ import { MessageEmbed } from '../utils/EmbedUtils';
 import { BaseSearchEmbed } from '../commands/search-embeds/BaseSearchEmbed';
 import { AppDiscord } from '../AppDiscord';
 import { CommandMetadataStorage } from '../ArgumentParser';
+import { Message } from 'discord.js';
+import { get_prefix_str } from '../server-config/ServerConfig';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;
@@ -26,7 +28,7 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
         super(1, options);
     }
 
-    async get_embed() {
+    async get_embed(message: Message) {
         const command_segment = this.commands.slice((this.page - 1) * this.page_length, this.page * this.page_length);
         const embed = new MessageEmbed({ title: 'Command Help' });
         embed.setFooter(`Page ${this.page}/${this.max_page}`);
@@ -44,7 +46,7 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
             if (!command) return;
             const previous_command = command_segment[index - 1];
             if (!previous_command || previous_command.group != command.group) embed.addField('\ufeff', `**${command.group}**`);
-            embed.addField(`\`${config.prefix}${command.commandName}\`: ${command.infos ?? ''}`, `${command.description ?? ''}\nUsage: \`${command.usage}\``);
+            embed.addField(`\`${command.commandName}\`: ${command.infos ?? ''}`, `${command.description ?? ''}\nUsage: \`${get_prefix_str(message)}${command.usage}\``);
         });
 
         return embed;

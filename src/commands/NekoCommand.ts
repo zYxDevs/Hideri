@@ -8,13 +8,14 @@ import { StringUtils } from '../utils/StringUtils';
 import config from '../configs/config.json';
 import { nekos } from '../apis/Instances';
 import { MessageEmbed } from '../utils/EmbedUtils';
-import { GuildMember } from 'discord.js';
+import { GuildMember, TextChannel } from 'discord.js';
+import { get_prefix, server_configs } from '../server-config/ServerConfig';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
 }
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export abstract class NekoCommand {
     @Command('neko', {
         infos: 'Fetch image from nekos.life',
@@ -26,7 +27,13 @@ export abstract class NekoCommand {
         if (StringUtils.ci_includes(neko_tags, tag)) {
             message.channel.startTyping();
             let location = 'sfw'
-            if (StringUtils.ci_get(nekos.nsfw, tag)) location = 'nsfw';
+            if (StringUtils.ci_get(nekos.nsfw, tag)) {
+                if (!(message?.channel as TextChannel)?.nsfw && !server_configs[message?.guild?.id]['common.nsfw_all_channels']) {
+                    return message.react('💢');
+                }
+
+                location = 'nsfw';
+            }
             const response = await StringUtils.ci_get(nekos[location], tag)();
             if (!response.url) return message.channel.send(response.cat ?? response.why ?? response.owo ?? response.fact ?? response.msg);
             const embed = new MessageEmbed();

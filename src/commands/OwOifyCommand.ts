@@ -4,11 +4,12 @@ import { Command } from '../ArgumentParser';
 import { RestAsString } from '../argument-types/RestAsString';
 import { CommandGroup } from '../types/CommandGroup';
 import owoify from 'owoify-js';
+import { get_prefix } from '../server-config/ServerConfig';
 
 ['owo', 'uwu', 'uvu'].forEach(command => {
     const command_cased = command[0].toUpperCase() + command[1] + command[2].toUpperCase();
 
-    @Discord(config.prefix)
+    @Discord(get_prefix)
     class OwOifyCommand {
         @Command(`${command}ify`, {
             group: CommandGroup.FUN,

@@ -5,10 +5,11 @@ import { Not } from '../../guards/Not';
 import { TextChannel, Message } from 'discord.js';
 import { HasPermission } from '../../guards/HasPermission';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
-import config from '../../configs/config.json';
 import { GuardToBoolean } from '../../guards/GuardToBoolean';
+import { StartsWithPrefix } from '../../guards/StartsWithPrefix';
+import { server_configs } from '../../server-config/ServerConfig';
 
-@Discord(config.prefix)
+@Discord()
 export abstract class BaseSearchEmbed {
     public pattern = /(?!x)x/g;
     public use_webhook = true;
@@ -19,21 +20,40 @@ export abstract class BaseSearchEmbed {
     public info = null;
     public description = null;
     public usage = null;
+    public nsfw = false;
 
     public static class_instances: BaseSearchEmbed[] = [];
+    private static class_instance_types: (typeof BaseSearchEmbed)[] = [];
 
     constructor() {
-        if (Object.getPrototypeOf(this) != BaseSearchEmbed.prototype) BaseSearchEmbed.class_instances.push(this);
+        if (BaseSearchEmbed.class_instance_types.includes(new.target)) return;
+        if (new.target == BaseSearchEmbed) return;
+
+        BaseSearchEmbed.class_instances.push(this);
+        BaseSearchEmbed.class_instance_types.push(new.target);
     }
 
     public abstract async embed_handler(message: Message, client: Client, match: RegExpMatchArray, is_webhook?: boolean): Promise<BaseEmbedBrowser>;
 
-    @Guard(NotBot, Not(StartsWith('<')))
+    @Guard(NotBot, Not(StartsWithPrefix))
     @On('message')
     private async on_message([message]: ArgsOf<'message'>, client: Client) {
+        let reacted = false;
+
         await Promise.allSettled(BaseSearchEmbed.class_instances.map(async instance => {
             let matches = [...message.content.matchAll(instance.pattern)];
             if (!matches.length) return;
+
+            if (instance.nsfw &&
+                !(message?.channel as TextChannel)?.nsfw &&
+                !server_configs[message?.guild?.id]['common.nsfw_all_channels']
+            ) {
+                if (!reacted) {
+                    reacted = true;
+                    message.react('💢');
+                }
+                return;
+            }
 
             message.channel.startTyping();
 
@@ -60,7 +80,7 @@ export abstract class BaseSearchEmbed {
                         const embeds = [];
     
                         for (const embed_browser of embed_browsers) {
-                            embeds.push(await embed_browser.get_embed());
+                            embeds.push(await embed_browser.get_embed(message));
                             embed_browser.remove();
                         }
 

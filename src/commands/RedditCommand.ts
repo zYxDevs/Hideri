@@ -6,6 +6,8 @@ import { RandomUtils } from '../utils/RandomUtils';
 import { CommandMessage, Discord } from '@typeit/discord';
 import { EmbedUtils } from '../utils/EmbedUtils';
 import config from '../configs/config.json';
+import { get_prefix, server_configs } from '../server-config/ServerConfig';
+import { TextChannel } from 'discord.js';
 
 class RedditStatusType extends SetArgumentType {
     public argument_list = ['hot', 'rising', 'new', 'top'];
@@ -19,7 +21,7 @@ class RedditTimeType extends SetArgumentType {
     public optional = true;
 }
 
-@Discord(config.prefix)
+@Discord(get_prefix)
 export abstract class RedditCommand {
     @Command('r', {
         infos: 'Fetch top post of subreddit',
@@ -35,6 +37,14 @@ export abstract class RedditCommand {
         if (Number.isNaN(post_index)) post_index = 0;
         if (post_number == 'r') post_index = RandomUtils.randint(0, items.length);
         const post = items[post_number].data;
+
+        if (post.over_18 &&
+            !(message?.channel as TextChannel)?.nsfw &&
+            !server_configs[message?.guild?.id]['common.nsfw_all_channels']
+            ) {
+            return message.react('💢');
+        }
+
         let img = post.url;
         if (!/\.(jpe?g|png|gif)$/ig.test(img)) img = post?.preview?.images[0]?.source?.url?.replace(/&amp;/ig, '&');
         message.channel.send(EmbedUtils.create_image_embed(post.title, img));

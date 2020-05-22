@@ -8,6 +8,7 @@ import impersonation_commands from '../configs/impersonation_commands.json';
 import { CommandGroup } from '../types/CommandGroup';
 import { RandomUtils } from '../utils/RandomUtils';
 import { RateLimit } from '../guards/RateLimit';
+import { get_prefix } from '../server-config/ServerConfig';
 
 impersonation_commands.forEach(({ name, info, description, text, aliases } : {
     name: string,
@@ -18,7 +19,7 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
 }) => {
     if (Array.isArray(text)) text = RandomUtils.create_randomizer(text);
 
-    @Discord(config.prefix)
+    @Discord(get_prefix)
     class Impersonation {
         @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS', {
             error_message: 'I need webhook permissions for this!',

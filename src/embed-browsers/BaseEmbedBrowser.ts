@@ -1,6 +1,6 @@
 import { Discord, On, Client, ArgsOf } from '@typeit/discord';
 import { CappedArray } from '../utils/CappedArray';
-import { MessageReaction, User, Message } from 'discord.js';
+import { MessageReaction, User, Message, Channel, GuildChannel, DMChannel, TextChannel, NewsChannel, PartialTextBasedChannelFields } from 'discord.js';
 import { MessageEmbed } from '../utils/EmbedUtils';
 
 export type EmbedBrowserOptions = {
@@ -24,16 +24,16 @@ export abstract class BaseEmbedBrowser {
         BaseEmbedBrowser.class_instances.push(this);
     }
 
-    public async send_embed(message: Message) {
-        const embed: MessageEmbed = await this.get_embed();
+    public async send_embed(message: Message, send_override?: PartialTextBasedChannelFields['send']) {
+        const embed: MessageEmbed = await this.get_embed(message);
         if (!embed) return false;
-        const embed_message = await message.channel.send(embed);
+        const embed_message = await (send_override ?? message.channel.send.bind(message.channel))(embed);
         this.add_reactions(embed_message);
         this.message = embed_message;
         return true;
     }
     
-    abstract async get_embed(): Promise<MessageEmbed>;
+    abstract async get_embed(message?: Message): Promise<MessageEmbed>;
 
     public set_embed(embed: MessageEmbed) {
         this.message.edit(embed);
