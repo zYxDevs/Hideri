@@ -186,11 +186,11 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     }
                 } else if (type === Boolean) {
                     const bool_string = argv.shift();
-                    if (/true|t|1|yes|y/i.test(bool_string)) {
+                    if (/^true|t|1|yes|y$/i.test(bool_string)) {
                         argument_array.push(true);
                         continue;
                     }
-                    if (/false|f|0|no|n/i.test(bool_string)) {
+                    if (/^false|f|0|no|n$/i.test(bool_string)) {
                         argument_array.push(false);
                         continue;
                     }
