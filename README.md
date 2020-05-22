@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="https://cdn.discordapp.com/avatars/507648234236411904/9a992f93f593db96af1ef13f2a949e0a.png?size=256">
+</p>
+
 # Hideri
 
 Hideri is a bot written in TypeScript which provides commands to search for hentai from many different sites. [Invite Hideri to your server.](https://discord.com/oauth2/authorize?client_id=507648234236411904&scope=bot&permissions=640928832)
