@@ -20,7 +20,7 @@ image_macros.forEach(macro => {
             })
         }
 
-        @Guard(RateLimit({ rate_limit: 5 }))
+        @Guard(RateLimit({ rate_limit: 7.5 }))
         @Command(macro.name, {
             description: macro.description,
             group: CommandGroup.IMAGE_MACROS,
