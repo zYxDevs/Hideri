@@ -3,7 +3,7 @@ import { CommandMessage, Client } from '@typeit/discord';
 import { MessageAttachment } from 'discord.js';
 import { Font } from '@jimp/plugin-print';
 import fetch from 'node-fetch';
-import { ImageProcessorHandler } from '../../workers/ImageProcessorHandler';
+import { ImageProcessorHandler, ImageProcessingError } from '../../workers/ImageProcessorHandler';
 import { create_logger } from '../../utils/Logger';
 
 const logger = create_logger(module);
@@ -147,7 +147,7 @@ export abstract class BaseImageMacro {
 
         const start = Date.now();
 
-        const { data } = await ImageProcessorHandler.process({
+        const result = await ImageProcessorHandler.process({
             image_location: this.options.image_location,
             mask_location: this.options.mask_location,
             fonts: this.options.fonts ?? BaseImageMacro.default_fonts,
@@ -155,10 +155,12 @@ export abstract class BaseImageMacro {
             frame: this.frame,
             segments: segments,
             emojis: emojis
-        });
+        }).catch((error: ImageProcessingError) => error);
+
+        if (result instanceof ImageProcessingError) return message.reply(`Error: ${result.message}`);
 
         logger.verbose(`image processed after ${Date.now() - start}ms`);
 
-        message.channel.send(new MessageAttachment(Buffer.from(data), `${this.options.output_filename ?? 'output'}.${this.get_extension(this.options.mime ?? Jimp.MIME_JPEG)}`));
+        message.channel.send(new MessageAttachment(Buffer.from(result.data), `${this.options.output_filename ?? 'output'}.${this.get_extension(this.options.mime ?? Jimp.MIME_JPEG)}`));
     }
 }
