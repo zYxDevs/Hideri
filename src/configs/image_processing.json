@@ -1,0 +1,4 @@
+{
+    "queue_size": 10,
+    "processing_timeout": 45
+}

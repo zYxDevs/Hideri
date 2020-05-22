@@ -1,6 +1,8 @@
-import { fork, Serializable, ChildProcess } from 'child_process';
+import { fork, ChildProcess } from 'child_process';
 import { create_logger } from '../utils/Logger';
 import { IPCLoggingResponse } from '../types/IPCLoggingResponse';
+import image_processing from '../configs/image_processing.json';
+import { AppDiscord } from '../AppDiscord';
 
 type ImageIPCOptions = {
     image_location: string,
@@ -23,6 +25,15 @@ type ImageResponse = {
     data: number[]
 } | IPCLoggingResponse;
 
+export const enum ImageProcessingErrorMessage {
+    TIMED_OUT = 'image processing timed out',
+    QUEUE_FULL = 'image processing queue full'
+}
+
+export class ImageProcessingError extends Error {
+    constructor(public message: ImageProcessingErrorMessage) { super(message); }
+}
+
 const logger = create_logger(module);
 const image_processor_logger = create_logger('Image Processing Thread');
 
@@ -38,15 +49,31 @@ export abstract class ImageProcessorHandler {
         let promise_resolve: Function;
         let promise_reject: Function;
         const promise = new Promise<{ data: number[] }>((resolve, reject) => [promise_resolve, promise_reject] = [resolve, reject]);
-        this.pending_requests.push({
+
+        if (this.pending_requests.length >= image_processing.queue_size) {
+            promise_reject(new ImageProcessingError(ImageProcessingErrorMessage.QUEUE_FULL));
+            return promise;
+        }
+
+        const request_object = {
             resolve: promise_resolve,
             reject: promise_reject,
             options: options
-        });
+        };
+
+        this.pending_requests.push(request_object);
 
         if (this.pending_requests.length == 1) {
             this.image_processor.send(options);
         }
+
+        AppDiscord.client.setTimeout(() => {
+            const index = this.pending_requests.indexOf(request_object);
+            if (index == -1) return;
+
+            promise_reject(new ImageProcessingError(ImageProcessingErrorMessage.TIMED_OUT));
+            this.pending_requests.splice(index, 1);
+        }, image_processing.processing_timeout * 1000);
 
         return promise;
     }
