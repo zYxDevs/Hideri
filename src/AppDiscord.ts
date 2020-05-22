@@ -171,7 +171,7 @@ export abstract class AppDiscord {
                 url: client.user.avatarURL()
             },
             fields: [{
-                name: '\ufeff',
+                name: 'Created by SK1982#6578',
                 value: `Running on ${client.guilds.cache.size} servers\nServing ${user_count} users`
             }]
         });
