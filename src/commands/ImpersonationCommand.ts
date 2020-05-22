@@ -7,6 +7,7 @@ import { HasPermission } from '../guards/HasPermission';
 import impersonation_commands from '../configs/impersonation_commands.json';
 import { CommandGroup } from '../types/CommandGroup';
 import { RandomUtils } from '../utils/RandomUtils';
+import { RateLimit } from '../guards/RateLimit';
 
 impersonation_commands.forEach(({ name, info, description, text, aliases } : {
     name: string,
@@ -22,6 +23,9 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
         @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS', {
             error_message: 'I need webhook permissions for this!',
             check_admin: true
+        }), RateLimit({
+            scope: 'channel',
+            rate_limit: 1
         }))
         @Command(name, {
             infos: info,
