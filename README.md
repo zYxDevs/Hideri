@@ -102,7 +102,7 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 ## `boorus.json`
 * sets which [boorus](https://github.com/AtlasTheBot/booru/blob/master/src/sites.json) the bot will explicitly define commands for
     ### format:
-```json
+```
 {
     "name": [command name],
     "booru": [booru site],
@@ -127,7 +127,7 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 ## `image_emotes.json`
 * defines image emote commands
     ### format:
-```json
+```
 {
     "name": [command name],
     "info"?: [command info],
@@ -139,7 +139,7 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 ## `image_macros.json`
 * defines image macro commands
     ### format:
-```json
+```
 {
     "name": [command name],
     "description": [command description],
@@ -165,7 +165,7 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 
 ## `impersonation_commands.json`
 * defines impersonation commands
-```json
+```
 {
     "name": [command name],
     "info": [command info],
