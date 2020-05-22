@@ -1,5 +1,5 @@
 import { BaseSearchEmbed } from './BaseSearchEmbed';
-import { CommandMessage, Discord } from '@typeit/discord';
+import { CommandMessage, Discord, Guard } from '@typeit/discord';
 import { Client, Message } from 'discord.js';
 import config from '../../configs/config.json';
 import { Command } from '../../ArgumentParser';
@@ -8,6 +8,7 @@ import { hitomi } from '../../apis/Instances';
 import { RandomUtils } from '../../utils/RandomUtils';
 import { HitomiEmbedBrowser } from '../../embed-browsers/HitomiEmbedBrowser';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
+import { RateLimit } from '../../guards/RateLimit';
 
 @Discord(config.prefix)
 export class HitomiSearchEmbed extends BaseSearchEmbed {
@@ -18,6 +19,10 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
     public info = 'Fetch gallery from hitomi.la';
     public usage = '!gallery! or !gallery page!';
 
+    @Guard(RateLimit({
+        scope: 'server',
+        rate_limit: 1
+    }))
     @Command('hitomi', {
         group: CommandGroup.COMMUNITIES,
         description: 'Get random image from hitomi.la',
