@@ -20,7 +20,8 @@ export abstract class AdminCommand {
         group: CommandGroup.ADMIN,
         infos: 'sets server config',
         description: 'see \`config help\` for details',
-        rest_required: false
+        rest_required: false,
+        example: 'config set common.prefix !\nconfig get common.prefix\nconfig delete common.prefix'
     })
     private async config(message: CommandMessage, client: Client, action: ConfigArgumentType, config: string = null, value: RestAsString) {
         const dm_channel = message.channel instanceof DMChannel;

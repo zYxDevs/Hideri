@@ -8,5 +8,6 @@ export type DOnExt = {
     group: CommandGroup,
     usage: string,
     hide?: boolean,
-    aliases?: string[]
+    aliases?: string[],
+    example?: string
 };

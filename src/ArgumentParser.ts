@@ -62,7 +62,8 @@ export interface CommandParamsExt {
     handle_errors?: boolean,
     rest_required?: boolean,
     history_expansion?: boolean,
-    nsfw?: boolean
+    nsfw?: boolean,
+    example?: string
 };
 
 const commands: DOnExt[] = [];
@@ -305,7 +306,8 @@ export function Command(commandName: string, params: CommandParamsExt = default_
             group: params.group,
             usage: params.usage,
             hide: params.hide,
-            aliases: params.aliases
+            aliases: params.aliases,
+            example: params.example
         });
 
         DiscordCommand(commandName)(target, propertyKey, descriptor);
