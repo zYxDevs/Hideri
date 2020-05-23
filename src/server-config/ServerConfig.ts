@@ -2,7 +2,7 @@ import { Client } from 'pg';
 import database from '../configs/database.json';
 import { create_logger } from '../utils/Logger';
 import { server_config_vars, ServerConfigKeys } from './ServerConfigVars';
-import { Message } from 'discord.js';
+import { Message, DMChannel } from 'discord.js';
 import { RegexUtils } from '../utils/RegexUtils';
 import { escape } from 'sqlutils/pg';
 import { Discord, On, ArgsOf } from '@typeit/discord';
@@ -76,7 +76,11 @@ export function get_prefix_str(message_or_id: Message | string) {
     return server_configs[typeof message_or_id == 'string' ? message_or_id : message_or_id?.guild?.id]['common.prefix'];
 }
 
-export const get_prefix = (message: Message) => new RegExp('^' + RegexUtils.escape(get_prefix_str(message)));
+export const get_prefix = (message: Message) => {
+    if (message.channel instanceof DMChannel) return /^[^\s\d\w]{1,2}/;
+
+    return new RegExp('^' + RegexUtils.escape(get_prefix_str(message)));
+}
 
 const process_database = async () => {
     const result = await database_client.query(`SELECT to_regclass('hideri_server_config')`);
