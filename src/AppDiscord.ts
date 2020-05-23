@@ -172,7 +172,7 @@ export abstract class AppDiscord {
         embed.addField('Group', command_obj.group);
         embed.addField('Info', command_obj.infos ?? 'None');
         embed.addField('Description', command_obj.description ?? 'None');
-        embed.addField('Usage', `\`${command_obj.usage}\``);
+        embed.addField('Usage', `\`${get_prefix_str(message)}${command_obj.usage}\``);
         if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases.join(', ')}\``);
         send_dm ? message.author.send(embed) : message.channel.send(embed);
     }
