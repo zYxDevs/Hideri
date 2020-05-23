@@ -10,6 +10,8 @@ import { nekos } from '../apis/Instances';
 import { MessageEmbed } from '../utils/EmbedUtils';
 import { GuildMember, TextChannel } from 'discord.js';
 import { get_prefix, server_configs } from '../server-config/ServerConfig';
+import title from 'title';
+import plur from 'plur';
 
 class NekosArgumentType extends SetArgumentType {
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
@@ -17,6 +19,25 @@ class NekosArgumentType extends SetArgumentType {
 
 @Discord(get_prefix)
 export abstract class NekoCommand {
+    constructor() {
+        ['tickle', 'slap', 'poke', 'kiss', 'hug', 'feed', 'cuddle'].forEach(command => {
+            @Discord(get_prefix)
+            class GenericNekoCommand {
+                @Command(command, {
+                    infos: `${title(command)} someone`,
+                    group: CommandGroup.IMAGE_EMOTES
+                })
+                private async exec(message: CommandMessage, member: GuildMember = null) {
+                    const embed = new MessageEmbed();
+                    embed.setImage((await nekos.sfw[command]()).url);
+                    if (member) embed.setDescription(`*${title(plur(command, 2))} ${member}*`);
+            
+                    message.channel.send(embed);
+                }
+            }
+        });
+    }
+
     @Command('neko', {
         infos: 'Fetch image from nekos.life',
         group: CommandGroup.COMMUNITIES,
