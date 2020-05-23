@@ -9,8 +9,9 @@ import { RandomUtils } from '../../utils/RandomUtils';
 import { HitomiEmbedBrowser } from '../../embed-browsers/HitomiEmbedBrowser';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { RateLimit } from '../../guards/RateLimit';
+import { get_prefix } from '../../server-config/ServerConfig';
 
-@Discord()
+@Discord(get_prefix)
 export class HitomiSearchEmbed extends BaseSearchEmbed {
     public pattern = /!\s*(\d{5,7})(\s+\d+)?\s*!/g;
     public use_webhook = false;
