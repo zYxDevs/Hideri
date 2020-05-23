@@ -58,13 +58,13 @@ export const server_configs: typeof server_configs_dict = new Proxy(server_confi
 
             target[prop][config_prop] = value;
 
-            console.log(value);
+            const escaped_value = escape(value.toString());
 
             database_client.query(`
                 INSERT INTO hideri_server_config (snowflake, key, value)
-                VALUES ('${prop}', '${config_prop}', ${escape(value)})
+                VALUES ('${prop}', '${config_prop}', ${escaped_value})
                 ON CONFLICT (snowflake, key) DO UPDATE
-                SET value=${escape(value)}
+                SET value=${escaped_value}
             `);
 
             return true;
