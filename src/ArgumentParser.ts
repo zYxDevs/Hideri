@@ -103,16 +103,33 @@ export function Command(commandName: string, params: CommandParamsExt = default_
 
         params.usage = usage;
 
-        descriptor.value = function (...args) {
+        descriptor.value = async function (...args) {
             const client: Client = args.find(arg => arg.constructor == Client);
-            const message: CommandMessage = args[0];
+            let message: CommandMessage = args[0];
 
-            if (server_configs[message?.guild?.id]['common.channel_list'].includes(message.channel.id) ==
-                server_configs[message?.guild?.id]['common.channel_list_as_blacklist']) return message.channel.stopTyping();
+            const server_config = server_configs[message?.guild?.id];
+
+            if (server_config['common.channel_list'].includes(message.channel.id) ==
+                server_config['common.channel_list_as_blacklist']) return;
             
-            if (server_configs[message?.guild?.id]['common.command_list'].length &&
-                server_configs[message?.guild?.id]['common.command_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
-                server_configs[message?.guild?.id]['common.command_list_as_blacklist']) return message.channel.stopTyping();
+            if (server_config['common.command_list'].length &&
+                server_config['common.command_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
+                server_config['common.command_list_as_blacklist']) return;
+
+            if (server_config['common.dm_list'].length &&
+                server_config['common.dm_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
+                server_config['common.dm_list_as_blacklist']) {
+                const dm_channel = message.author.dmChannel ?? await message.author.createDM();
+
+                message = new Proxy(message, {
+                    get: (target, prop) => {
+                        if (prop == 'channel') return dm_channel;
+                        if (prop == 'reply') return dm_channel.send.bind(dm_channel)
+    
+                        return target[prop];
+                    }
+                });
+            }
 
             if (!(message.channel instanceof DMChannel)
                 && !message.channel.nsfw

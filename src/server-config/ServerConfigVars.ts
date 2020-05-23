@@ -16,12 +16,13 @@ export type ServerConfig = {
 
 export type ServerConfigKeys = {
     'common.prefix': string
-    'common.help_dm': boolean,
     'common.nsfw_all_channels': boolean
     'common.channel_list': string[]
     'common.channel_list_as_blacklist': boolean
     'common.command_list': string[]
-    'common.command_list_as_blacklist': boolean
+    'common.command_list_as_blacklist': boolean,
+    'common.dm_list': string[],
+    'common.dm_list_as_blacklist': boolean
 }
 
 export const server_config_vars: { [name in keyof ServerConfigKeys]: ServerConfig } = {
@@ -29,11 +30,6 @@ export const server_config_vars: { [name in keyof ServerConfigKeys]: ServerConfi
         description: 'prefix for server',
         type: 'string',
         default_value: config.prefix,
-    },
-    'common.help_dm': {
-        description: 'whether or not the help command should be sent as a DM instead of sending it in the channel',
-        type: 'boolean',
-        default_value: false
     },
     'common.nsfw_all_channels': {
         description: 'whether nsfw commands should be allowed in all channels, or nsfw only',
@@ -59,5 +55,15 @@ export const server_config_vars: { [name in keyof ServerConfigKeys]: ServerConfi
         description: 'if command_list should be used as a blacklist, otherwise whitelist',
         type: 'boolean',
         default_value: true,
+    },
+    'common.dm_list': {
+        description: 'list of commands that will be sent as DMs instead of sending in the channel',
+        type: 'list',
+        default_value: []
+    },
+    'common.dm_list_as_blacklist': {
+        description: 'if dm_list should be used as a blacklist of commands to send as DMs, otherwise a whitelist of commands that will not be sent as DMs',
+        type: 'boolean',
+        default_value: true
     }
 };
