@@ -14,7 +14,7 @@ import { findBestMatch } from 'string-similarity';
 import { ServerHandler } from './workers/ServerHandler';
 import { create_logger } from './utils/Logger';
 import { MessageEmbed } from './utils/EmbedUtils';
-import { get_prefix, get_prefix_str, server_configs } from './server-config/ServerConfig';
+import { get_prefix, get_prefix_str } from './server-config/ServerConfig';
 
 const logger = create_logger(module);
 
@@ -93,7 +93,7 @@ export abstract class AppDiscord {
             });
         }).flat()).size;
 
-        logger.info(`bot logged in, client id ${client.user.id}, serving ${client.guilds.cache.size} guilds and ${user_count} users with ${Client.getCommands().length} commands`);
+        logger.info(`bot logged in, client id ${client.user.id}, serving ${client.guilds.cache.size} guilds and ${user_count} users with ${CommandMetadataStorage.get_commands().length} commands`);
         logger.info(`${client.user.username} version ${PACKAGE_VERSION} (${GIT_HASH}) built with TypeScript version ${TYPESCRIPT_VERSION}`);
     }
 
