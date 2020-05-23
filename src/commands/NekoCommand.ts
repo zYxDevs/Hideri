@@ -29,6 +29,7 @@ export abstract class NekoCommand {
             let location = 'sfw'
             if (StringUtils.ci_get(nekos.nsfw, tag)) {
                 if (!(message?.channel as TextChannel)?.nsfw && !server_configs[message?.guild?.id]['common.nsfw_all_channels']) {
+                    message.channel.stopTyping();
                     return message.react('💢');
                 }
 
