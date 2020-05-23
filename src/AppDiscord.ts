@@ -1,11 +1,10 @@
-import { Discord, On, Client, CommandMessage, Guard, ArgsOf } from '@typeit/discord';
+import { Discord, On, Client, CommandMessage, Guard, ArgsOf, Command as DiscordCommand } from '@typeit/discord';
 import 'reflect-metadata';
 import config from './configs/config.json';
 import activities from './configs/activities.json';
 import { Command, CommandMetadataStorage } from './ArgumentParser';
 import { Owner } from './guards/Owner';
 import { HelpEmbedBrowser } from './embed-browsers/HelpEmbedBrowser';
-import { RegexUtils } from './utils/RegexUtils';
 import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
@@ -62,11 +61,7 @@ export abstract class AppDiscord {
 
         @Discord(config.prefix)
         abstract class DefaultHelpCommand {
-            @Command('h', {
-                hide: true,
-                extraneous_argument_message: false,
-                aliases: ['help']
-            })
+            @DiscordCommand('h')
             private async help(message: CommandMessage, client: Client) {
                 const prefix = get_prefix_str(message);
                 if (prefix == config.prefix) return;
@@ -74,9 +69,13 @@ export abstract class AppDiscord {
                 const reply_message = await message.author.send(`The server you are in has a prefix of \`${prefix}\`, but you have used the default prefix`);
 
                 // don't try this at home, kids
-                return (outer_this.help as any)(Object.assign({}, message, {
-                    channel: reply_message.channel,
-                    reply: reply_message.reply
+                return (outer_this.help as any)(new Proxy(message, {
+                    get: (target, prop) => {
+                        if (prop == 'channel') return reply_message.channel;
+                        if (prop == 'reply') return reply_message.reply.bind(reply_message);
+
+                        return target[prop];
+                    }
                 }), client);
             }
         }
