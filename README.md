@@ -17,6 +17,36 @@ Use the `<h` or `<help` command for help. The following commands are implemented
 #### `<invite`: gets the invite link
 #### `<uptime`: gets uptime of bot
 
+## Admin Only
+#### `<config help <config_key>`: gets help for the config key
+* Examples:
+    * `<config help`: get general help
+    * `<config help common.prefix`: gets help on the `common.prefix` config value
+#### `<config set [config_key] [value]`: sets the config key for the server
+* Examples:
+    * `<config set common.prefix !`: changes the prefix to `!` for the server
+    * `<config set common.nsfw_all_channels false`: only allows nsfw commands in nsfw channels
+#### `<config delete [config_key]`: deletes the config key for the server
+* Examples:
+    * `<config delete common.help_dm`: deletes the set value for `common.help_dm` and resets it to default
+#### `<config get [config_key]`: gets the config value for the server
+* Examples:
+    * `<config get common.command_list`: gets a list of whitelisted/blacklisted commands
+
+The `<config` command can also be used with DM channels if given a server id after the config key (you must be an admin in that server).
+* Example: `<config set common.prefix 177013215600139808 !`
+
+### Config Values:
+| Config Key                       | Type     | Description                                                          | Default |
+|----------------------------------|----------|----------------------------------------------------------------------|---------|
+|`common.prefix                   `|`string  `| prefix for the server                                                |`<      `|
+|`common.help_dm                  `|`boolean `| whether or not the help command should be sent as a DM               |`false  `|
+|`common.nsfw_all_channels        `|`boolean `| whether nsfw commands should be allowed in all channels              |`true   `|
+|`common.channel_list             `|`string[]`| list of allowed/disallowed channels for commands                     |`[]     `|
+|`common.channel_list_as_blacklist`|`boolean `| if channel_list should be used as a blacklist, otherwise a whitelist |`true   `|
+|`common.command_list             `|`string[]`| list of allowed/disallowed commands                                  |`[]     `|
+|`common.command_list_as_blacklist`|`boolean `| if command_list should be used as a blacklist, otherwise a whitelist |`true   `|
+
 ## Communities
 #### `<hypnohub [...query]`: gets an image from hypnohub.net
 * aliases: `<hypno`
@@ -118,15 +148,15 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 
 | Key                    | Description                                                                    |
 |------------------------|--------------------------------------------------------------------------------|
-| token                  | bot token                                                                      |
-| prefix                 | bot command prefix                                                             |
-| owner_id               | bot owner id                                                                   |
-| port                   | port the image proxy server will listen on (optional if proxy server disabled) |
-| enable_server          | whether or not the image proxy server should be enabled                        |
-| server_url             | external ip/url of the image proxy server                                      |
-| color                  | embed color                                                                    |
-| cache_dir              | directory image caches are stored in                                           |
-| exit_on_uncaught_error | if the bot should exit when an uncaught error is thrown                        |
+|`token                 `| bot token                                                                      |
+|`prefix                `| bot command prefix                                                             |
+|`owner_id              `| bot owner id                                                                   |
+|`port                  `| port the image proxy server will listen on (optional if proxy server disabled) |
+|`enable_server         `| whether or not the image proxy server should be enabled                        |
+|`server_url            `| external ip/url of the image proxy server                                      |
+|`color                 `| embed color                                                                    |
+|`cache_dir             `| directory image caches are stored in                                           |
+|`exit_on_uncaught_error`| if the bot should exit when an uncaught error is thrown                        |
 
 ## `image_emotes.json`
 * defines image emote commands
@@ -184,15 +214,15 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 
 | Key                 | Description                                                                                      |
 |---------------------|--------------------------------------------------------------------------------------------------|
-| log_level           | minimum log-level of the combined log (silly, verbose, debug, info, http, warn, error, or fatal) |
-| console             | whether or not to log to console                                                                 |
-| log_dir             | directory for logs                                                                               |
-| combined_log        | filename of the combined log, or null for none                                                   |
-| error_log           | filename of the error log, or null for none                                                      |
-| http_log            | filename of the http log, or null for none                                                       |
-| info_log            | filename of the info log, or null for none                                                       |
-| generate_json_logs  | whether to generate json formatted logs (filename is log filename + .json)                       |
-| server_log_loopback | whether to log access to the server from a loopback address (127.0.0.1/8 or ::1)                 |
+|`log_level          `| minimum log-level of the combined log (silly, verbose, debug, info, http, warn, error, or fatal) |
+|`console            `| whether or not to log to console                                                                 |
+|`log_dir            `| directory for logs                                                                               |
+|`combined_log       `| filename of the combined log, or null for none                                                   |
+|`error_log          `| filename of the error log, or null for none                                                      |
+|`http_log           `| filename of the http log, or null for none                                                       |
+|`info_log           `| filename of the info log, or null for none                                                       |
+|`generate_json_logs `| whether to generate json formatted logs (filename is log filename + .json)                       |
+|`server_log_loopback`| whether to log access to the server from a loopback address (127.0.0.1/8 or ::1)                 |
 
 ## `neko_tags.json`
 * a list of allowed tags for the `<neko` command
