@@ -40,12 +40,23 @@ The `<config` command can also be used with DM channels if given a server id aft
 | Config Key                       | Type     | Description                                                          | Default |
 |----------------------------------|----------|----------------------------------------------------------------------|---------|
 |`common.prefix                   `|`string  `| prefix for the server                                                |`<      `|
-|`common.help_dm                  `|`boolean `| whether or not the help command should be sent as a DM               |`false  `|
-|`common.nsfw_all_channels        `|`boolean `| whether nsfw commands should be allowed in all channels              |`true   `|
+|`common.nsfw_all_channels        `|`boolean `| whether nsfw commands should be allowed in all channels, or just nsfw            |`true   `|
 |`common.channel_list             `|`string[]`| list of allowed/disallowed channels for commands                     |`[]     `|
 |`common.channel_list_as_blacklist`|`boolean `| if channel_list should be used as a blacklist, otherwise a whitelist |`true   `|
 |`common.command_list             `|`string[]`| list of allowed/disallowed commands                                  |`[]     `|
 |`common.command_list_as_blacklist`|`boolean `| if command_list should be used as a blacklist, otherwise a whitelist |`true   `|
+|`common.dm_list                  `|`string[]`| list of commands that will be sent as DMs instead of sending in the channel |`[]     `|
+|`common.dm_list_as_blacklist     `|`boolean `| if dm_list should be used as a blacklist of commands to send as DMs, otherwise a whitelist of commands that will not be sent as DMs |`true   `|
+
+* Examples:
+    * `<config set common.prefix !`: sets the prefix to `!`
+    * `<config set common.nsfw_all_channels false`: only allow nsfw commands to be used in nsfw channels
+    * `<config set common.channel_list 713177166174617650`: disallows commands from being used in channel id `713177166174617650`
+    * `<config set common.channel_list_as_blacklist false`: now commands can only be used in channel id `713177166174617650`
+    * `<config set common.command_list help,*booru*`: disallows the help command, and any command containing `booru`
+    * `<config set common.command_list_as_blacklist false`: now only the help command and booru commands can be used
+    * `<config set common.dm_list help`: sends the help command as a DM instead of in the channel
+    * `<config set common.dm_list_as_blacklist false`: now all commands but the help command will be sent as a DM
 
 ## Communities
 #### `<hypnohub [...query]`: gets an image from hypnohub.net
