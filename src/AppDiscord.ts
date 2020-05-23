@@ -155,7 +155,7 @@ export abstract class AppDiscord {
             let { ratings } = findBestMatch(command, commands.filter(command => !command.hide).flatMap(command => [command.commandName, ...(command.aliases ?? [])]));
             ratings = ratings.filter(({ rating }) => rating > .35).map(({ target }) => target);
 
-            if (!ratings.length) (send_dm ? message.author.send : message.reply)(`Error: command \`${command}\` not found`);
+            if (!ratings.length) return send_dm ? message.author.send(`Error: command \`${command}\` not found`) : message.reply(`Error: command \`${command}\` not found`);
 
             const embed = new MessageEmbed({ title: `Command \`${command}\` not found` });
             embed.addField('Did you mean the following?', ratings.map(name => {
@@ -165,7 +165,7 @@ export abstract class AppDiscord {
                 return `\`${command_obj.commandName}\`, from ${command_obj.group}: ${command_obj.infos ?? ''}`;
             }).filter(x => x).join('\n'))
 
-            return (send_dm ? message.author : message.channel).send(embed);
+            return send_dm ? message.author.send(embed) : message.channel.send(embed);
         }
         
         const embed = new MessageEmbed({ title: `\`${command_obj.commandName}\` command` });
@@ -174,7 +174,7 @@ export abstract class AppDiscord {
         embed.addField('Description', command_obj.description ?? 'None');
         embed.addField('Usage', `\`${command_obj.usage}\``);
         if (command_obj.aliases?.length) embed.addField('Aliases', `\`${command_obj.aliases.join(', ')}\``);
-        (send_dm ? message.author : message.channel).send(embed);
+        send_dm ? message.author.send(embed) : message.channel.send(embed);
     }
 
     @Command('version', {
