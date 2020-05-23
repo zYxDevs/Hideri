@@ -124,7 +124,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 return message.channel.stopTyping();;
             }
 
-            usage = get_prefix_str(message) + usage;
+            const prefixed_usage = get_prefix_str(message) + usage;
 
             let argv = string_argv(message.content);
             argv = argv.slice(1);
@@ -178,7 +178,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     if (!optional) {
                         let output = '';
                         if (params.missing_argument_message) output += `Error: missing argument \`${name}\`\n\n`;
-                        if (params.incorrect_usage_message) output += `Usage: \`${usage}\``;
+                        if (params.incorrect_usage_message) output += `Usage: \`${prefixed_usage}\``;
                         if (output) message.reply(output);
                         return;
                     }
@@ -198,7 +198,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        return reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, prefixed_usage, message);
                     }
                     argument_array.push(number);
                 } else if (type === Integer) {
@@ -208,7 +208,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        return reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, prefixed_usage, message);
                     }
                 } else if (type === Boolean) {
                     const bool_string = argv.shift();
@@ -223,7 +223,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        return reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, prefixed_usage, message);
                     }
                 } else if (type === User) {
                     const id = (argv.shift().trim().match(/\d+/) ?? [])[0];
@@ -234,7 +234,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        return reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, prefixed_usage, message);
                     }
                 } else if (type == GuildMember) {
                     const id = (argv.shift()?.trim().match(/\d+/) ?? [])[0];
@@ -245,7 +245,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     } else if (!params.args_required || optional) {
                         argument_array.push(undefined);
                     } else {
-                        return reply_incorrect(params, name, usage, message);
+                        return reply_incorrect(params, name, prefixed_usage, message);
                     }
                 } else if (type.constructor === Rest) {
                     if (type.type == String) {
@@ -253,14 +253,14 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     }
                     for (let number_str of argv.splice(0)) {
                         const number = +number_str;
-                        if (Number.isNaN(number) && params.args_required) return reply_incorrect(params, name, usage, message);
+                        if (Number.isNaN(number) && params.args_required) return reply_incorrect(params, name, prefixed_usage, message);
                         argument_array.push(number);
                     }
                 } else if (type === RestAsString) {
                     argument_array.push(new RestAsString(argv.splice(0), message.content));
                 } else if (type.prototype instanceof CustomArgumentType) {
                     const custom_argument: CustomArgumentType = new type(argv.shift());
-                    if (!custom_argument.validate_argument()) return reply_incorrect(params, name, usage, message);
+                    if (!custom_argument.validate_argument()) return reply_incorrect(params, name, prefixed_usage, message);
                     argument_array.push(custom_argument);
                 } else {
                     argument_array.push(argv.shift());
@@ -270,7 +270,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
             if (argv.length && params.extraneous_argument_message) {
                 let output = '';
                 output += `Error: extraneous argument(s) \`[${argv.join(', ')}]\`\n\n`;
-                if (params.incorrect_usage_message) output += `Usage: \`${usage}\``;
+                if (params.incorrect_usage_message) output += `Usage: \`${prefixed_usage}\``;
                 if (output) message.reply(output);
                 return;
             }
