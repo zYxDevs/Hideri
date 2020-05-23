@@ -5,6 +5,7 @@ import { server_config_vars, ServerConfigKeys } from './ServerConfigVars';
 import { Message } from 'discord.js';
 import { RegexUtils } from '../utils/RegexUtils';
 import { escape } from 'sqlutils/pg';
+import { Discord, On, ArgsOf } from '@typeit/discord';
 
 const logger = create_logger(module);
 
@@ -17,6 +18,16 @@ const server_configs_dict: {
         [config_value in keyof typeof server_config_vars]?: ServerConfigKeys[config_value]
     }
 } = {};
+
+@Discord()
+export abstract class ServerLeaveHandler {
+    @On('guildDelete')
+    private on_leave([guild]: ArgsOf<'guildDelete'>, client: Client) {
+        database_client.query(`DELETE FROM hideri_server_config WHERE snowflake='${guild.id}'`);
+        if (guild.id in server_configs_dict) delete server_configs_dict[guild.id];
+    }
+}
+
 
 export const server_configs: typeof server_configs_dict = new Proxy(server_configs_dict, {
     get: (target, prop: string) => new Proxy(target[prop] ?? {}, {
