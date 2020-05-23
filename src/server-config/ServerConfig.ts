@@ -4,6 +4,7 @@ import { create_logger } from '../utils/Logger';
 import { server_config_vars, ServerConfigKeys } from './ServerConfigVars';
 import { Message } from 'discord.js';
 import { RegexUtils } from '../utils/RegexUtils';
+import { escape } from 'sqlutils/pg';
 
 const logger = create_logger(module);
 
@@ -23,7 +24,39 @@ export const server_configs: typeof server_configs_dict = new Proxy(server_confi
             if (config_prop in config_target) return config_target[config_prop];
             if (config_prop in server_config_vars) return server_config_vars[config_prop].default_value;
 
-            throw new ReferenceError(`config variable ${config_prop} does not exist`);
+            throw new TypeError(`config variable ${config_prop} does not exist`);
+        },
+        set: (config_target, config_prop: string, value) => {
+            if (!(config_prop in server_config_vars)) return false;
+            if (!target[prop]) target[prop] = {};
+
+            switch (server_config_vars[config_prop].type) {
+                case 'boolean':
+                    if (typeof value != 'boolean') return false;
+                    break;
+                case 'list':
+                    if (!Array.isArray(value)) return false;
+                    break;
+                case 'number':
+                    if (typeof value != 'number' || Number.isNaN(value)) return false;
+                    break;
+                
+                default:
+                    if (typeof value != 'string') return false;
+            }
+
+            target[prop][config_prop] = value;
+
+            console.log(value);
+
+            database_client.query(`
+                INSERT INTO hideri_server_config (snowflake, key, value)
+                VALUES ('${prop}', '${config_prop}', ${escape(value)})
+                ON CONFLICT (snowflake, key) DO UPDATE
+                SET value=${escape(value)}
+            `);
+
+            return true;
         }
     })
 });
@@ -59,7 +92,7 @@ const process_database = async () => {
 
         switch (config_var.type) {
             case 'boolean':
-                server_configs_dict[snowflake][key] = /^true|t|yes|1$/i.test(value.trim());
+                server_configs_dict[snowflake][key] = /^true|t|yes|y|1$/i.test(value.trim());
                 break;
             case 'list':
                 server_configs_dict[snowflake][key] = value.split(',').map(x => x.trim())

@@ -28,7 +28,6 @@ export const server_config_vars: { [name in keyof ServerConfigKeys]: ServerConfi
     'common.prefix': {
         description: 'prefix for server',
         type: 'string',
-        allowed_values: ['*'],
         default_value: config.prefix,
     },
     'common.help_dm': {
