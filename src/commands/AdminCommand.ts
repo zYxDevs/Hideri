@@ -21,7 +21,8 @@ export abstract class AdminCommand {
         infos: 'sets server config',
         description: 'see \`config help\` for details',
         rest_required: false,
-        example: 'config set common.prefix !\nconfig get common.prefix\nconfig delete common.prefix'
+        example: 'config set common.prefix !\nconfig get common.prefix\nconfig delete common.prefix',
+        history_expansion: false
     })
     private async config(message: CommandMessage, client: Client, action: ConfigArgumentType, config: string = null, value: RestAsString) {
         const dm_channel = message.channel instanceof DMChannel;
