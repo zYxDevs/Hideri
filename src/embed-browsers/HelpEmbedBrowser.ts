@@ -13,6 +13,7 @@ import { get_prefix_str } from '../server-config/ServerConfig';
 
 export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     private page_length = 7;
+    private server_id;
 
     private commands: DOnExt[] = [...new Array(BaseSearchEmbed.class_instances.length), ...CommandMetadataStorage.get_commands().reduce((command_map, command: DOnExt) => {
         if (command.hide) return command_map;
@@ -26,6 +27,11 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
     
     constructor(options?: EmbedBrowserOptions) {
         super(1, options);
+    }
+
+    public async send_embed(message: Message) {
+        this.server_id = message?.guild?.id;
+        return super.send_embed(message);
     }
 
     async get_embed(message: Message) {
@@ -46,7 +52,7 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
             if (!command) return;
             const previous_command = command_segment[index - 1];
             if (!previous_command || previous_command.group != command.group) embed.addField('\ufeff', `**${command.group}**`);
-            embed.addField(`\`${command.commandName}\`: ${command.infos ?? ''}`, `${command.description ?? ''}\nUsage: \`${get_prefix_str(message)}${command.usage}\``);
+            embed.addField(`\`${command.commandName}\`: ${command.infos ?? ''}`, `${command.description ?? ''}\nUsage: \`${get_prefix_str(this.server_id ?? message)}${command.usage}\``);
         });
 
         return embed;

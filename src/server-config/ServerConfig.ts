@@ -72,7 +72,10 @@ export const server_configs: typeof server_configs_dict = new Proxy(server_confi
     })
 });
 
-export const get_prefix_str = (message: Message) => server_configs[message?.guild?.id]['common.prefix'];
+export function get_prefix_str(message_or_id: Message | string) {
+    return server_configs[typeof message_or_id == 'string' ? message_or_id : message_or_id?.guild?.id]['common.prefix'];
+}
+
 export const get_prefix = (message: Message) => new RegExp('^' + RegexUtils.escape(get_prefix_str(message)));
 
 const process_database = async () => {
