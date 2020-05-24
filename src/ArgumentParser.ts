@@ -63,7 +63,8 @@ export interface CommandParamsExt {
     rest_required?: boolean,
     history_expansion?: boolean,
     nsfw?: boolean,
-    example?: string
+    example?: string,
+    kwargs?: { [key: string]: string }
 };
 
 const commands: DOnExt[] = [];
@@ -72,6 +73,10 @@ export abstract class CommandMetadataStorage {
     public static get_commands(): DOnExt[] {
         return commands;
     }
+}
+
+export abstract class KwArgs {
+    [key: string]: string
 }
 
 export function Command(commandName: string, params: CommandParamsExt = default_options) {
@@ -86,7 +91,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
             const type = argument_types[index];
             let type_name = type.name;
 
-            if (type == Client) return '';
+            if (type == Client || type == KwArgs) return '';
             if (type == GuildMember || type == User) type_name = `@${type_name}`;
             if (type == RestAsString) return `${params.rest_required ? '[' : '<'}...${name}${params.rest_required ? '' : '?'}: String${params.rest_required ? ']' : '>'}`;
             if (type.prototype instanceof CustomArgumentType) return new type('').get_usage();
@@ -100,6 +105,10 @@ export function Command(commandName: string, params: CommandParamsExt = default_
 
             return `${optional ? '<' : '['}${name}: ${type_name}${optional ? '>' : ']'}`;
         }).filter(x => x).join(' ')).trim();
+
+        if (params.kwargs) {
+            usage += ' ' + Object.entries(params.kwargs).map(([ key, usage ]) => `<**${key}: ${usage}>`).join(' ');
+        }
 
         params.usage = usage;
 
@@ -175,6 +184,30 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 logger.info(`command ${commandName} called by ${message.author.tag} (${message.author.id}) in server ${message.guild.name} (${message.guild.id}), channel #${message.channel.name} (${message.channel.id})`);
             }
 
+            let kwargs: KwArgs = {};
+
+            if (params.kwargs) {
+                for (let index = 0; index < argv.length; ++index) {
+                    if (!argv[index]) continue;
+                    
+                    let [ , dashes, key, separator, value ] = argv[index].match(/^(-{0,2})(\w+)(=| )(.+)/) ?? [];
+                    
+                    if (!dashes && !separator) continue;
+                    if (!(key.toLowerCase() in params.kwargs)) continue;
+                    if (!value) {
+                        if (!argv[index + 1]) continue;
+
+                        value = argv[index + 1];
+                        delete argv[index + 1];
+                    }
+
+                    kwargs[key.toLowerCase()] = value;
+                    delete argv[index];
+                }
+
+                argv = argv.filter(x => x);
+            }
+
             const argument_array: any[] = [message];
 
             for (let index = 0; index < argument_types.length; ++index) {
@@ -193,7 +226,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                     optional = true;
                 }
 
-                if (type != Client && argv[0] === undefined) {
+                if (type != Client && type != KwArgs && argv[0] === undefined) {
                     if (!optional) {
                         let output = '';
                         if (params.missing_argument_message) output += `Error: missing argument \`${name}\`\n\n`;
@@ -210,6 +243,8 @@ export function Command(commandName: string, params: CommandParamsExt = default_
 
                 if (type === Client) {
                     argument_array.push(client);
+                } else if (type == KwArgs) {
+                    argument_array.push(kwargs);
                 } else if (type === Number) {
                     const number = +argv.shift();
                     if (!Number.isNaN(number)) {

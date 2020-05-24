@@ -42,7 +42,7 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
         if (this.page == 1) {
             embed.setThumbnail(AppDiscord.client.user.avatarURL());
 
-            embed.addField('*Arguments marked with \`<\` and \`>\` are optional*\n*Tip: use \`!!\` in command arguments to refer to the content of the last message in the channel*', '**Search Embeds**');
+            embed.addField('*Arguments marked with \`<\` and \`>\` are optional*\n*Arguments prefixed with \`**\` are keyword arguments (use \`--arg=value\`)*\n*Tip: use \`!!\` in command arguments to refer to the content of the last message in the channel*', '**Search Embeds**');
             BaseSearchEmbed.class_instances.forEach(instance => {
                 embed.addField(`${instance.name}: ${instance.info ?? ''}`, `${instance.description ?? ''}\nUsage: \`${instance.usage}\``);
             });
