@@ -1,6 +1,6 @@
 import { BaseSearchEmbed } from './BaseSearchEmbed';
 import { Client, Message } from 'discord.js';
-import { CommandMessage, Discord } from '@typeit/discord';
+import { CommandMessage, Discord, Guard } from '@typeit/discord';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { NHentaiEmbedBrowser } from '../../embed-browsers/NHentaiEmbedBrowser';
 import config from '../../configs/config.json';
@@ -13,6 +13,7 @@ import { get_prefix } from '../../server-config/ServerConfig';
 import { ExHentaiEmbedBrowser } from '../../embed-browsers/ExHentaiEmbedBrowser';
 import { StringUtils } from '../../utils/StringUtils';
 import { ThumbnailsType } from 'exapi';
+import { RateLimit } from '../../guards/RateLimit';
 
 @Discord(get_prefix)
 export class ExHentaiSearchEmbed extends BaseSearchEmbed {
@@ -36,6 +37,10 @@ export class ExHentaiSearchEmbed extends BaseSearchEmbed {
         'misc': 'Misc'
     };
 
+    @Guard(RateLimit({
+        scope: 'server',
+        rate_limit: 1.5
+    }))
     @Command('eh', {
         description: 'Get random image from exhentai/e-hentai',
         group: CommandGroup.COMMUNITIES,
