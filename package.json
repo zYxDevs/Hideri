@@ -34,6 +34,7 @@
     "mime-types": "^2.1.27",
     "moment": "^2.26.0",
     "moment-duration-format": "^2.3.2",
+    "moment-timezone": "^0.5.31",
     "nekos.life": "^2.0.7",
     "nhentai-api": "^3.0.2",
     "node-fetch": "^2.6.0",

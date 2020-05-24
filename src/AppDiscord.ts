@@ -9,7 +9,7 @@ import { GIT_HASH, PACKAGE_VERSION, TYPESCRIPT_VERSION } from './constants';
 import { RandomUtils } from './utils/RandomUtils';
 import { MathUtils } from './utils/MathUtils';
 import { BaseActivity } from './activities/BaseActivity';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { findBestMatch } from 'string-similarity';
 import { ServerHandler } from './workers/ServerHandler';
 import { create_logger } from './utils/Logger';

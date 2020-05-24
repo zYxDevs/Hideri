@@ -6,7 +6,7 @@ import path from 'path';
 import logging from './configs/logging.json';
 import config from './configs/config.json';
 import { AppDiscord } from "./AppDiscord";
-import moment from 'moment';
+import moment from 'moment-timezone';
 import moment_duration_format from 'moment-duration-format';
 import { create_logger } from './utils/Logger';
 
