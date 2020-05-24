@@ -41,4 +41,5 @@ build/**/*
 yarn.lock
 
 src/configs/config.json
+src/configs/credentials.json
 src/constants.ts

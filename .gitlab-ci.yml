@@ -15,6 +15,7 @@ build:
   stage: build
   script:
     - cp src/configs/config.json.example src/configs/config.json
+    - cp src/configs/credentials.json.example src/configs/credentials.json
     - npm run build
     - mv build/configs/config.json build/configs/config.json.example
   artifacts:
@@ -26,6 +27,7 @@ production:
   script:
     - cd build
     - cp $BOT_CONFIG_PRODUCTION ./configs/config.json
+    - cp $BOT_CREDENTIALS_CONFIG_PRODUCTION ./configs/credentials.json
     - >
       echo '{"connection": "process.env.DATABASE_URL"}' > ./configs/database.json
     - dpl --skip-cleanup --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
