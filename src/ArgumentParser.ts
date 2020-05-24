@@ -107,6 +107,8 @@ export function Command(commandName: string, params: CommandParamsExt = default_
             const client: Client = args.find(arg => arg.constructor == Client);
             let message: CommandMessage = args[0];
 
+            if (message?.author?.bot) return;
+
             const server_config = server_configs[message?.guild?.id];
 
             if (server_config['common.channel_list'].includes(message.channel.id) ==
