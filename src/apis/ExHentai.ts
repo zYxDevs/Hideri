@@ -8,8 +8,8 @@ export class ExHentai extends ExAPI {
     private static gallery_cache = new CappedMap<string, EHGallery>(1000);
     private static image_cache = new CappedMap<string, string>(1000);
 
-    public async getGalleryInfo(gallery: GalleryToken, thumbnails_type?: ThumbnailsType) {
-        const cache_key = gallery.join('/') + (thumbnails_type ?? '');
+    public async getGalleryInfo(gallery: GalleryToken, thumbnails_type: ThumbnailsType = ThumbnailsType.NORMAL) {
+        const cache_key = `${gallery.join('/')}:${thumbnails_type}`;
         if (ExHentai.gallery_cache.has(cache_key)) {
             logger.verbose(`cache hit: gallery ${cache_key}`);
 
