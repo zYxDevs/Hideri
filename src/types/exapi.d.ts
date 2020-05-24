@@ -87,7 +87,7 @@ declare module 'exapi' {
         getGalleryInfo(gallery: GalleryToken, thumbnails_type?: ThumbnailsType): Promise<EHGallery>
         getImgUrl(token: ViewToken): Promise<string>
         getImgUrl(tokens: ViewToken[]): Promise<string[]>
-        search(search: string | SearchConfig): Promise<EHIndex>
+        search(search: string | SearchConfig): Promise<EHSearch>
     }
 
     class EHIndex {
@@ -99,7 +99,7 @@ declare module 'exapi' {
     class EHSearch extends EHIndex {
         page: number;
 
-        next(advance?: number): Promise<this>
+        next(advance?: number): Promise<this | null>
     }
 
     class EHGallery {
@@ -112,6 +112,6 @@ declare module 'exapi' {
         getThumbnails(): string[]
         getViewHref(): ViewToken[]
         getComment(): Comment[]
-        next(advance?: number): Promise<this>
+        next(advance?: number): Promise<this | null>
     }
 }
