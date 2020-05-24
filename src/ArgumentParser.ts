@@ -299,7 +299,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 if (result instanceof Promise) {
                     result.catch(error => {
                         if (!params.handle_errors) return;
-                        message.channel.send(`An unknown error occured: \`${error}\``);
+                        message.channel.send(`An unknown error occured: \`${error}\``).catch(e => logger.warn(`rejection in replying with error message: ${e}`));
 
                         if (error instanceof Error) {
                             write_error(commandName, error);
@@ -311,7 +311,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 } else { message.channel.stopTyping(); }
             } catch (error) {
                 if (!params.handle_errors) return;
-                message.channel.send(`An unknown error occured: \`${error.name} ${error.message}\``);
+                message.channel.send(`An unknown error occured: \`${error.name} ${error.message}\``).catch(e => logger.warn(`rejection in replying with error message: ${e}`));
                 message.channel.stopTyping();
 
                 write_error(commandName, error);
