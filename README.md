@@ -7,6 +7,11 @@
 Hideri is a bot written in TypeScript which provides commands to search for hentai from many different sites. [Invite Hideri to your server.](https://discord.com/oauth2/authorize?client_id=507648234236411904&scope=bot&permissions=640928832)
 
 # Commands
+
+* Arguments in square brackets `[]` are required
+* Arguments in angle brackets `<>` are optional
+* Arguments prefixed with `**` are keyword arguments. Use `--key=value` anywhere in a command to set them.
+
 Use the `<h` or `<help` command for help. The following commands are implemented.
 
 ## General
@@ -16,6 +21,11 @@ Use the `<h` or `<help` command for help. The following commands are implemented
 #### `<version`: gets the version of the bot
 #### `<invite`: gets the invite link
 #### `<uptime`: gets uptime of bot
+
+## Misc Commands
+#### `<stoptyping`: stops the bot typing in the channel if it gets stuck typing
+* aliases: `<stop_typing`
+#### `<creation_date <@member|#channel>`: gets the creation date of a user's account or a channel or the server
 
 ## Admin Only
 #### `<config help <config_key>`: gets help for the config key
@@ -36,7 +46,7 @@ Use the `<h` or `<help` command for help. The following commands are implemented
 The `<config` command can also be used with DM channels if given a server id after the config key (you must be an admin in that server).
 * Example: `<config set common.prefix 177013215600139808 !`
 
-### Config Values:
+### Server Config Values:
 | Config Key                       | Type     | Description                                                          | Default |
 |----------------------------------|----------|----------------------------------------------------------------------|---------|
 |`common.prefix                   `|`string  `| prefix for the server                                                |`<      `|
@@ -84,6 +94,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<hitomila`
 #### `<nh [...query]`: gets a random gallery from nhentai.net
 * aliases: `<nhentai`
+#### `<eh [...query] <**type>`: gets a random gallery of type `type` from e-hentai/exhentai. If `--type` is not provided, it defaults to `doujinshi`
+* aliases: `<ex`, `<exhentai`, `<e-hentai`, `<ehentai`
 
 ## Embed Patterns
 Hideri also responds to the following patterns anywhere in a message
@@ -108,21 +120,28 @@ Hideri also responds to the following patterns anywhere in a message
 
 ## Impersonation
 #### `<baka [@member]`: makes someone a tsundere
-#### `<onii-chan [@member]`
+#### `<onii-chan [@member]`: police are on their way
 #### `<embarrass [@member]`: embarrass someone
 
 ## Image Emotes
 #### `<aoc`
-#### `<unfunny`
-#### `<pgleave`
-#### `<whoasked`
-#### `<findwhoasked`
+#### `<unfunny`: not funny
+#### `<pgleave`: leave.
+#### `<whoasked`: did i ask?
+#### `<findwhoasked`: find who asked.
 #### `<ugly`
-#### `<dicks`
-#### `<didntask`
-#### `<everyone`
-#### `<heyhey`
-#### `<pat <@member>`
+#### `<dicks`: you love sucking them
+#### `<didntask`: i didn't ask
+#### `<everyone`: please don't
+#### `<heyhey`: shinomiya-san
+#### `<pat <@member>`: pats member
+#### `<tickle <@member>`: tickles member
+#### `<slap <@member>`: slaps member
+#### `<poke <@member>`: pokes member
+#### `<kiss <@member>`: kisses member
+#### `<hug <@member>`: hugs member
+#### `<feed <@member>`: feeds member
+#### `<cuddle <@member>`: cuddles member
 
 # Development
 ### Requirements
@@ -133,7 +152,7 @@ Node v11 or greater
 
 1. Install dependencies with `npm i`
 7. Patch packages with `npx patch-package`
-7. Set bot token and other configs in `src/configs/config.json` (see `config.json.example` for example)
+7. Set bot token and other configs in `src/configs/config.json` and `src/configs/credentials.json` (see `config.json.example` and `credentials.json.example` for examples)
 0. Compile and run with `npm run start`
 1. Configure port forwarding if you are using server proxying (see the configuration section for details)
 3. Invite bot to server
@@ -168,6 +187,17 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 |`color                 `| embed color                                                                    |
 |`cache_dir             `| directory image caches are stored in                                           |
 |`exit_on_uncaught_error`| if the bot should exit when an uncaught error is thrown                        |
+
+## `credentials.json`
+* configuration for website logins
+
+| Key | Description |
+|-----|-------------|
+|`exhentai`| cookies for exhentai |
+|`proxy`   | proxy to use (ssh only currently) |
+
+## `database.json`
+* configuration for postgresql connection. Has one key: `connection`, which can be a postgresql connection string or an environment variable if the string starts with `process.env`
 
 ## `image_emotes.json`
 * defines image emote commands
@@ -239,7 +269,6 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 * a list of allowed tags for the `<neko` command
 
 # TODO
-* add support for e-hentai/exhentai
 * add support for tsumino
 * add support for hanime.tv
 * add support for hentaihaven
