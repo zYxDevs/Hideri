@@ -23,6 +23,7 @@ export class ExHentaiSearchEmbed extends BaseSearchEmbed {
     public info = 'Fetch gallery from exhentai/e-hentai';
     public usage = '}gallery/token{ or }gallery/token/page{';
     public nsfw = true;
+    public use_webhook = false;
 
     private types = {
         'doujinshi': 'Doujinshi',
