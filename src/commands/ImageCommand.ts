@@ -18,4 +18,12 @@ export abstract class ImageCommand {
         const { msg } = await (await fetch('https://ahegao.egecelikci.com/api')).json();
         message.channel.send(EmbedUtils.create_image_embed('Ahegao Result', msg));
     }
+
+    @Command('bestboy', {
+        hide: true,
+        aliases: ['best_boy']
+    })
+    private async hibiki(message: CommandMessage) {
+        message.channel.send(EmbedUtils.create_image_embed('Hibiki', 'https://cdn.discordapp.com/attachments/713123662085226587/714322327055368263/ev303.png'));
+    }
 }
