@@ -61,7 +61,7 @@ export class ExHentaiSearchEmbed extends BaseSearchEmbed {
             text: query_str,
             type: kwargs.type ? kwargs.type.split(',').map(type => {
                 return StringUtils.ci_get(this.types, type)
-            }).filter(x => x) : ['Doujinshi']
+            }).filter(x => x) : Object.values(this.types)
         });
 
         if (!search_results.pages) return message.reply('No search results found'); 
