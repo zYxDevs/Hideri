@@ -11,6 +11,7 @@ import moment from 'moment-timezone';
 import moment_duration_format from 'moment-duration-format';
 import { create_logger } from './utils/Logger';
 import { exec, execSync } from 'child_process';
+import { MathUtils } from './utils/MathUtils';
 
 const logger = create_logger('');
 const writeFile = fs.promises.writeFile;
@@ -30,11 +31,6 @@ let last_timeout;
 const setup_proxy = (i = 0) => {
     clearTimeout(last_timeout);
 
-    if (i > 10) {
-        logger.log('fatal', 'ssh process exited 10 times in a short time period!');
-        process.exit(3);
-    }
-
     const ssh_config = (credentials as any).proxy;
     const keyfile = path.resolve(`${__dirname}/configs/${ssh_config.key}`);
     try {
@@ -47,10 +43,13 @@ const setup_proxy = (i = 0) => {
     logger.info(`setting up ssh proxy`);
     const ssh = exec(`ssh -i "${keyfile}" -oStrictHostKeyChecking=no -p ${ssh_config.port} -D 1080 "${ssh_config.user}@${ssh_config.address}"`);
     ssh.on('close', code => {
-        logger.error(`ssh process closed with code ${code}`);
-        let last_timeout = setTimeout(() => i = 0, 60e3);
+        const next_delay = MathUtils.clamp(i * 100, 0, 60000);
 
-        setup_proxy(i + 1);
+        logger.error(`ssh process closed with code ${code}`);
+        logger.error(`trying again in ${next_delay}ms`);
+        last_timeout = setTimeout(() => i = 0, 61e3);
+
+        setTimeout(() => setup_proxy(i + 1), next_delay);
     });
 };
 
