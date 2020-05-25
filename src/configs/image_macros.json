@@ -97,5 +97,33 @@
             "height": 267,
             "rot": 0
         }
+    }, {
+        "name": "nepgyasay",
+        "description": "Have Nepgya say something",
+        "image_location": "assets/nepgya.png",
+        "mask_location": "assets/nepgya_mask.png",
+        "output_filename": "nepgya",
+        "mime": "image/png",
+        "frame": {
+            "x": 88,
+            "y": 758,
+            "width": 550,
+            "height": 270,
+            "rot": 0
+        }
+    }, {
+        "name": "astolfosay",
+        "description": "Have Astolfo say something",
+        "image_location": "assets/astolfo.png",
+        "mask_location": "assets/astolfo_mask.png",
+        "output_filename": "astolfo",
+        "mime": "image/png",
+        "frame": {
+            "x": 393,
+            "y": 603,
+            "width": 614,
+            "height": 410,
+            "rot": -10.7
+        }
     }
 ]
