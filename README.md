@@ -103,6 +103,8 @@ Hideri also responds to the following patterns anywhere in a message
 * example: `(177013)` or `(238029 16)`
 #### `!gallery page!`: gets a specific page and gallery from hitomi.la
 * example: `!1147281!` or `!930477 10!`
+#### `}gallery/token/page{`: gets a specific page and gallery from exhentai/e-hentai
+* example: `}1644295/e2a1c52635{` or `}598161/e4c27bdca0/196{`
 
 ## Image Macros
 #### `<tohrusay <...text_or_images>`: have Tohru say something
