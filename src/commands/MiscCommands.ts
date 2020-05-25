@@ -66,4 +66,14 @@ export abstract class MiscCommands {
 
         message.channel.send(`${snowflake_text} ${moment(time).tz(zone).format('M/D/YYYY, h:mm:ss A zz')}`);
     }
+
+    @Command('stoptyping', {
+        group: CommandGroup.MISC,
+        aliases: [ 'stop_typing' ],
+        description: 'stops the bot typing in the channel if the bot is stuck typing',
+        extraneous_argument_message: false
+    })
+    private stop_typing(message: CommandMessage) {
+        message.channel.stopTyping();
+    }
 }
