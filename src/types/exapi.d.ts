@@ -81,7 +81,7 @@ declare module 'exapi' {
     }
 
     export default class {
-        constructor(cookies: ApiCookies)
+        constructor(cookies: ApiCookies, proxy?: string)
 
         getIndex(page: number): Promise<EHIndex>
         getGalleryInfo(gallery: GalleryToken, thumbnails_type?: ThumbnailsType): Promise<EHGallery>

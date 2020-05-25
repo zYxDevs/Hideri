@@ -42,4 +42,5 @@ yarn.lock
 
 src/configs/config.json
 src/configs/credentials.json
+src/configs/id_rsa
 src/constants.ts
