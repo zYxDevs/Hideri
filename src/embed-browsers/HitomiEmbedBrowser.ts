@@ -81,11 +81,11 @@ export class HitomiEmbedBrowser extends PaginatedEmbedBrowser {
             embed.setImage(image);
             embed.setURL(hitomi.get_gallery_url(this.gallery));
             embed.setFooter('min 5 digits');
-            embed.addField('Number of pages:', this.gallery.files.length);
+            embed.addField('Number of pages:', this.gallery.files.length, true);
             let language = this.gallery.language_localname;
             if (this.gallery.language_localname != this.gallery.language) language += ` (${this.gallery.language})`;
             if (this.gallery.language_localname) embed.addField('Language:', language);
-            embed.addField('Type:', this.gallery.type);
+            embed.addField('Type:', this.gallery.type, true);
 
             const tags = this.gallery.tags.map(tag => {
                 let out = tag.tag;

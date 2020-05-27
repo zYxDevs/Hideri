@@ -78,7 +78,8 @@ export class ExHentaiEmbedBrowser extends PaginatedEmbedBrowser {
             embed.addFields(Object.entries(this.gallery.getInfo('tag')).map(([ tag_name, tags ]) => {
                 return {
                     name: ['male', 'female', 'misc'].includes(tag_name) ? title(tag_name) : title(plur(tag_name, 2)),
-                    value: tags.join(', ')
+                    value: tags.join(', '),
+                    inline: true
                 }
             }));
 

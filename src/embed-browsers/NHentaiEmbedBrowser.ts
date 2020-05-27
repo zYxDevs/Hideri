@@ -47,7 +47,7 @@ export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
             embed.setTitle(this.doujin.title.english ?? this.doujin.title.japanese ?? this.doujin.title.pretty);
             embed.setURL(`https://nhentai.net/g/${this.gallery}/`);
             embed.setFooter('min 5 digits');
-            embed.addField('Number of pages:', this.doujin.pages.length);
+            embed.addField('Number of pages:', this.doujin.pages.length, true);
             const tag_dict: { [key: string]: string[] } = {};
             (this.doujin as any).tags.forEach(tag => {
                 const type = tag.type.type;
@@ -56,7 +56,8 @@ export class NHentaiEmbedBrowser extends PaginatedEmbedBrowser {
             });
             embed.addFields(Object.entries(tag_dict).map(([ type, tags ]) => ({
                 name: title(plur(type, tags.length)) + ':',
-                value: tags.join(', ')
+                value: tags.join(', '),
+                inline: true
             })));
             return embed;
         }
