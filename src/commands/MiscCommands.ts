@@ -74,6 +74,6 @@ export abstract class MiscCommands {
         extraneous_argument_message: false
     })
     private stop_typing(message: CommandMessage) {
-        message.channel.stopTyping();
+        message.channel.stopTyping(true);
     }
 }
