@@ -43,6 +43,8 @@ export abstract class BaseSearchEmbed {
     private async on_message([message]: ArgsOf<'message'>, client: Client) {
         let reacted = false;
 
+        let typing = false;
+
         await Promise.allSettled(BaseSearchEmbed.class_instances.map(async instance => {
             const server_config = server_configs[message?.guild?.id];
 
@@ -82,7 +84,10 @@ export abstract class BaseSearchEmbed {
                 return;
             }
 
-            message.channel.startTyping();
+            if (!typing) {
+                message.channel.startTyping();
+                typing = true;
+            }
 
             const has_webhook_permission = GuardToBoolean(HasPermission('MANAGE_WEBHOOKS', {
                 error_message: null,
