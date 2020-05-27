@@ -96,6 +96,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<nhentai`
 #### `<eh [...query] <**type>`: gets a random gallery of type `type` from e-hentai/exhentai. If `--type` is not provided, it defaults to `doujinshi`
 * aliases: `<ex`, `<exhentai`, `<e-hentai`, `<ehentai`
+#### `<ha [...query]`: gets a video from hanime.tv
+* aliases: `<hanime`
 
 ## Embed Patterns
 Hideri also responds to the following patterns anywhere in a message
@@ -105,6 +107,8 @@ Hideri also responds to the following patterns anywhere in a message
 * example: `!1147281!` or `!930477 10!`
 #### `}gallery/token/page{`: gets a specific page and gallery from exhentai/e-hentai
 * example: `}1644295/e2a1c52635{` or `}598161/e4c27bdca0/196{`
+#### `/video title/`: gets a video from hanime
+* example: `/The Public Toilet 2/`
 
 ## Image Macros
 #### `<tohrusay <...text_or_images>`: have Tohru say something
