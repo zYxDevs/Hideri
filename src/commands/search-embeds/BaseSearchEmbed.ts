@@ -8,6 +8,7 @@ import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { GuardToBoolean } from '../../guards/GuardToBoolean';
 import { StartsWithPrefix } from '../../guards/StartsWithPrefix';
 import { server_configs } from '../../server-config/ServerConfig';
+import matcher from 'matcher';
 
 @Discord()
 export abstract class BaseSearchEmbed {
@@ -21,6 +22,8 @@ export abstract class BaseSearchEmbed {
     public description = null;
     public usage = null;
     public nsfw = false;
+
+    public associated_command = null;
 
     public static class_instances: BaseSearchEmbed[] = [];
     private static class_instance_types: (typeof BaseSearchEmbed)[] = [];
@@ -41,6 +44,30 @@ export abstract class BaseSearchEmbed {
         let reacted = false;
 
         await Promise.allSettled(BaseSearchEmbed.class_instances.map(async instance => {
+            const server_config = server_configs[message?.guild?.id];
+
+            if (server_config['common.channel_list'].includes(message.channel.id) ==
+                server_config['common.channel_list_as_blacklist']) return;
+            
+            if (server_config['common.command_list'].length &&
+                server_config['common.command_list'].some(pattern => matcher.isMatch(instance.associated_command, pattern)) ==
+                server_config['common.command_list_as_blacklist']) return;
+
+            if (server_config['common.dm_list'].length &&
+                server_config['common.dm_list'].some(pattern => matcher.isMatch(instance.associated_command, pattern)) ==
+                server_config['common.dm_list_as_blacklist']) {
+                const dm_channel = message.author.dmChannel ?? await message.author.createDM();
+
+                message = new Proxy(message, {
+                    get: (target, prop) => {
+                        if (prop == 'channel') return dm_channel;
+                        if (prop == 'reply') return dm_channel.send.bind(dm_channel)
+    
+                        return target[prop];
+                    }
+                });
+            }
+
             let matches = [...message.content.matchAll(instance.pattern)];
             if (!matches.length) return;
 

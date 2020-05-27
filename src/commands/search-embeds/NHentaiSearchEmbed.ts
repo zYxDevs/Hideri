@@ -20,6 +20,8 @@ export class NHentaiSearchEmbed extends BaseSearchEmbed {
     public usage = '(gallery) or (gallery page)';
     public nsfw = true;
 
+    public associated_command = 'nh';
+
     @Command('nh', {
         description: 'Get random image from nhentai',
         group: CommandGroup.COMMUNITIES,

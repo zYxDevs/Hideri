@@ -21,6 +21,8 @@ export class HitomiSearchEmbed extends BaseSearchEmbed {
     public usage = '!gallery! or !gallery page!';
     public nsfw = true;
 
+    public associated_command = 'hitomi';
+
     @Guard(RateLimit({
         scope: 'server',
         rate_limit: 1

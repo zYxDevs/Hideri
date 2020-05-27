@@ -19,6 +19,8 @@ export class HAnimeSearchEmbed extends BaseSearchEmbed {
     public usage = '/video name/';
     public nsfw = true;
 
+    public associated_command = 'ha';
+
     @Command('ha', {
         description: 'Get random video from hanime',
         group: CommandGroup.COMMUNITIES,

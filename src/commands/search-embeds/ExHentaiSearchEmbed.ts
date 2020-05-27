@@ -25,6 +25,8 @@ export class ExHentaiSearchEmbed extends BaseSearchEmbed {
     public nsfw = true;
     public use_webhook = false;
 
+    public associated_command = 'eh';
+
     private types = {
         'doujinshi': 'Doujinshi',
         'manga': 'Manga',
