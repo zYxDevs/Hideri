@@ -2,7 +2,7 @@ import { Discord, Guard, On, Client, ArgsOf } from '@typeit/discord';
 import { NotBot } from '../../guards/NotBot';
 import { StartsWith } from '../../guards/StartsWith';
 import { Not } from '../../guards/Not';
-import { TextChannel, Message } from 'discord.js';
+import { TextChannel, Message, DMChannel } from 'discord.js';
 import { HasPermission } from '../../guards/HasPermission';
 import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
 import { GuardToBoolean } from '../../guards/GuardToBoolean';
@@ -41,13 +41,17 @@ export abstract class BaseSearchEmbed {
     @Guard(NotBot, Not(StartsWithPrefix))
     @On('message')
     private async on_message([message]: ArgsOf<'message'>, client: Client) {
+        const server_config = server_configs[message?.guild?.id];
+
+        if (!(message.channel instanceof DMChannel) &&
+            server_config['common.require_mention_for_search'] &&
+            !message.mentions.has(client.user)) return;
+
         let reacted = false;
 
         let typing = false;
 
         await Promise.allSettled(BaseSearchEmbed.class_instances.map(async instance => {
-            const server_config = server_configs[message?.guild?.id];
-
             if (server_config['common.channel_list'].includes(message.channel.id) ==
                 server_config['common.channel_list_as_blacklist']) return;
             
@@ -74,7 +78,8 @@ export abstract class BaseSearchEmbed {
             if (!matches.length) return;
 
             if (instance.nsfw &&
-                !(message?.channel as TextChannel)?.nsfw &&
+                !(message.channel instanceof DMChannel) &&
+                !message.channel.nsfw &&
                 !server_configs[message?.guild?.id]['common.nsfw_all_channels']
             ) {
                 if (!reacted) {
