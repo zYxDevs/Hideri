@@ -101,7 +101,7 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<hanime`
 
 ## Embed Patterns
-Hideri also responds to the following patterns anywhere in a message
+Hideri also responds to the following patterns anywhere in a message. Note that, by default, Hideri is configured to only respond to these Hideri is @mentioned in the message.
 #### `(gallery page)`: gets a specific page and gallery from nhentai
 * example: `(177013)` or `(238029 16)`
 #### `!gallery page!`: gets a specific page and gallery from hitomi.la
