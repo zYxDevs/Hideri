@@ -50,7 +50,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 | Config Key                       | Type     | Description                                                          | Default |
 |----------------------------------|----------|----------------------------------------------------------------------|---------|
 |`common.prefix                   `|`string  `| prefix for the server                                                |`<      `|
-|`common.nsfw_all_channels        `|`boolean `| whether nsfw commands should be allowed in all channels, or just nsfw            |`true   `|
+|`common.nsfw_all_channels        `|`boolean `| whether nsfw commands should be allowed in all channels, or just nsfw            |`false   `|
+|`common.require_mention_for_search`|`boolean`| whether non-command searches such as (177013) require a mention to the bot | `true` |
 |`common.channel_list             `|`string[]`| list of allowed/disallowed channels for commands                     |`[]     `|
 |`common.channel_list_as_blacklist`|`boolean `| if channel_list should be used as a blacklist, otherwise a whitelist |`true   `|
 |`common.command_list             `|`string[]`| list of allowed/disallowed commands                                  |`[]     `|
@@ -276,5 +277,4 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 
 # TODO
 * add support for tsumino
-* add support for hanime.tv
 * add support for hentaihaven
