@@ -8,7 +8,7 @@ import { StringUtils } from '../utils/StringUtils';
 import config from '../configs/config.json';
 import { nekos } from '../apis/Instances';
 import { MessageEmbed } from '../utils/EmbedUtils';
-import { GuildMember, TextChannel } from 'discord.js';
+import { GuildMember, DMChannel } from 'discord.js';
 import { get_prefix, server_configs } from '../server-config/ServerConfig';
 import title from 'title';
 import plur from 'plur';
@@ -46,15 +46,18 @@ export abstract class NekoCommand {
     private async neko(message: CommandMessage, tag_type: NekosArgumentType, text: RestAsString) {
         const tag = tag_type.get();
         if (StringUtils.ci_includes(neko_tags, tag)) {
-            message.channel.startTyping();
             let location = 'sfw'
             if (StringUtils.ci_get(nekos.nsfw, tag)) {
-                if (!(message?.channel as TextChannel)?.nsfw && !server_configs[message?.guild?.id]['common.nsfw_all_channels']) {
-                    message.channel.stopTyping();
+                if (!(message.channel instanceof DMChannel) &&
+                    !message.channel.nsfw &&
+                    !server_configs[message?.guild?.id]['common.nsfw_all_channels']) {
                     return message.react('💢');
                 }
 
+                message.channel.startTyping();
                 location = 'nsfw';
+            } else {
+                message.channel.startTyping();
             }
             const response = await StringUtils.ci_get(nekos[location], tag)();
             if (!response.url) return message.channel.send(response.cat ?? response.why ?? response.owo ?? response.fact ?? response.msg);
