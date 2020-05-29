@@ -9,6 +9,8 @@ import { CommandGroup } from '../types/CommandGroup';
 import { RandomUtils } from '../utils/RandomUtils';
 import { RateLimit } from '../guards/RateLimit';
 import { get_prefix } from '../server-config/ServerConfig';
+import { Owner } from '../guards/Owner';
+import { RestAsString } from '../argument-types/RestAsString';
 
 impersonation_commands.forEach(({ name, info, description, text, aliases } : {
     name: string,
@@ -47,3 +49,25 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
         }
     }
 });
+
+@Discord(get_prefix)
+export abstract class OwnerImpersonation {
+    @Guard(IsTextChannel(), HasPermission('MANAGE_WEBHOOKS', {
+        error_message: 'I need webhook permissions for this!',
+        check_admin: true
+    }), Owner())
+    @Command('impersonate', {
+        hide: true
+    })
+    private async impersonate(message: CommandMessage, member: GuildMember, text: RestAsString) {
+        const webhook = await (message.channel as TextChannel).createWebhook(member.displayName, {
+            avatar: member.user.avatarURL()
+        });
+
+        await webhook.send(text.get());
+
+        message.delete().catch(() => {});
+
+        webhook.delete();
+    }
+}
