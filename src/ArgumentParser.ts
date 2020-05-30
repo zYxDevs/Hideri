@@ -190,7 +190,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 for (let index = 0; index < argv.length; ++index) {
                     if (!argv[index]) continue;
                     
-                    let [ , dashes, key, separator, value ] = argv[index].match(/^(-{0,2})(\w+)(=| )(.+)/) ?? [];
+                    let [ , dashes, key, separator, value ] = argv[index].match(/^(-{0,2})(\w+)(=)?(.+)?/) ?? [];
                     
                     if (!dashes && !separator) continue;
                     if (!(key.toLowerCase() in params.kwargs)) continue;
