@@ -1,16 +1,20 @@
 export class StringUtils {
-    public static ci_get(dict: Object, search_key: string, options = { fuzzy: true }) {
+    public static ci_get<T>(haystack: string[] | { [key: string]: T }, search_key: string, options = { fuzzy: true }) {
         const confidence_map = new Map<number, any>();
-        for (let key in dict) {
+
+        for (let [key, value] of Object.entries(haystack)) {
+            let needle: string = key;
+            if (Array.isArray(haystack)) needle = value;
+
             if (!options.fuzzy) {
-                if (key.toLowerCase() == search_key.toLowerCase()) return dict[key];
+                if (needle.toLowerCase() == search_key.toLowerCase()) return value;
             } else {
-                if (key.toLowerCase().startsWith(search_key.toLowerCase())) {
-                    const confidence = search_key.length / key.length;
+                if (needle.toLowerCase().startsWith(search_key.toLowerCase())) {
+                    const confidence = search_key.length / needle.length;
                     if (confidence <= .66) continue;
-                    if (confidence == 1) return dict[key];
+                    if (confidence == 1) return value;
                     
-                    confidence_map.set(confidence, dict[key]);
+                    confidence_map.set(confidence, value);
                 }
             }
         }
@@ -19,6 +23,7 @@ export class StringUtils {
 
         if (confidence_map.has(highest_confidence)) return confidence_map.get(highest_confidence);
     }
+
     public static ci_includes(array: Array<string>, search: string, options = { fuzzy: true }) {
         return array.some(val => {
             if (!options.fuzzy) return val.toLowerCase() == search.toLowerCase();
