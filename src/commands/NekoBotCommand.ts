@@ -132,7 +132,8 @@ nekobot_tags.text_commands.forEach(({ name, endpoint, description, aliases }) =>
 export abstract class NekoBotCommand {
     @Command('nekobot', {
         rest_required: false,
-        group: CommandGroup.IMAGE_EMOTES
+        group: CommandGroup.COMMUNITIES,
+        infos: 'Fetch image from nekobot'
     })
     private async nekobot(message: CommandMessage, client: Client, command: NekoBotArgumentType, ...params: string[]) {
         // abandon all hope
