@@ -1,0 +1,118 @@
+{
+    "image_endpoints": {
+        "sfw": [
+            "holo",
+            "neko",
+            "kemonomimi",
+            "kanna",
+            "gah",
+            "coffee"
+        ],
+        "nsfw": [
+            "hass",
+            "hmidriff",
+            "hneko",
+            "hkitsune",
+            "hanal",
+            "hthigh"
+        ]
+    },
+    "image_commands": [
+        {
+            "name": "animedetect",
+            "endpoint": "animeFace",
+            "description": "find anime faces in image",
+            "aliases": [
+                "animefind",
+                "animeface"
+            ]
+        },
+        {
+            "name": "awooify",
+            "endpoint": "awooify",
+            "description": "awooify an image/user avatar"
+        }, {
+            "name": "baguette",
+            "endpoint": "baguette",
+            "description": "make a user hold a baguette"
+        }, {
+            "name": "deepfry",
+            "endpoint": "deepFry",
+            "description": "deepfry an image",
+            "aliases": [
+                "deep-fry"
+            ]
+        }, {
+            "name": "iphone",
+            "endpoint": "iphoneX",
+            "description": "put an image on an iPhone X",
+            "aliases": [
+                "iphonex",
+                "iphone-x"
+            ]
+        }, {
+            "name": "jpeg",
+            "endpoint": "jpeg",
+            "description": "needs more jpeg",
+            "aliases": [
+                "morejpeg",
+                "more-jpeg",
+                "needsmorejpeg",
+                "needs-more-jpeg"
+            ]
+        }, {
+            "name": "lolice",
+            "endpoint": "lolice",
+            "description": "i swear officer she's 800 years old"
+        }, {
+            "name": "threats",
+            "endpoint": "threats",
+            "description": "biggest threat"
+        }, {
+            "name": "trash",
+            "endpoint": "trash",
+            "description": "your waifu is trash"
+        }
+    ],
+    "text_commands": [
+        {
+            "name": "changemymind",
+            "endpoint": "changeMyMind",
+            "description": "change my mind",
+            "aliases": [
+                "cmm",
+                "change-my-mind",
+                "crowdersay"
+            ]
+        }, {
+            "name": "clyde",
+            "endpoint": "clyde",
+            "description": "have clyde say something",
+            "aliases": [
+                "clydesay"
+            ]
+        }, {
+            "name": "hifumisay",
+            "endpoint": "fact",
+            "description": "have Hifumi say something",
+            "aliases": [
+                "fact"
+            ]
+        }, {
+            "name": "kannasay",
+            "endpoint": "kannagen",
+            "description": "have Kanna say something",
+            "aliases": [
+                "kannagen"
+            ]
+        }, {
+            "name": "trumptweet",
+            "endpoint": "trumpTweet",
+            "description": "have Trump tweet something",
+            "aliases": [
+                "trumpsay",
+                "trump-tweet"
+            ]
+        }
+    ]
+}
