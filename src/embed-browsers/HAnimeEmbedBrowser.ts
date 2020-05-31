@@ -20,7 +20,7 @@ export class HAnimeEmbedBrowser extends BaseEmbedBrowser {
         embed.addField('Upload Date', moment(this.video.created_at).format('MMMM Do, YYYY'), true);
         embed.addField('Alternate Titles', this.video.titles.map(({ title }) => title).join(', '), true);
         embed.addField('Tags', this.video.tags.map(({ text }) => text).join(', '));
-        embed.setFooter('min 10 chars');
+        embed.setFooter('min 8 chars');
 
         return embed;
     }

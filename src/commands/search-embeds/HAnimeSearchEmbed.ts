@@ -12,7 +12,7 @@ import string_similarity from 'string-similarity';
 
 @Discord(get_prefix)
 export class HAnimeSearchEmbed extends BaseSearchEmbed {
-    public pattern = /(?:\s|^)\/([\w ]{10,64})\/(?:\s|$)/g;
+    public pattern = /(?:\s|^)\/([\S ]{8,64})\/(?:\s|$)/g;
 
     public name = 'HAnime';
     public info = 'Fetch video from hanime';
