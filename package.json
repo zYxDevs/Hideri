@@ -11,7 +11,8 @@
     "postinstall": "patch-package",
     "start": "npm run build && node build/index.js",
     "clean": "node clean.js",
-    "copyfiles": "cpx -u \"src/assets/**\" \"build/assets\" && cpx -u \"patches/**\" \"build/patches\""
+    "copyfiles": "cpx -u \"src/assets/**\" \"build/assets\" && cpx -u \"patches/**\" \"build/patches\"",
+    "postversion": "git push && git push --tags"
   },
   "author": "",
   "license": "ISC",
