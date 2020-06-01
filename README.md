@@ -89,6 +89,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 #### `<booru [booru] [...query]`: gets an image from the selected booru
 #### `<ahegao`: gets a random ahegao picture
 #### `<neko [tag] <text>`: gets an image from nekos.life
+#### `<nekobot [tag]`: gets an image from nekobot.xyz
+#### `<nekobot [tag] [...args]`: generates an image from nekobot (see [nekobot.xyz docs](https://docs.nekobot.xyz/))
 #### `<r [subreddit] <status> <time> <post_number>`: gets a post from a subreddit
 * aliases: `<reddit`
 #### `<hitomi [...query]`: gets a random gallery from hitomi.la
@@ -119,6 +121,26 @@ Hideri also responds to the following patterns anywhere in a message. Note that,
 #### `<kaedesay <...text_or_images>:` have Kaede say something
 #### `<maisay <...text_or_images>:` have Mai say something
 #### `<chikasay <...text_or_images>:` have Chika say something
+#### `<animedetect [image]`: find anime faces in an image/avatar
+#### `<awooify [image]`: awooify an image/avatar
+#### `<baguette [image]`: make a user hold a baguette
+#### `<deepfry [image]`: deep fries an image
+#### `<iphone [image]`: puts an image on an iphone
+#### `<jpeg [image]`: needs more jpeg
+#### `<lolice [image]`: i swear officer she's 9000 years old
+#### `<threats [image]`: biggest threats to society
+#### `<trash [image]`: make a waifu trash
+#### `<clyde [...text]`: make clyde say something
+#### `<hifumisay [...text]`: have hifumi say something
+#### `<kannasay [...text]`: have kanna say something
+#### `<trumptweet [...text]`: have trump tweet something
+#### `<captcha [image] [...text]`: generate a captcha
+#### `<magik [image] <intensity>`: magik warp an image
+#### `<phcomment [@member] [text]`: have a member make a comment on pornhub
+#### `<ship [@member1] [@member2]`: ship two members (distracted boyfriend meme)
+#### `<whowouldwin [@member1] [@member2]`: who would win?
+#### `<tweet [handle] [text]`: create a tweet by handle containing text
+#### `<ddlc [...text] <**character: monika|sayori|natsuki|yuri> <**background: bedroom|class|closet|club|corridor|house|kitchen|residential|sayori_bedroom> <**body: 1|2|1b|2b> <**face: string>`: have one of the dokis say something
 
 ## Fun
 #### `<owoify [message]`: owoifwies a mwessage
