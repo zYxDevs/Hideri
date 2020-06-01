@@ -7,6 +7,7 @@ import { RestAsString } from '../argument-types/RestAsString';
 import { StringUtils } from '../utils/StringUtils';
 import { MessageUtils } from '../utils/MessageUtils';
 import { SauceNAOEmbedBrowser } from '../embed-browsers/SauceNAOEmbedBrowser';
+import { CommandGroup } from '../types/CommandGroup';
 
 const sites: string[] = Object.setPrototypeOf({
     3: "DoujinMangaLexicon",
@@ -78,7 +79,8 @@ export abstract class SauceNAOCommand {
             database: [...new Set(Object.values(sites))].join('|')
         },
         history_expansion: false,
-        rest_required: false
+        rest_required: false,
+        group: CommandGroup.COMMUNITIES
     })
     private async exec(message: CommandMessage, client: Client, kwargs: KwArgs, image: RestAsString) {
         const image_url = await MessageUtils.get_image(image.get(), message, client);
