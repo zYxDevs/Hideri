@@ -248,7 +248,7 @@ export class Hitmoi extends ImageUploadProxy {
         const combined = littleEndian ? left + 2 ** 32 * right : 2 ** 32 * left + right;
 
         if (!Number.isSafeInteger(combined))
-            console.warn(combined, 'exceeds MAX_SAFE_INTEGER. Precision may be lost');
+            logger.warn(combined + ' exceeds MAX_SAFE_INTEGER. Precision may be lost');
 
         return combined;
     }
@@ -270,7 +270,7 @@ export class Hitmoi extends ImageUploadProxy {
         for (let i = 0; i < number_of_keys; i++) {
             const key_size = view.getInt32(pos, false /* big-endian */);
             if (!key_size || key_size > 32) {
-                console.log('fatal: !key_size || key_size > 32');
+                logger.error('fatal: !key_size || key_size > 32');
                 return;
             }
             pos += 4;
@@ -379,7 +379,7 @@ export class Hitmoi extends ImageUploadProxy {
         let [offset, length] = data;
 
         if (length > 100000000 || length <= 0) {
-            console.error('length ' + length + ' is too long');
+            logger.error('length ' + length + ' is too long');
             return [];
         }
 
@@ -397,10 +397,10 @@ export class Hitmoi extends ImageUploadProxy {
         let expected_length = number_of_galleryids * 4 + 4;
 
         if (number_of_galleryids > 10000000 || number_of_galleryids <= 0) {
-            console.error('number_of_galleryids ' + number_of_galleryids + ' is too long');
+            logger.error('number_of_galleryids ' + number_of_galleryids + ' is too long');
             return [];
         } else if (inbuf.byteLength !== expected_length) {
-            console.error('inbuf.byteLength ' + inbuf.byteLength + ' !== expected_length ' + expected_length);
+            logger.error('inbuf.byteLength ' + inbuf.byteLength + ' !== expected_length ' + expected_length);
             return [];
         }
 
@@ -429,7 +429,7 @@ export class Hitmoi extends ImageUploadProxy {
             debugger;
 
             return new Uint8Array(buffer);
-        }).catch(console.error);
+        }).catch(e => logger.error(e));
     }
 
     private async get_node_at_address(field, address: number, serial?: number) {

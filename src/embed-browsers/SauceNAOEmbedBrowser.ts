@@ -8,7 +8,6 @@ export class SauceNAOEmbedBrowser extends PaginatedEmbedBrowser {
     
     constructor(private sources: SagiriResult[], options?: EmbedBrowserOptions) {
         super(1, options);
-        console.log(sources, sources.length);
         const low_similarity_index = sources.findIndex(({ similarity }) => similarity < 50);
         if (low_similarity_index != -1) {
             sources.splice(low_similarity_index, 0, null);
