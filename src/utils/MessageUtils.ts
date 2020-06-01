@@ -27,10 +27,10 @@ export abstract class MessageUtils {
 
         param = (param ?? '').trim();
 
-        if (param.startsWith('<') && param.endsWith('>')) param = param.slice(1, -1);
-
         if (this.url_regex.test(param) && !this.private_ip_regex.test(param)) {
-            const url = /^(https?|ftp):\/\//i.test(param) ? param : `http://${param}`;
+            let url = param.match(this.url_regex)[1];
+
+            url = /^(https?|ftp):\/\//i.test(url) ? url : `http://${url}`;
 
             const response = await fetch(url, {
                 method: 'HEAD'
