@@ -210,6 +210,32 @@ export abstract class AppDiscord {
         message.channel.send(embed);
     }
 
+    @Command('info', {
+        infos: 'Get info',
+        extraneous_argument_message: false,
+        aliases: [
+            'infos'
+        ]
+    })
+    private async info(message: CommandMessage, client: Client) {
+        const embed = new MessageEmbed({
+            title: client.user.username,
+            thumbnail: {
+                url: client.user.avatarURL()
+            },
+            description: `${client.user.username} is a multi-purpose bot focused on sending images, doujins, and videos from many popular hentai sites, such as NHentai, ExHentai, HAnime, and more. ${client.user.username} comes with many other fun commands for your Discord server.`,
+            fields: [{
+                name: 'Created by SK1982#6578',
+                value: 'For help: `<h`\nTo get the invite link to this bot: `<invite`\nTo get the version of this bot: `<version`\n\n*This bot is [open source](https://github.com/sk-1982/Hideri)*\n*Please send issues/bug reports to the [issue tracker](https://github.com/sk-1982/Hideri/issues)*'
+            }],
+            footer: {
+                text: `v${PACKAGE_VERSION} | TS v${TYPESCRIPT_VERSION} | commit ${GIT_HASH}`
+            }
+        });
+
+        message.channel.send(embed);
+    }
+
     @Command('uptime', {
         infos: 'Get uptime',
         description: 'Get the uptime of this bot',
