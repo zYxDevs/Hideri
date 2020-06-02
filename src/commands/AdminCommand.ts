@@ -1,5 +1,5 @@
 import { Discord, CommandMessage, Client } from '@typeit/discord';
-import { get_prefix, server_configs } from '../server-config/ServerConfig';
+import { get_prefix, server_configs, get_prefix_str } from '../server-config/ServerConfig';
 import { Admin } from '../guards/Admin';
 import { Command } from '../ArgumentParser';
 import { CommandGroup } from '../types/CommandGroup';
@@ -32,6 +32,10 @@ export abstract class AdminCommand {
 
         if (action.get() == 'help' && !config) {
             const embed = new MessageEmbed({ title: 'Server Configuration' });
+
+            const prefix = get_prefix_str(message);
+
+            embed.setDescription(`*Set a config value with* \`${prefix}config set [key] [value]\`\n*e.g.* \`${prefix}config set common.prefix !\``);
 
             Object.entries(server_config_vars).forEach(([ config, info ]) => {
                 embed.addField(`\`${config}: ${info.type}\``, '```\n' + `${info.description}\nDefault: ${info.default_value}` + '\n```');
