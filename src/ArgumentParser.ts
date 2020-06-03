@@ -365,7 +365,7 @@ export function Command(commandName: string, params: CommandParamsExt = default_
         });
 
         DiscordCommand(commandName)(target, propertyKey, descriptor);
-        params.aliases?.forEach(alias => DiscordCommand(alias)(target, propertyKey, descriptor));
+        params.aliases?.forEach?.(alias => DiscordCommand(alias)(target, propertyKey, descriptor));
 
         return descriptor;
     };
