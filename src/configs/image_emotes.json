@@ -44,5 +44,23 @@
     }, {
         "name": "heyhey",
         "url": "https://cdn.discordapp.com/attachments/473310675616268292/711740229911969894/tenor.gif"
+    }, {
+        "name": "programming",
+        "url": [
+            "https://cdn.discordapp.com/attachments/713123662085226587/717560500396752916/cf9.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717560472177606686/56a.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717560427067736074/246.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717560401214177381/18c.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717575291005960253/dsxpxuisqqu31.jpg",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717575987893764117/unknown.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717576143116697600/a83xvNQ_460s.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717576814322647070/yQ2kMuh61vNYRZ51i0OqC5OuSqcMVgw2kEk1pO1TIrs5Oiv9coOiQRWUjakNPr-fJfHsjMVgKVL5aPN9MkK1oahwNQb2J52U5gBp.png",
+            "https://cdn.discordapp.com/attachments/713123662085226587/717577003062001715/o5sqjf752dg41.png"
+        ],
+        "description": "get a programmer (ani)meme",
+        "aliases": [
+            "programmer",
+            "softwareengineer"
+        ]
     }
 ]
