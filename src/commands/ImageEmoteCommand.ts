@@ -14,7 +14,7 @@ image_emotes.forEach(({ name, info, description, url, aliases }) => {
             infos: info,
             description: description,
             group: CommandGroup.IMAGE_EMOTES,
-            aliases: aliases
+            aliases: aliases ?? []
         })
         private async exec(message: CommandMessage) {
             const embed = new MessageEmbed();
