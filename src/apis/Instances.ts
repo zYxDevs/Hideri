@@ -6,6 +6,7 @@ import { ExHentai } from './ExHentai';
 import { HAnime } from './HAnime';
 import { NekoBot } from 'nekobot-api';
 import { sagiri } from './Sagiri';
+import { Tsumino } from './Tsumino';
 
 export const nhentai = new NHentai();
 export const nekos = new NekosClient();
@@ -14,3 +15,4 @@ export const exhentai = ((credentials as any)?.proxy?.type == 'ssh') ? new ExHen
 export const hanime = new HAnime();
 export const nekobot = new NekoBot();
 export const saucenao = sagiri(credentials.saucenao, { results: 20 });
+export const tsumino = new Tsumino();

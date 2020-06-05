@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@typeit/discord": "^4.0.7",
+    "@types/cheerio": "^0.22.18",
     "booru": "^2.2.3",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
@@ -27,6 +28,7 @@
     "exapi": "^1.0.3",
     "express": "^4.17.1",
     "file-type": "^14.5.0",
+    "form-urlencoded": "^4.1.4",
     "get-function-arguments": "^1.0.0",
     "grosso-modo": "^3.1.1",
     "hanime": "^1.1.2",
