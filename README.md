@@ -101,6 +101,10 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<ex`, `<exhentai`, `<e-hentai`, `<ehentai`
 #### `<ha [...query]`: gets a video from hanime.tv
 * aliases: `<hanime`
+#### `<ts [...query]`: gets a book from tsumino
+* aliases: `<tsu`, `<tsumino`, `<tsbook`, `<tsuminobook`, `<tsgallery`, `<tsuminogallery`
+#### `<tsv [...query]`: gets a video from tsumino
+* aliases: `<tsuminovideo`, `<tsvideo`
 
 ## Embed Patterns
 Hideri also responds to the following patterns anywhere in a message. Note that, by default, Hideri is configured to only respond to these Hideri is @mentioned in the message.
@@ -112,6 +116,8 @@ Hideri also responds to the following patterns anywhere in a message. Note that,
 * example: `}1644295/e2a1c52635{` or `}598161/e4c27bdca0/196{`
 #### `/video title/`: gets a video from hanime
 * example: `/The Public Toilet 2/`
+#### `)entry_id(` or `)entry_id page(`: gets a specific entry (doujin/video) from tsumino
+* example: `)49683(` or `)45036(` or `)48073 22(`
 
 ## Image Macros
 #### `<tohrusay <...text_or_images>`: have Tohru say something
@@ -298,5 +304,9 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 * a list of allowed tags for the `<neko` command
 
 # TODO
-* add support for tsumino
-* add support for hentaihaven
+- [ ] add support for hentaihaven
+- [ ] add support for anime (anilist, mal, etc.)
+- [ ] add support for manga (mangadex, etc.)
+- [ ] add support for vns (vndb, etc.)
+- [ ] add support for lns (lndb, etc)
+- [ ] add support for nozomi.la
