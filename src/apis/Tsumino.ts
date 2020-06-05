@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import formurlencoded from 'form-urlencoded';
 import cheerio from 'cheerio';
 import url from 'url';
+import { ImageUploadProxy } from './ImageUploadProxy';
 
 type SearchResultListing<T> = {
     historyPage: number,
@@ -77,14 +78,18 @@ export interface Book extends Entry {
 };
 
 export class Book {
-    public get_page_url(page: number) {
+    public get_page_image_url(page: number) {
         return `https://content.tsumino.com/parts/${this.id}/${page}?key=${this.key}&expires=${this.expires}`;
+    }
+
+    public get_page_url(page: number) {
+        return `https://www.tsumino.com/Read/Index/${this.id}?page=${page}`;
     }
 }
 
 export class Video {}
 
-export class Tsumino {
+export class Tsumino extends ImageUploadProxy {
     public async search<T extends EntryType = 'Book'>(query: string, type: T = ('Book' as any), options?: SearchRequest): Promise<SearchResult<T>> {
         options = Object.assign({}, default_options, options);
 
