@@ -60,8 +60,8 @@ export abstract class BaseEmbedBrowser {
         const id = reaction.message.id;
         if (!reaction_type) return;
         BaseEmbedBrowser.class_instances.forEach(instance => {
-            if (instance.get_message().id != id) return;
-            instance.reaction_buttons.get(reaction_type_str)?.call(instance, reaction, user, client);
+            if (instance.get_message?.()?.id != id) return;
+            instance.reaction_buttons?.get?.(reaction_type_str)?.call?.(instance, reaction, user, client);
         });
     }
 }
