@@ -1,8 +1,6 @@
 import { BaseSearchEmbed } from './BaseSearchEmbed';
 import { Client, Message } from 'discord.js';
 import { CommandMessage, Discord } from '@typeit/discord';
-import { BaseEmbedBrowser } from '../../embed-browsers/BaseEmbedBrowser';
-import { NHentaiEmbedBrowser } from '../../embed-browsers/NHentaiEmbedBrowser';
 import { CommandGroup } from '../../types/CommandGroup';
 import { Command } from '../../ArgumentParser';
 import { RestAsString } from '../../argument-types/RestAsString';
