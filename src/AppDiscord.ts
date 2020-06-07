@@ -159,7 +159,7 @@ export abstract class AppDiscord {
                 const command_obj = commands.find(({ commandName, aliases }) => commandName == name || aliases?.includes(name));
                 if (!command_obj) return '';
 
-                return `\`${command_obj.commandName}\`, from ${command_obj.group}: ${command_obj.infos ?? ''}`;
+                return `\`${name}\`, from ${command_obj.group}: ${command_obj.infos ?? ''}`;
             }).filter(x => x).join('\n'))
 
             return message.channel.send(embed);
