@@ -7,6 +7,7 @@ import { HAnime } from './HAnime';
 import { NekoBot } from 'nekobot-api';
 import { sagiri } from './Sagiri';
 import { Tsumino } from './Tsumino';
+import { NineHentai } from './NineHentai';
 
 export const nhentai = new NHentai();
 export const nekos = new NekosClient();
@@ -16,3 +17,4 @@ export const hanime = new HAnime();
 export const nekobot = new NekoBot();
 export const saucenao = sagiri(credentials.saucenao, { results: 20 });
 export const tsumino = new Tsumino();
+export const ninehentai = new NineHentai();
