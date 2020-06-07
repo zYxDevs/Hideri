@@ -83,7 +83,7 @@ nekobot_tags.image_commands.forEach(({ name, endpoint, description, aliases }) =
         }))
         @Command(name, {
             description: description,
-            aliases: aliases,
+            aliases: aliases ?? [],
             group: CommandGroup.IMAGE_MACROS,
             history_expansion: false,
             usage: `${name} [image]`
@@ -113,7 +113,7 @@ nekobot_tags.text_commands.forEach(({ name, endpoint, description, aliases }) =>
         }))
         @Command(name, {
             description: description,
-            aliases: aliases,
+            aliases: aliases ?? [],
             group: CommandGroup.IMAGE_MACROS
         })
         private async exec(message: CommandMessage, text: RestAsString) {

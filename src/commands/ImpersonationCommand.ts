@@ -34,7 +34,7 @@ impersonation_commands.forEach(({ name, info, description, text, aliases } : {
             infos: info,
             description: description,
             group: CommandGroup.IMPERSONATION,
-            aliases: aliases
+            aliases: aliases ?? []
         })
         private async exec(message: CommandMessage, member: GuildMember) {
             const webhook = await (message.channel as TextChannel).createWebhook(member.displayName, {

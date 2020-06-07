@@ -124,11 +124,11 @@ export function Command(commandName: string, params: CommandParamsExt = default_
                 server_config['common.channel_list_as_blacklist']) return;
             
             if (server_config['common.command_list'].length &&
-                server_config['common.command_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
+                server_config['common.command_list'].some(pattern => matcher.isMatch([commandName, ...(params.aliases ?? [])], pattern)) ==
                 server_config['common.command_list_as_blacklist']) return;
 
             if (server_config['common.dm_list'].length &&
-                server_config['common.dm_list'].some(pattern => matcher.isMatch([commandName, ...params.aliases], pattern)) ==
+                server_config['common.dm_list'].some(pattern => matcher.isMatch([commandName, ...(params.aliases ?? [])], pattern)) ==
                 server_config['common.dm_list_as_blacklist']) {
                 const dm_channel = message.author.dmChannel ?? await message.author.createDM();
 

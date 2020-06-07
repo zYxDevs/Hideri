@@ -59,7 +59,7 @@ boorus.forEach(({ name, booru, aliases, info, description } : {
     class BooruCommand extends BaseBooruCommand {
         @Command(name, {
             group: CommandGroup.COMMUNITIES,
-            aliases: aliases,
+            aliases: aliases ?? [],
             infos: info,
             description: description ?? `Fetch an image from ${booru}`,
             nsfw: !booru.includes('safebooru')
