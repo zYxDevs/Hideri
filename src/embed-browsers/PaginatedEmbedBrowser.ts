@@ -1,5 +1,6 @@
 import { BaseEmbedBrowser, EmbedBrowserOptions, EmbedReactionTypes } from './BaseEmbedBrowser';
 import { MathUtils } from '../utils/MathUtils';
+import { Message, PartialTextBasedChannelFields } from 'discord.js';
 
 export abstract class PaginatedEmbedBrowser extends BaseEmbedBrowser {
     public min_page = 1;
@@ -21,6 +22,11 @@ export abstract class PaginatedEmbedBrowser extends BaseEmbedBrowser {
         this._page = MathUtils.clamp(page, this.min_page, this.max_page);
 
         if (this._page != last_page) this.get_embed(this.message).then(embed => this.set_embed(embed));
+    }
+
+    public async send_embed(message: Message, send_override?: PartialTextBasedChannelFields['send']) {
+        this._page = MathUtils.clamp(this._page, this.min_page, this.max_page);
+        return super.send_embed(message, send_override);
     }
 
     public on_previous() {
