@@ -17,6 +17,8 @@ export abstract class BaseBooruCommand {
             return message.reply(`Booru \`${booru}\` does not exist.`);
         }
 
+        message.channel.startTyping();
+
         query = query.map(segment => segment.replace(/\s+/g, '_'));
         const results = await booru_site.search(query, { random: true });
         if (results.posts.length == 0) return message.reply('Your query returned no results. (try adding wildcards)');            
