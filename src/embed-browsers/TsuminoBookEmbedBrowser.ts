@@ -29,14 +29,14 @@ export class TsuminoBookEmbedBrowser extends PaginatedEmbedBrowser {
             embed.setImage(thumbnail_url);
             embed.setURL(this.book.url);
             embed.setTitle(this.book.title);
-            embed.addField('Uploaded On', this.book.uploaded, true);
-            embed.addField('Uploaded By', this.book.uploader, true);
-            embed.addField('Rating', this.book.rating, true);
+            if (this.book.uploaded) embed.addField('Uploaded On', this.book.uploaded, true);
+            if (this.book.uploader.length) embed.addField('Uploaded By', this.book.uploader.join(', '), true);
+            if (this.book.rating) embed.addField('Rating', this.book.rating, true);
             embed.addField('Number of Pages', this.book.pages);
-            embed.addField(plur('Parody', this.book.parody.length), this.book.parody.join(', '), true);
-            embed.addField(plur('Category', this.book.category.length), this.book.category.join(', '), true);
-            embed.addField(plur('Group', this.book.group.length), this.book.group.join(', '), true);
-            embed.addField('Tags', this.book.tags.join(', '));
+            if (this.book.parody.length) embed.addField(plur('Parody', this.book.parody.length), this.book.parody.join(', '), true);
+            if (this.book.category.length) embed.addField(plur('Category', this.book.category.length), this.book.category.join(', '), true);
+            if (this.book.group.length) embed.addField(plur('Group', this.book.group.length), this.book.group.join(', '), true);
+            if (this.book.tags.length) embed.addField('Tags', this.book.tags.join(', '));
             embed.setFooter('min 5 digits');
 
             return embed;
