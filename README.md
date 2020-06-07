@@ -21,6 +21,7 @@ Use the `<h` or `<help` command for help. The following commands are implemented
 #### `<version`: gets the version of the bot
 #### `<invite`: gets the invite link
 #### `<uptime`: gets uptime of bot
+#### `<info`: gets additional info about the bot
 
 ## Misc Commands
 #### `<stoptyping`: stops the bot typing in the channel if it gets stuck typing
@@ -105,6 +106,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<tsu`, `<tsumino`, `<tsbook`, `<tsuminobook`, `<tsgallery`, `<tsuminogallery`
 #### `<tsv [...query]`: gets a video from tsumino
 * aliases: `<tsuminovideo`, `<tsvideo`
+#### `<9h [...query]`: gets a book from 9hentai
+* aliases: `<ninehentai`, `<9hentai`
 
 ## Embed Patterns
 Hideri also responds to the following patterns anywhere in a message. Note that, by default, Hideri is configured to only respond to these Hideri is @mentioned in the message.
@@ -118,6 +121,8 @@ Hideri also responds to the following patterns anywhere in a message. Note that,
 * example: `/The Public Toilet 2/`
 #### `)entry_id(` or `)entry_id page(`: gets a specific entry (doujin/video) from tsumino
 * example: `)49683(` or `)45036(` or `)48073 22(`
+#### `[gallery]` or `[gallery page]`: gets a specific gallery from 9hentai
+* example: `[63991]` or `[07933 22]`
 
 ## Image Macros
 #### `<tohrusay <...text_or_images>`: have Tohru say something
