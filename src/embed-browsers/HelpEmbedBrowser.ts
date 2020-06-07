@@ -42,7 +42,8 @@ export class HelpEmbedBrowser extends PaginatedEmbedBrowser {
         if (this.page == 1) {
             embed.setThumbnail(AppDiscord.client.user.avatarURL());
 
-            embed.addField('*Arguments marked with \`<\` and \`>\` are optional*\n*Arguments prefixed with \`**\` are keyword arguments (use \`--arg=value\`)*\n*Tip: use \`!!\` in command arguments to refer to the content of the last message in the channel*', '**Search Embeds**');
+            embed.addField('*Arguments marked with \`<\` and \`>\` are optional*\n*Arguments prefixed with \`**\` are keyword arguments (use \`--arg=value\`)*\n*Tip: use \`!!\` in command arguments to refer to the content of the last message in the channel*',
+                `**Search Embeds**\n*${AppDiscord.client.user.username} responds to the following patterns in a message. By default, these search patterns require a mention to ${AppDiscord.client.user} to function. Admins: see \`<config help\` to change this behavior*`);
             BaseSearchEmbed.class_instances.forEach(instance => {
                 embed.addField(`${instance.name}: ${instance.info ?? ''}`, `${instance.description ?? ''}\nUsage: \`${instance.usage}\``);
             });
