@@ -41,6 +41,7 @@ export abstract class ImageCommand {
         nsfw: true
     })
     private async trap(message: CommandMessage) {
+        message.channel.startTyping();
         const { url } = Math.random() > .5 ? await (await fetch('https://api.computerfreaker.cf/v1/trap')).json() : await nekos.nsfw.trap();
 
         return message.channel.send(new MessageEmbed({ image: { url: url } }));
