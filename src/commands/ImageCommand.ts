@@ -6,6 +6,7 @@ import { EmbedUtils, MessageEmbed } from '../utils/EmbedUtils';
 import { get_prefix } from '../server-config/ServerConfig';
 import { nekos } from '../apis/Instances';
 import { RandomUtils } from '../utils/RandomUtils';
+import astolfo from '../configs/astolfo.json';
 
 @Discord(get_prefix)
 export abstract class ImageCommand {
@@ -32,6 +33,19 @@ export abstract class ImageCommand {
     })
     private async hibiki(message: CommandMessage) {
         message.channel.send(EmbedUtils.create_image_embed('Hibiki', 'https://cdn.discordapp.com/attachments/713123662085226587/714322327055368263/ev303.png'));
+    }
+
+    @Command('astolfo', {
+        infos: 'Get an image of Astolfo',
+        group: CommandGroup.IMAGE_EMOTES,
+        nsfw: true
+    })
+    private astolfo(message: CommandMessage) {
+        message.channel.send(new MessageEmbed({
+            image: {
+                url: `https://gitlab.com/christopher.wang/astolfo/-/raw/master/${encodeURIComponent(RandomUtils.choice(astolfo))}`
+            }
+        }));
     }
 
     @Command('trap', {
