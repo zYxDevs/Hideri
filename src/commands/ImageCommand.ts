@@ -5,18 +5,25 @@ import { CommandGroup } from '../types/CommandGroup';
 import { EmbedUtils, MessageEmbed } from '../utils/EmbedUtils';
 import { get_prefix } from '../server-config/ServerConfig';
 import { nekos } from '../apis/Instances';
+import { RandomUtils } from '../utils/RandomUtils';
 
 @Discord(get_prefix)
 export abstract class ImageCommand {
+    private ahegao_images: Promise<string[]> = fetch('https://assets.ahegao.egecelikci.com/data.json')
+        .then(data => data.json())
+        .then((images: string[]) => images.map(image => `https://assets.ahegao.egecelikci.com/images/${image}`));
+
     @Command('ahegao', {
         infos: 'Get random ahegao picture',
-        group: CommandGroup.COMMUNITIES,
+        group: CommandGroup.IMAGE_EMOTES,
         nsfw: true
     })
-    private async ahegao(message: CommandMessage) {
-        message.channel.startTyping();
-        const { msg } = await (await fetch('https://ahegao.egecelikci.com/api')).json();
-        message.channel.send(EmbedUtils.create_image_embed('Ahegao Result', msg));
+    private async ahegao(message: CommandMessage) {       
+        message.channel.send(new MessageEmbed({
+            image: {
+                url: RandomUtils.choice(await this.ahegao_images)
+            }
+        }));
     }
 
     @Command('bestboy', {
