@@ -8,6 +8,7 @@ import { NekoBot } from 'nekobot-api';
 import { sagiri } from './Sagiri';
 import { Tsumino } from './Tsumino';
 import { NineHentai } from './NineHentai';
+import { HentaiHavenAPI } from 'hentaihaven';
 
 export const nhentai = new NHentai();
 export const nekos = new NekosClient();
@@ -18,3 +19,4 @@ export const nekobot = new NekoBot();
 export const saucenao = sagiri(credentials.saucenao, { results: 20 });
 export const tsumino = new Tsumino();
 export const ninehentai = new NineHentai();
+export const hentaihaven = new HentaiHavenAPI();
