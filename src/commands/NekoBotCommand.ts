@@ -257,6 +257,21 @@ export abstract class NekoBotCommand {
         }
     }
 
+    @Command('catgirl', {
+        description: 'get a catgirl',
+        group: CommandGroup.IMAGE_EMOTES,
+        extraneous_argument_message: false
+    })
+    private async catgirl(message: Message) {
+        message.channel.startTyping();
+
+        const result = await nekobot.imageEndpoint.getImage('neko');
+
+        if (!result) return;
+
+        message.channel.send(new MessageEmbed({ image: { url: result } }));
+    }
+
     @Guard(RateLimit({
         scope: 'channel',
         rate_limit: 2.5
