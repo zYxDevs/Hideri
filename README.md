@@ -108,6 +108,8 @@ The `<config` command can also be used with DM channels if given a server id aft
 * aliases: `<tsuminovideo`, `<tsvideo`
 #### `<9h [...query]`: gets a book from 9hentai
 * aliases: `<ninehentai`, `<9hentai`
+#### `<hentaihaven [...query]`: gets a video from hentaihaven
+* aliases: `<haven`, `<hhaven`
 
 ## Embed Patterns
 Hideri also responds to the following patterns anywhere in a message. Note that, by default, Hideri is configured to only respond to these Hideri is @mentioned in the message.
@@ -123,6 +125,8 @@ Hideri also responds to the following patterns anywhere in a message. Note that,
 * example: `)49683(` or `)45036(` or `)48073 22(`
 #### `[gallery]` or `[gallery page]`: gets a specific gallery from 9hentai
 * example: `[63991]` or `[07933 22]`
+#### `H(video name)H`: gets a specific video from hentaihaven
+* example: `H(Futabu! Episode 1)H`
 
 ## Image Macros
 #### `<tohrusay <...text_or_images>`: have Tohru say something
@@ -308,10 +312,31 @@ If you are running the bot on a node version lower than 14, you need to set `tar
 ## `neko_tags.json`
 * a list of allowed tags for the `<neko` command
 
-# TODO
-- [ ] add support for hentaihaven
-- [ ] add support for anime (anilist, mal, etc.)
-- [ ] add support for manga (mangadex, etc.)
-- [ ] add support for vns (vndb, etc.)
-- [ ] add support for lns (lndb, etc)
-- [ ] add support for nozomi.la
+# Things to be added
+- [ ] add 4chan/other imageboards
+- [ ] add anime (anilist, mal, etc.)
+- [ ] add manga (mangadex, etc.)
+- [ ] add vns (vndb, etc.)
+- [ ] add lns (lndb, etc)
+- [ ] add hbrowse
+- [ ] add hentaigasm
+- [ ] add underhentai
+- [ ] add hentaimama
+- [ ] add hentaird
+- [ ] add ver hentai
+- [ ] add nozomi.la
+- [X] added hentaihaven
+- [X] added saucenao
+- [X] added 9hentai
+- [X] added nekobot
+- [X] added hanime
+- [X] added exhentai
+- [X] added tsumino
+- [X] added hitomi.la
+- [X] added nekos.life
+- [X] added reddit
+- [X] added various boorus
+- [X] added nhentai
+
+# Things that will never be added
+- [ ] FAKKU
