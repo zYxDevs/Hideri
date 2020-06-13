@@ -66,6 +66,8 @@ const image_gen_types = new MultiKeyMap<string, ArgumentType[]>([
 const image_endpoints = [...nekobot_tags.image_endpoints.nsfw, ...nekobot_tags.image_endpoints.sfw];
 
 class NekoBotArgumentType extends SetArgumentType {
+    public default = 'neko';
+    public optional = true;
     public argument_list = [...image_endpoints, ...image_gen_types.keys()]
 }
 
