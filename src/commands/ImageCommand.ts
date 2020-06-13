@@ -59,7 +59,8 @@ export abstract class ImageCommand {
             'htrap',
             'hfemboy'
         ],
-        nsfw: true
+        nsfw: true,
+        extraneous_argument_message: false
     })
     private async trap(message: CommandMessage) {
         message.channel.startTyping();
