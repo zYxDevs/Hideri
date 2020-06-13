@@ -14,6 +14,8 @@ import title from 'title';
 import plur from 'plur';
 
 class NekosArgumentType extends SetArgumentType {
+    public default = 'neko';
+    public optional = true;
     public argument_list = [...neko_tags, 'OwOify', 'spoiler'];
 }
 
