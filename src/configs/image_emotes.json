@@ -62,5 +62,24 @@
             "programmer",
             "softwareengineer"
         ]
+    }, {
+        "name": "ps5",
+        "url": [
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_mhk_mechamania__dc1e74e927167288fb6fb43784cf25f9.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_mhk_mechamania__a0867f6f4e3132c3ddc994c851d36175.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_mhk_mechamania__9f1a21b4e4d0adcb3ff85ba187f6a275.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_usagihime__2bca4881b1255597779842e137fbe1ba.png",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_dreamcatcher__7703ca23fa60afe59c3741ea5fa78e8f.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_ranyu__5694460a24413a30cca3bc2631c7753c.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_mhk_mechamania__ff3604dda1196d1e5a04b75095856b36.jpg",
+            "https://danbooru.donmai.us/data/__original_and_1_more_drawn_by_gendo0032__4624c1873996f980e544fe2ffe847c5f.png",
+            "https://i.imgur.com/ucc2627.jpg",
+            "https://i.imgur.com/7VtB2Qy.jpg"
+        ],
+        "description": "gets an image of a PlayStation 5",
+        "aliases": [
+            "playstation5",
+            "playstation-5"
+        ]
     }
 ]
