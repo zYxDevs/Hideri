@@ -7,7 +7,7 @@ import { MessageEmbed } from '../utils/EmbedUtils';
 import { get_prefix } from '../server-config/ServerConfig';
 import { RandomUtils } from '../utils/RandomUtils';
 
-image_emotes.forEach(({ name, info, description, url, aliases }) => {
+image_emotes.forEach(({ name, info, description, url, aliases, raw }) => {
     @Discord(get_prefix)
     class ImageEmote {
         @Command(name, {
@@ -17,8 +17,12 @@ image_emotes.forEach(({ name, info, description, url, aliases }) => {
             aliases: aliases ?? []
         })
         private async exec(message: CommandMessage) {
+            const image = Array.isArray(url) ? RandomUtils.choice(url) : url;
+
+            if (raw) return message.channel.send(image);
+
             const embed = new MessageEmbed();
-            embed.setImage(Array.isArray(url) ? RandomUtils.choice(url) : url);
+            embed.setImage(image);
             message.channel.send(embed);
         }
     }

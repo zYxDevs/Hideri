@@ -36,7 +36,8 @@
     }, {
         "name": "didntask",
         "info": "i didn't ask",
-        "url": "https://cdn.discordapp.com/attachments/531118981432475665/664226393273663509/video0.mp4"
+        "url": "https://cdn.discordapp.com/attachments/531118981432475665/664226393273663509/video0.mp4",
+        "raw": true
     }, {
         "name": "everyone",
         "info": "who did an @ everyone",
