@@ -18,6 +18,11 @@ export class SauceNAOEmbedBrowser extends PaginatedEmbedBrowser {
     }
     
     async get_embed() {
+        if (!this.sources.length) return new MessageEmbed({
+            title: 'No Results Found',
+            description: 'No results were found for that image. Try searching manually on Google Images/Tineye'
+        });
+
         const source = this.sources[this._page - 1];
 
         if (source === null) return new MessageEmbed({
