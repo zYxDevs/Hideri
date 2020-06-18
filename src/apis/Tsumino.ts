@@ -91,7 +91,9 @@ export class Video {}
 
 export class Tsumino extends ImageUploadProxy {
     public async search<T extends EntryType = 'Book'>(query: string, type: T = ('Book' as any), options?: SearchRequest): Promise<SearchResult<T>> {
-        options = Object.assign({}, default_options, options);
+        options = Object.assign({}, default_options, options, {
+            Text: query
+        });
 
         // TODO: auto-tagging
 
