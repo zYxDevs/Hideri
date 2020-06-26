@@ -90,5 +90,21 @@
             "pog",
             "pogchamp"
         ]
+    }, {
+        "name": "mousepad",
+        "url": [
+            "https://cdn.discordapp.com/attachments/713177166174617650/726213852353527888/unknown.png",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726213884431827034/f97jy4hnjxs01.png",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726213944338939954/unknown.png",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726214078783029278/7A24E49.jpg",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726214190712356875/unknown.png",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726214258186125322/B57i0K7t.png",
+            "https://cdn.discordapp.com/attachments/713177166174617650/726214351375171664/379_1000.png"
+        ],
+        "description": "gets an image of a mousepad",
+        "aliases": [
+            "cumpad"
+        ],
+        "nsfw": true
     }
 ]
