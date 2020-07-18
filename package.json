@@ -19,7 +19,7 @@
   "dependencies": {
     "9hentai": "^1.0.3",
     "@typeit/discord": "^4.0.8",
-    "@types/cheerio": "^0.22.18",
+    "@types/cheerio": "^0.22.21",
     "booru": "^2.2.3",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
@@ -65,10 +65,10 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/express": "^4.17.6",
-    "@types/node": "^14.0.5",
+    "@types/express": "^4.17.7",
+    "@types/node": "^14.0.23",
     "@types/node-fetch": "^2.5.7",
-    "@types/pg": "^7.14.3",
+    "@types/pg": "^7.14.4",
     "cpx": "^1.5.0",
     "globby": "^11.0.0",
     "rimraf": "^3.0.2",
