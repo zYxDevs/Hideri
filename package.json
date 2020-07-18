@@ -19,7 +19,7 @@
   "dependencies": {
     "9hentai": "^1.0.3",
     "@typeit/discord": "^4.0.8",
-    "booru": "^2.2.3",
+    "booru": "^2.3.2",
     "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.4",
     "core-js": "^3.6.5",
