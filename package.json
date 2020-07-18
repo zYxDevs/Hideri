@@ -39,7 +39,7 @@
     "matcher": "^3.0.0",
     "memory-cache": "^0.2.0",
     "mime-types": "^2.1.27",
-    "moment": "^2.26.0",
+    "moment": "^2.27.0",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
     "nekobot-api": "^1.1.5",
