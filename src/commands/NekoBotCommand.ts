@@ -13,6 +13,7 @@ import { MathUtils } from '../utils/MathUtils';
 import { CommandGroup } from '../types/CommandGroup';
 import { RateLimit } from '../guards/RateLimit';
 import { RestAsString } from '../argument-types/RestAsString';
+import { DDLCCharacterType, DDLCBackgroundType, DDLCBodyType } from 'nekobot-api';
 
 const enum ArgumentType {
     IMAGE = 'image',
@@ -461,9 +462,9 @@ export abstract class NekoBotCommand {
         }
 
         const ddlc_result = await nekobot.imageGen.ddlc(
-            character.toLowerCase(),
-            background.toLowerCase(),
-            body.toLowerCase(),
+            character.toLowerCase() as DDLCCharacterType,
+            background.toLowerCase() as DDLCBackgroundType,
+            body.toLowerCase() as DDLCBodyType,
             face.toLowerCase(),
             text
         );
