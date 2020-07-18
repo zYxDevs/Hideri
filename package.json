@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "9hentai": "^1.0.3",
-    "@typeit/discord": "^4.0.7",
+    "@typeit/discord": "^4.0.8",
     "@types/cheerio": "^0.22.18",
     "booru": "^2.2.3",
     "cheerio": "^1.0.0-rc.3",
