@@ -70,7 +70,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/pg": "^7.14.4",
     "cpx": "^1.5.0",
-    "globby": "^11.0.0",
+    "globby": "^11.0.1",
     "rimraf": "^3.0.2",
     "semver": "^7.3.2",
     "tslint": "^6.1.2",
