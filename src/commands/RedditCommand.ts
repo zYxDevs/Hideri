@@ -31,7 +31,11 @@ export abstract class RedditCommand {
     private async r(message: CommandMessage, subreddit: string, status: RedditStatusType, timeframe: RedditTimeType, post_number: string = '0') {
         message.channel.startTyping();
 
-        const response = await (await fetch(`https://www.reddit.com/r/${subreddit}/${status.get()}/.json?limit=100${timeframe.get() ? ('&t=' + timeframe.get()) : ''}`)).json();
+        const data = await fetch(`https://www.reddit.com/r/${subreddit}/${status.get()}/.json?limit=100${timeframe.get() ? ('&t=' + timeframe.get()) : ''}`);
+        const response = await data.json();
+
+        if (response.error == 404 || data.url.includes('/subreddits/search.json?q=')) return message.channel.send(`Error: unknown subreddit`);
+
         const items = response.data.children.filter(({ data }) => !data.is_self && !data.stickied);
         let post_index = parseInt(post_number as string);
         if (Number.isNaN(post_index)) post_index = 0;
