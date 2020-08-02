@@ -11,7 +11,7 @@ const dist_package = Object.assign({}, package, {
         postinstall: 'patch-package'
     },
     engines: {
-        node: `${semver.major(process.version)}.${semver.minor(process.version)}.x`
+        node: `${semver.major(process.version)}.x`
     }
 });
 
