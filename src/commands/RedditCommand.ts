@@ -34,7 +34,8 @@ export abstract class RedditCommand {
         const data = await fetch(`https://www.reddit.com/r/${subreddit}/${status.get()}/.json?limit=100${timeframe.get() ? ('&t=' + timeframe.get()) : ''}`);
         const response = await data.json();
 
-        if (response.error == 404 || data.url.includes('/subreddits/search.json?q=')) return message.channel.send(`Error: unknown subreddit`);
+        if (response.error == 404 || data.url.includes('/subreddits/search.json?q=')) return message.channel.send(`Error: ${response.reason ?? 'unknown'} subreddit`);
+        if (response.error == 403) return message.channel.send(`Error: ${response.reason ?? 'private'} subreddit`);
 
         const items = response.data.children.filter(({ data }) => !data.is_self && !data.stickied);
         let post_index = parseInt(post_number as string);
