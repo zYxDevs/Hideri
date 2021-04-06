@@ -10,7 +10,8 @@ import { Discord, On, ArgsOf } from '@typeit/discord';
 const logger = create_logger(module);
 
 export const database_client = new Client({
-    connectionString: database.connection.startsWith('process.env.') ? eval(database.connection) : database.connection
+    connectionString: database.connection.startsWith('process.env.') ? eval(database.connection) : database.connection,
+    ssl: database.ssl
 });
 
 const server_configs_dict: {

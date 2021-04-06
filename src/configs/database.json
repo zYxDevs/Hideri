@@ -1,3 +1,4 @@
 {
-    "connection": "postgres://postgres:postgres@localhost"
+    "connection": "postgres://postgres:postgres@localhost",
+    "ssl": false
 }
