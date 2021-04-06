@@ -8,9 +8,10 @@ import { EmbedUtils } from '../utils/EmbedUtils';
 import config from '../configs/config.json';
 import { get_prefix, server_configs } from '../server-config/ServerConfig';
 import { TextChannel } from 'discord.js';
+import {MathUtils} from "../utils/MathUtils";
 
 class RedditStatusType extends SetArgumentType {
-    public argument_list = ['hot', 'rising', 'new', 'top'];
+    public argument_list = ['hot', 'rising', 'new', 'top', 'controversial'];
     public optional = true;
     public default = 'hot';
 }
@@ -38,10 +39,15 @@ export abstract class RedditCommand {
         if (response.error == 403) return message.channel.send(`Error: ${response.reason ?? 'private'} subreddit`);
 
         const items = response.data.children.filter(({ data }) => !data.is_self && !data.stickied);
+
+        if (!items.length)
+            return message.channel.send('Error: no image posts found.');
+
         let post_index = parseInt(post_number as string);
         if (Number.isNaN(post_index)) post_index = 0;
         if (post_number == 'r') post_index = RandomUtils.randint(0, items.length);
-        const post = items[post_number].data;
+
+        const post = items[MathUtils.clamp(post_index, 0, items.length - 1)].data;
 
         if (post.over_18 &&
             !(message?.channel as TextChannel)?.nsfw &&
@@ -53,6 +59,6 @@ export abstract class RedditCommand {
 
         let img = post.url;
         if (!/\.(jpe?g|png|gif)$/ig.test(img)) img = post?.preview?.images[0]?.source?.url?.replace(/&amp;/ig, '&');
-        message.channel.send(EmbedUtils.create_image_embed(post.title, img));
+        message.channel.send(EmbedUtils.create_image_embed(post.title, img, `https://reddit.com${post.permalink}`));
     }
 }

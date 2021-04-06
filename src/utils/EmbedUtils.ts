@@ -2,10 +2,10 @@ import { MessageEmbed as DiscordMessageEmbed, MessageEmbedOptions } from 'discor
 import config from '../configs/config.json';
 
 export abstract class EmbedUtils {
-    public static create_image_embed(name: string, url?: string) {
+    public static create_image_embed(name: string, image: string = undefined, url: string = image) {
         const embed = new MessageEmbed();
         embed.setAuthor(name, undefined, url);
-        if (url) embed.setImage(url);
+        if (image) embed.setImage(image);
         return embed;
     }
 }
