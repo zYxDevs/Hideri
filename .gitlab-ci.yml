@@ -30,7 +30,7 @@ production:
     - cp $BOT_CREDENTIALS_CONFIG_PRODUCTION ./configs/credentials.json
     - cp $SSH_KEY ./configs/id_rsa
     - >
-      echo '{"connection": "process.env.DATABASE_URL", "ssl": true}' > ./configs/database.json
+      echo '{"connection": "process.env.DATABASE_URL", "ssl": {"rejectUnauthorized": false}}' > ./configs/database.json
     - dpl --skip-cleanup --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
   only:
     - master
